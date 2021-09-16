@@ -1,0 +1,217 @@
+{
+    "Create Flag": [
+        "ComponentManager",
+        "ObjectManager",
+        "Scene",
+        "World",
+        "Logic"
+    ],
+    "Update Flag": [
+        "Scene",
+        "Logic"
+    ],
+    "FixedUpdate Flag": [
+        "World"
+    ],
+    "Objects": [
+        {
+            "Components": [
+                {
+                    "Type": "class CS460::TransformComponent",
+                    "Value": {
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [0, 0, -60],
+                        "Scale": [1, 1, 1]
+                    }
+                },
+                {
+                    "Type": "class CS460::CameraComponent",
+                    "Value": {
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [0, 0, -60],
+                        "Zoom": 1.0
+                    }
+                },
+                {
+                    "Type": "class Game::ControllerComponent"
+                }
+            ],
+            "Name": "Camera"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class CS460::TransformComponent",
+                    "Value": {
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [0, -40, 0],
+                        "Scale": [1, 1, 1]
+                    }
+                },
+                {
+                    "Type": "class CS460::RigidBodyComponent",
+                    "Value": {
+                        "Motion": "Static"
+                    }
+                },
+                {
+                    "Type": "class CS460::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Material": "Rubber",
+                                "Orientation": [1, 0, 0, 0],
+                                "Position": [0, 0, 0],
+                                "Cube": [1200, 30, 1200],
+                                "Scale": 1,
+                                "Type": "Box"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "Platform"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class CS460::TransformComponent",
+                    "Value": {
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [0, 15, 0],
+                        "Scale": [1, 1, 1]
+                    }
+                },
+                {
+                    "Type": "class CS460::RigidBodyComponent",
+                    "Value": {
+                    }
+                },
+                {
+                    "Type": "class CS460::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 0.1,
+                                "Orientation": [1, 0, 0, 0],
+                                "Position": [0, 0, 0],
+                                "Cube": [6, 4, 6],
+                                "Scale": 1,
+                                "Type": "Box"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "Box2"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class CS460::TransformComponent",
+                    "Value": {
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [0, 20, 0],
+                        "Scale": [1, 1, 1]
+                    }
+                },
+                {
+                    "Type": "class CS460::RigidBodyComponent",
+                    "Value": {
+                    }
+                },
+                {
+                    "Type": "class CS460::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 0.1,
+                                "Orientation": [1, 0, 0, 0],
+                                "Position": [0, 0, 0],
+                                "Cube": [5, 4, 5],
+                                "Scale": 1,
+                                "Type": "Box"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "Box3"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class CS460::TransformComponent",
+                    "Value": {
+                        "Orientation": [1, 0, 0, 0],
+                        "Position": [0, 25, 0],
+                        "Scale": [1, 1, 1]
+                    }
+                },
+                {
+                    "Type": "class CS460::RigidBodyComponent",
+                    "Value": {
+                    }
+                },
+                {
+                    "Type": "class CS460::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 0.1,
+                                "Orientation": [1, 0, 0, 0],
+                                "Position": [0, 0, 0],
+                                "Cube": [4, 4, 4],
+                                "Scale": 1,
+                                "Type": "Box"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "Box4"
+        }
+    ],
+    "Settings": {
+        "World": {
+            "Draw Broad Phase": {
+                "Color": [1, 1, 1, 1],
+                "Flag": false
+            },
+            "Draw Contact": {
+                "Color": [1, 0, 0, 1],
+                "Flag": true
+            },
+            "Draw EPA": {
+                "Color": [1, 1, 0, 1],
+                "Flag": false
+            },
+            "Draw GJK": {
+                "Color": [0, 1, 0, 1],
+                "Flag": false
+            },
+            "Draw Primitive": {
+                "Color": [0, 0, 1, 1],
+                "Flag": true
+            },
+            "Forces": [
+                {
+                    "Type": "class CS460::Drag",
+                    "Value": {
+                        "Linear Drag": 0.25,
+                        "Angular Drag": 0.25
+                    }
+                },
+                {
+                    "Type": "class CS460::Gravity",
+                    "Value": {
+                        "Global Gravity": [0, -10, 0],
+                        "Gravity Coefficient": 1.0
+                    }
+                }
+            ]
+        },
+        "ProjectionMatrix": "Perspective"
+    },
+    "Type": "Space"
+}

@@ -1,0 +1,121 @@
+{
+    "Create Flag": [
+        "ComponentManager",
+        "ObjectManager",
+        "Scene",
+        "World",
+        "Logic"
+    ],
+    "Update Flag": [
+        "Scene",
+        "Logic"
+    ],
+    "FixedUpdate Flag": [
+        "World"
+    ],
+    "Objects": [
+        {
+            "Components": [
+                {
+                    "Type": "class CS460::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, -60 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class CS460::CameraComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, -60 ],
+                        "Zoom": 1.0
+                    }
+                },
+                {
+                    "Type": "class Game::ControllerComponent"
+                }
+            ],
+            "Name": "Camera"
+        },
+             {
+            "Components": [
+                {
+                    "Type": "class CS460::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 0, 0, 0 ],
+                        "Position": [ 0, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class CS460::ParticleEmitterComponent",
+                    "Value": {
+                        "Texture": "../../Resource/Texture/white.dds",
+                        "Particle Amount": 10000,
+                        "Emission Amount": 1,
+                        "Emission Rate": 0.0,
+                        "Life Decay Rate": 0.1,
+                        "Scale Decay Rate": 0.1,
+                        "Base Position": [ 0, 0, 0 ],
+                        "Base Velocity": [ 0, 0, 0 ],
+                        "Base Color": [ 1, 1, 0.5, 1.0 ],
+                        "Base Life": 3.0,
+                        "Base Scale": 1,
+                        "Position Variance": [ 0, 0, 0 ],
+                        "Velocity Variance": [ 0.5, 1, 1 ],
+                        "Color Variance": [ 0.1, 0.1, 0, 0 ],
+                        "Life Variance": 0.1,
+                        "Scale Variance": 0.0
+                    }
+                }
+            ],
+            "Name": "Particle"
+        }
+    ],
+    "Settings": {
+        "World": {
+            "Draw Broad Phase": {
+                "Color": [ 1, 1, 1, 1 ],
+                "Flag": true
+            },
+            "Draw Contact": {
+                "Color": [ 1, 0, 0, 1 ],
+                "Flag": true
+            },
+            "Draw EPA": {
+                "Color": [ 1, 1, 0, 1 ],
+                "Flag": true
+            },
+            "Draw GJK": {
+                "Color": [ 0, 1, 0, 1 ],
+                "Flag": true
+            },
+            "Draw Primitive": {
+                "Color": [ 0, 0, 1, 1 ],
+                "Flag": true
+            },
+            "Forces": [
+                {
+                    "Type": "class CS460::Drag",
+                    "Value": {
+                        "Linear Drag": 0.25,
+                        "Angular Drag": 0.25
+                    }
+                }
+            ],
+            "Rays": [
+                {
+                    "Option": "Trace",
+                    "Position": [ 0, 0, 0 ],
+                    "Direction": [ -1, 1, 0 ],
+                    "Reflection Count": 4,
+                    "Max Distance": -1.0,
+                    "Color" : [1, 0, 0, 1]
+                }
+            ]
+        },
+        "ProjectionMatrix": "Perspective"
+    },
+    "Type": "Space"
+}

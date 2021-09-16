@@ -1,0 +1,270 @@
+{
+    "Create Flag": [
+        "ComponentManager",
+        "ObjectManager",
+        "Scene",
+        "World",
+        "Logic"
+    ],
+    "Update Flag": [
+        "Scene",
+        "Logic"
+    ],
+    "FixedUpdate Flag": [
+        "World"
+    ],
+    "Objects": [
+        {
+            "Components": [
+                {
+                    "Type": "class CS460::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, -60 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class CS460::CameraComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 0, -60 ],
+                        "Zoom": 1.0
+                    }
+                },
+                {
+                    "Type": "class Game::ControllerComponent"
+                }
+            ],
+            "Name": "Camera"
+        },
+
+        {
+            "Components": [
+                {
+                    "Type": "class CS460::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ -20, 0, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class CS460::RigidBodyComponent",
+                    "Value": {
+                        "Linear": {
+                            "Velocity": [ 0, 0, 0 ]
+                        }
+                    }
+                },
+                {
+                    "Type": "class CS460::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 1, 5, 1 ],
+                                "Scale": 1,
+                                "Type": "Ellipsoid"
+                            },
+                            {
+                                "Density": 1.0,
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 5, 0 ],
+                                "Radius": [ 4, 2, 4 ],
+                                "Scale": 1,
+                                "Type": "Ellipsoid"
+                            },
+                            {
+                                "Density": 1.0,
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, -5, 0 ],
+                                "Radius": [ 3, 3, 3 ],
+                                "Scale": 1,
+                                "Type": "Ellipsoid"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Name": "Dumbbell"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class CS460::TransformComponent",
+                    "Value": {
+                        "Origin": [ 0, 0, 0 ],
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 10, -5, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class CS460::RigidBodyComponent",
+                    "Value": {
+                        "Angular": {
+
+                        }
+                    }
+                },
+                {
+                    "Type": "class CS460::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 30.0,
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 3.5, 0.5, 0.5 ],
+                                "Scale": 1,
+                                "Type": "Ellipsoid"
+                            }
+                        ]
+                    }
+                }
+
+            ],
+            "Name": "Ellipsoid2"
+        },
+
+        {
+            "Components": [
+                {
+                    "Type": "class CS460::TransformComponent",
+                    "Value": {
+                        "Origin": [ 0, 0, 0 ],
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 0, 10, 0 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class CS460::RigidBodyComponent",
+                    "Value": {
+                        "Angular": {
+
+                        }
+                    }
+                },
+                {
+                    "Type": "class CS460::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 4.5, 2.5, 1 ],
+                                "Scale": 1,
+                                "Type": "Ellipsoid"
+                            },
+                            {
+                                "Density": 1.0,
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 1, 2.5, 4.5 ],
+                                "Scale": 1,
+                                "Type": "Ellipsoid"
+                            }
+                        ]
+                    }
+                }
+
+            ],
+            "Name": "ComplexEllipsoid"
+        },
+        {
+            "Components": [
+                {
+                    "Type": "class CS460::TransformComponent",
+                    "Value": {
+                        "Orientation": [ 1, 0, 0, 0 ],
+                        "Position": [ 10, 9, -3 ],
+                        "Scale": [ 1, 1, 1 ]
+                    }
+                },
+                {
+                    "Type": "class CS460::RigidBodyComponent",
+                    "Value": {
+                    }
+                },
+                {
+                    "Type": "class CS460::ColliderComponent",
+                    "Value": {
+                        "Colliders": [
+                            {
+                                "Density": 1.0,
+                                "Material": "Rubber",
+                                "Orientation": [ 1, 0, 0, 0 ],
+                                "Position": [ 0, 0, 0 ],
+                                "Radius": [ 3, 1 ],
+                                "Height": 3,
+                                "Ratio": 1.5,
+                                "Scale": 1,
+                                "Type": "Truncated"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "Type": "class Game::ControllerComponent"
+                }
+            ],
+            "Name": "Truncated"
+        }
+    ],
+    "Settings": {
+        "World": {
+            "Draw Broad Phase": {
+                "Color": [ 1, 1, 1, 1 ],
+                "Flag": true
+            },
+            "Draw Contact": {
+                "Color": [ 1, 0.274509804, 0.274509804, 1 ],
+                "Flag": false
+            },
+            "Draw EPA": {
+                "Color": [ 1, 1, 0, 1 ],
+                "Flag": false
+            },
+            "Draw GJK": {
+                "Color": [ 0, 1, 0, 1 ],
+                "Flag": false
+            },
+            "Draw Primitive": {
+                "Color": [ 0, 0, 1, 1 ],
+                "Flag": true
+            },
+            "Draw Force": {
+                "Color": [ 1, 0.898039216, 0, 1 ],
+                "Flag": true
+            },
+            "Draw Velocity": {
+                "Color": [ 0, 0.698039216, 0.11372549, 1 ],
+                "Flag": true
+            },
+            "Draw Position": {
+                "Color": [ 0, 0.419607843, 1, 1 ],
+                "Flag": true
+            },
+            "Do Broad Phase": true,
+            "Do Narrow Phase": true,
+            "Do Resolution": true,
+
+            "Forces": [
+                {
+                    "Type": "class CS460::Drag",
+                    "Value": {
+                        "Linear Drag": 0.0,
+                        "Angular Drag": 0.0
+                    }
+                }
+            ]
+        },
+        "ProjectionMatrix": "Perspective"
+    },
+    "Type": "Space"
+}
