@@ -21,9 +21,9 @@ warnings "Extra"
 includedirs {"Include"}
 links {
     "dxgi", "d3d11", "d3dcompiler", "d2d1", "dwrite", "dsound", "dxguid",
-    "winmm", "Xinput9_1_0"
+    "winmm", "Xinput9_1_0", "libfbxsdk-md", "libxml2-md", "zlib-md"
 }
-libdirs {"Lib/%{cfg.buildcfg}"}
+libdirs {"Lib/%{cfg.buildcfg}/**"}
 files {"**.h", "**.hpp", "**.cpp", "**.inl", "./Resource/**.json", "./Resource/**.shader"}
 buildoptions {"-std:c++17"}
 removefiles {"**Template.cpp"}
