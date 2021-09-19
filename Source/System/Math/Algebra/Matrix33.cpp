@@ -423,9 +423,9 @@ namespace CS460
         Real       trace = Trace();
         if (trace > 0.0f)
         {
-            Real s          = sqrtf(trace + 1.0f);
-            result.r        = s * 0.5f;
-            Real multiplier = 0.5f / s;
+            Real scalar          = sqrtf(trace + 1.0f);
+            result.r        = scalar * 0.5f;
+            Real multiplier = 0.25f / scalar;
             result.i        = ((*this)(2, 1) - (*this)(1, 2)) * multiplier;
             result.j        = ((*this)(0, 2) - (*this)(2, 0)) * multiplier;
             result.k        = ((*this)(1, 0) - (*this)(0, 1)) * multiplier;

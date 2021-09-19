@@ -63,38 +63,17 @@ namespace CS460
 
     void Quaternion::Set(const Vector3& from, const Vector3& to)
     {
-        // get axis of rotation
         Vector3 axis = from.CrossProduct(to);
-        // get scaled cos of angle between vectors and set initial quaternion
         Set(from.DotProduct(to), axis.x, axis.y, axis.z);
-        // quaternion at this point is ||from||*||to||*( cos(theta), r*sin(theta) )
-        // normalize to remove ||from||*||to|| factor
         SetNormalize();
-        // quaternion at this point is ( cos(theta), r*sin(theta) )
-        // what we want is ( cos(theta/2), r*sin(theta/2) )
-        // set up for half angle calculation
         r += 1.0f;
-        // now when we normalize, we'll be dividing by sqrt(2*(1+cos(theta))), which is 
-        // what we want for r*sin(theta) to give us r*sin(theta/2)
-        // w will become 
-        //                 1+cos(theta)
-        //            ----------------------
-        //            sqrt(2*(1+cos(theta)))
-        // which simplifies to cos(theta/2)
-        // before we normalize, check if vectors are opposing
         if (r <= Math::EPSILON)
         {
-            //rotate pi radians around orthogonal vector take cross product with x axis
             if (from.z * from.z > from.x * from.x)
                 Set(0.0f, 0.0f, from.z, -from.y);
-                //or take cross product with z axis
             else
                 Set(0.0f, from.y, -from.x, 0.0f);
         }
-        //s = sqrtf(2*(1+cos(theta))) 
-        //Real s = sqrtf(2.0f * r); Real norm = sqrtf(r * r + i * i + j * j + k * k);
-        //r = s * 0.5f; i = axis.x / s; j = axis.y / s; k = axis.z / s;
-        //s is equal to norm. so just normalize again to get rotation quaternion.
         SetNormalize();
     }
 
@@ -131,9 +110,9 @@ namespace CS460
         Real trace = rotation_matrix.Trace();
         if (trace > 0.0f)
         {
-            Real s          = sqrtf(trace + 1.0f);
-            r               = s * 0.5f;
-            Real multiplier = 0.5f / s;
+            Real scalar          = sqrtf(trace + 1.0f);
+            r               = scalar * 0.5f;
+            Real multiplier = 0.25f / scalar;
             i               = (rotation_matrix(2, 1) - rotation_matrix(1, 2)) * multiplier;
             j               = (rotation_matrix(0, 2) - rotation_matrix(2, 0)) * multiplier;
             k               = (rotation_matrix(1, 0) - rotation_matrix(0, 1)) * multiplier;

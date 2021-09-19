@@ -41,18 +41,6 @@
     {
       "Components": [
         {
-          "Type": "class CS460::SkyComponent",
-          "Value": {
-            "Texture": "../../Resource/Texture/CubeMap/SeaCube.dds",
-            "Type": 0
-          }
-        }
-      ],
-      "Name": "Sky"
-    },
-    {
-      "Components": [
-        {
           "Type": "class CS460::TransformComponent",
           "Value": {
             "Orientation": [1, 0, 0, 0],
