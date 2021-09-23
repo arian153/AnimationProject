@@ -1,9 +1,7 @@
-
 #pragma once
 #include "../Utility/MathDef.hpp"
 #include "../Structure/EulerAngle.hpp"
 #include "../Structure/AxisRadian.hpp"
-
 
 namespace CS460
 {
@@ -66,7 +64,7 @@ namespace CS460
         void       AddRotation(const Quaternion& quaternion);
         void       AddRadian(Real radian);
         void       ChangeAxis(const Vector3& axis);
-        
+
     public:
         friend Quaternion Conjugate(const Quaternion& quaternion);
         friend Quaternion Inverse(const Quaternion& quaternion);
@@ -76,27 +74,27 @@ namespace CS460
         friend Quaternion SwingTwistInterpolation(const Quaternion& start, const Quaternion& end, const Vector3& twist_axis, Real t);
 
     public:
-        Quaternion           operator-() const;
-        Quaternion&          operator=(const Quaternion& rhs);
-        bool                 operator ==(const Quaternion& rhs) const;
-        bool                 operator !=(const Quaternion& rhs) const;
-        Real                 operator[](size_t i) const;
-        Real&                operator[](size_t i);
-        Quaternion           operator*(const Quaternion& rhs) const;
-        Quaternion&          operator *=(const Quaternion& rhs);
-        Quaternion           operator+(const Quaternion& rhs) const;
-        Quaternion&          operator+=(const Quaternion& rhs);
-        Quaternion           operator-(const Quaternion& rhs) const;
-        Quaternion&          operator-=(const Quaternion& rhs);
-        Quaternion           operator*(Real scalar) const;
-        friend Quaternion    operator*(Real scalar, const Quaternion& quaternion);
-        Quaternion&          operator*=(Real scalar);
-        friend std::ostream& operator<<(std::ostream& os, const Quaternion& rhs);
+        Quaternion                 operator-() const;
+        Quaternion&                operator=(const Quaternion& rhs);
+        bool                       operator ==(const Quaternion& rhs) const;
+        bool                       operator !=(const Quaternion& rhs) const;
+        Real                       operator[](size_t i) const;
+        Real&                      operator[](size_t i);
+        Quaternion                 operator*(const Quaternion& rhs) const;
+        Quaternion&                operator *=(const Quaternion& rhs);
+        Quaternion                 operator+(const Quaternion& rhs) const;
+        Quaternion&                operator+=(const Quaternion& rhs);
+        Quaternion                 operator-(const Quaternion& rhs) const;
+        Quaternion&                operator-=(const Quaternion& rhs);
+        Quaternion                 operator*(Real scalar) const;
+        friend Quaternion          operator*(Real scalar, const Quaternion& quaternion);
+        Quaternion&                operator*=(Real scalar);
+        friend std::ostream&       operator<<(std::ostream& os, const Quaternion& rhs);
         friend std::wstringstream& operator<<(std::wstringstream& os, const Quaternion& rhs);
-        Quaternion           operator*(const Vector3& vector) const;
-        friend Quaternion    operator*(const Vector3& vector, const Quaternion& quaternion);
-        Matrix33             operator*(const Matrix33& matrix) const;
-        friend Matrix33      operator*(const Matrix33& matrix, const Quaternion& quaternion);
+        Quaternion                 operator*(const Vector3& vector) const;
+        friend Quaternion          operator*(const Vector3& vector, const Quaternion& quaternion);
+        Matrix33                   operator*(const Matrix33& matrix) const;
+        friend Matrix33            operator*(const Matrix33& matrix, const Quaternion& quaternion);
 
     public:
         static Quaternion Identity();

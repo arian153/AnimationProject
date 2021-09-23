@@ -1,4 +1,3 @@
-
 #include "Quaternion.hpp"
 #include "Matrix33.hpp"
 #include "Vector3.hpp"
@@ -110,7 +109,7 @@ namespace CS460
         Real trace = rotation_matrix.Trace();
         if (trace > 0.0f)
         {
-            Real scalar          = sqrtf(trace + 1.0f);
+            Real scalar     = sqrtf(trace + 1.0f);
             r               = scalar * 0.5f;
             Real multiplier = 0.25f / scalar;
             i               = (rotation_matrix(2, 1) - rotation_matrix(1, 2)) * multiplier;
@@ -130,9 +129,9 @@ namespace CS460
             }
             size_t _j       = (_i + 1) % 3;
             size_t _k       = (_j + 1) % 3;
-            Real   s        = sqrtf(rotation_matrix(_i, _i) - rotation_matrix(_j, _j) - rotation_matrix(_k, _k) + 1.0f);
-            (*this)[_i]     = 0.5f * s;
-            Real multiplier = 0.5f / s;
+            Real   scalar   = sqrtf(rotation_matrix(_i, _i) - rotation_matrix(_j, _j) - rotation_matrix(_k, _k) + 1.0f);
+            (*this)[_i]     = 0.5f * scalar;
+            Real multiplier = 0.25f / scalar;
             r               = (rotation_matrix(_k, _j) - rotation_matrix(_j, _k)) * multiplier;
             (*this)[_j]     = (rotation_matrix(_j, _i) + rotation_matrix(_i, _j)) * multiplier;
             (*this)[_k]     = (rotation_matrix(_k, _i) + rotation_matrix(_i, _k)) * multiplier;
@@ -399,7 +398,7 @@ namespace CS460
                            p_multiplier * vector.z + v_multiplier * k + c_multiplier * (i * vector.y - j * vector.x));
         }
         //"Rotate non-unit quaternion"
-        return Vector3();
+        return RotateVector(vector);
     }
 
     Vector3 Quaternion::RotateVector(const Vector3& vector) const
@@ -818,7 +817,7 @@ namespace CS460
         {
             Real    radian = 2.0f * acosf(rhs.r);
             Real    length = sqrtf(1.0f - (rhs.r * rhs.r));
-            Vector3 axis = Math::Vector3::Y_AXIS;
+            Vector3 axis   = Math::Vector3::Y_AXIS;
             if (Math::IsZero(length) == false)
             {
                 length = 1.0f / length;

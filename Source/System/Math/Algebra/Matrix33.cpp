@@ -423,7 +423,7 @@ namespace CS460
         Real       trace = Trace();
         if (trace > 0.0f)
         {
-            Real scalar          = sqrtf(trace + 1.0f);
+            Real scalar     = sqrtf(trace + 1.0f);
             result.r        = scalar * 0.5f;
             Real multiplier = 0.25f / scalar;
             result.i        = ((*this)(2, 1) - (*this)(1, 2)) * multiplier;
@@ -443,9 +443,9 @@ namespace CS460
             }
             size_t _j       = (_i + 1) % 3;
             size_t _k       = (_j + 1) % 3;
-            Real   s        = sqrtf((*this)(_i, _i) - (*this)(_j, _j) - (*this)(_k, _k) + 1.0f);
-            result[_i]      = 0.5f * s;
-            Real multiplier = 0.5f / s;
+            Real   scalar   = sqrtf((*this)(_i, _i) - (*this)(_j, _j) - (*this)(_k, _k) + 1.0f);
+            result[_i]      = 0.5f * scalar;
+            Real multiplier = 0.25f / scalar;
             result.r        = ((*this)(_k, _j) - (*this)(_j, _k)) * multiplier;
             result[_j]      = ((*this)(_j, _i) + (*this)(_i, _j)) * multiplier;
             result[_k]      = ((*this)(_k, _i) + (*this)(_i, _k)) * multiplier;

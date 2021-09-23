@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 namespace CS460
 {
@@ -9,5 +10,7 @@ namespace CS460
         ~Bone();
 
     private:
+        Bone*              parent = nullptr;
+        std::vector<Bone*> children;
     };
 }

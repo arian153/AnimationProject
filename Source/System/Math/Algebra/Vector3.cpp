@@ -1,4 +1,3 @@
-
 #include "Vector3.hpp"
 #include "Matrix33.hpp"
 #include "..//Utility/Utility.hpp"
@@ -47,23 +46,23 @@ namespace CS460
 
     void Vector3::SetZero()
     {
-        this->x = 0.f;
-        this->y = 0.f;
-        this->z = 0.f;
+        x = 0.f;
+        y = 0.f;
+        z = 0.f;
     }
 
     void Vector3::SetInverse()
     {
-        this->x = Math::IsZero(x) ? 0.0f : 1.0f / this->x;
-        this->y = Math::IsZero(y) ? 0.0f : 1.0f / this->y;
-        this->z = Math::IsZero(z) ? 0.0f : 1.0f / this->z;
+        x = Math::IsZero(x) ? 0.0f : 1.0f / x;
+        y = Math::IsZero(y) ? 0.0f : 1.0f / y;
+        z = Math::IsZero(z) ? 0.0f : 1.0f / z;
     }
 
     void Vector3::SetNegate()
     {
-        this->x = -this->x;
-        this->y = -this->y;
-        this->z = -this->z;
+        x = - x;
+        y = - y;
+        z = - z;
     }
 
     void Vector3::SetNormalize()
@@ -71,15 +70,15 @@ namespace CS460
         Real length = sqrtf(x * x + y * y + z * z);
         if (length > 0.f)
         {
-            (*this) *= (1.f / length);
+            *this *= 1.f / length;
         }
     }
 
     void Vector3::SetHalf()
     {
-        this->x *= 0.5f;
-        this->y *= 0.5f;
-        this->z *= 0.5f;
+        x *= 0.5f;
+        y *= 0.5f;
+        z *= 0.5f;
     }
 
     void Vector3::SetClean()
@@ -94,10 +93,10 @@ namespace CS460
 
     void Vector3::SetProjection(const Vector3& a, const Vector3& b)
     {
-        Real multiplier = (a.DotProduct(b)) / (b.DotProduct(b));
-        this->x         = b.x * multiplier;
-        this->y         = b.y * multiplier;
-        this->z         = b.z * multiplier;
+        Real multiplier = a.DotProduct(b) / b.DotProduct(b);
+        x               = b.x * multiplier;
+        y               = b.y * multiplier;
+        z               = b.z * multiplier;
     }
 
     Real Vector3::Length() const
@@ -107,7 +106,7 @@ namespace CS460
 
     Real Vector3::LengthSquared() const
     {
-        return (x * x + y * y + z * z);
+        return x * x + y * y + z * z;
     }
 
     Real Vector3::Smallest() const
@@ -129,24 +128,24 @@ namespace CS460
 
     Real Vector3::DistanceTo(const Vector3& rhs) const
     {
-        Real _x = rhs.x - this->x;
-        Real _y = rhs.y - this->y;
-        Real _z = rhs.z - this->z;
+        Real _x = rhs.x - x;
+        Real _y = rhs.y - y;
+        Real _z = rhs.z - z;
         return sqrtf(_x * _x + _y * _y + _z * _z);
     }
 
     Real Vector3::DistanceSquaredTo(const Vector3& rhs) const
     {
-        Real _x = rhs.x - this->x;
-        Real _y = rhs.y - this->y;
-        Real _z = rhs.z - this->z;
-        return (_x * _x + _y * _y + _z * _z);
+        Real _x = rhs.x - x;
+        Real _y = rhs.y - y;
+        Real _z = rhs.z - z;
+        return _x * _x + _y * _y + _z * _z;
     }
 
     Vector3 Vector3::ProjectionTo(const Vector3& rhs) const
     {
         Vector3 result     = rhs;
-        Real    multiplier = ((*this).DotProduct(rhs)) / (rhs.DotProduct(rhs));
+        Real    multiplier = (*this).DotProduct(rhs) / rhs.DotProduct(rhs);
         result *= multiplier;
         return result;
     }
@@ -154,7 +153,7 @@ namespace CS460
     Vector3 Vector3::ProjectionFrom(const Vector3& rhs) const
     {
         Vector3 result     = *this;
-        Real    multiplier = (rhs.DotProduct(*this)) / ((*this).DotProduct(*this));
+        Real    multiplier = rhs.DotProduct(*this) / (*this).DotProduct(*this);
         result *= multiplier;
         return result;
     }
@@ -183,14 +182,14 @@ namespace CS460
     Vector3 Vector3::Inverse() const
     {
         return Vector3(
-                       Math::IsZero(x) ? 0.0f : 1.0f / this->x,
-                       Math::IsZero(y) ? 0.0f : 1.0f / this->y,
-                       Math::IsZero(z) ? 0.0f : 1.0f / this->z);
+                       Math::IsZero(x) ? 0.0f : 1.0f / x,
+                       Math::IsZero(y) ? 0.0f : 1.0f / y,
+                       Math::IsZero(z) ? 0.0f : 1.0f / z);
     }
 
     Vector3 Vector3::Negate() const
     {
-        return Vector3(-this->x, -this->y, -this->z);
+        return Vector3(- x, - y, - z);
     }
 
     Vector3 Vector3::Scale(Real scale) const
@@ -203,9 +202,29 @@ namespace CS460
         return Vector3(fabsf(x), fabsf(y), fabsf(z));
     }
 
+    Matrix33 Vector3::SkewSymmetricMatrix() const
+    {
+        //get skew-symmetric matrix to represent "CrossProduct(A, r) = TildeA * r"
+        //given r, A are both vector3
+        return Matrix33(
+                        0.0f, -z, y,
+                        z, 0.0f, -x,
+                        -y, x, 0.0f);
+    }
+
+    Matrix33 Vector3::ProjectionMatrix() const
+    {
+        // get projection matrix to represent "DotProduct(r, A)*A = HatA * r"
+        // given r, A are both vector3
+        return Matrix33(
+                        x * x, x * y, x * z,
+                        y * x, y * y, y * z,
+                        z * x, z * y, z * z);
+    }
+
     Real Vector3::DotProduct(const Vector3& rhs) const
     {
-        return (x * rhs.x + y * rhs.y + z * rhs.z);
+        return x * rhs.x + y * rhs.y + z * rhs.z;
     }
 
     Vector3 Vector3::CrossProduct(const Vector3& rhs) const
@@ -219,9 +238,9 @@ namespace CS460
     Matrix33 Vector3::OuterProduct(const Vector3& rhs) const
     {
         return Matrix33(
-                        (this->x * rhs.x), (this->x * rhs.y), (this->x * rhs.z),
-                        (this->y * rhs.x), (this->y * rhs.y), (this->y * rhs.z),
-                        (this->z * rhs.x), (this->z * rhs.y), (this->z * rhs.z)
+                        x * rhs.x, x * rhs.y, x * rhs.z,
+                        y * rhs.x, y * rhs.y, y * rhs.z,
+                        z * rhs.x, z * rhs.y, z * rhs.z
                        );
     }
 
@@ -232,7 +251,7 @@ namespace CS460
 
     Vector3 Vector3::CrossProductTwice(const Vector3& rhs) const
     {
-        return (this->CrossProduct(rhs)).CrossProduct(*this);
+        return CrossProduct(rhs).CrossProduct(*this);
     }
 
     bool Vector3::IsValid() const
@@ -247,16 +266,16 @@ namespace CS460
 
     bool Vector3::IsEqual(const Vector3& rhs) const
     {
-        return (Math::IsEqual(x, rhs.x)
-            && Math::IsEqual(y, rhs.y)
-            && Math::IsEqual(z, rhs.z));
+        return Math::IsEqual(x, rhs.x)
+                && Math::IsEqual(y, rhs.y)
+                && Math::IsEqual(z, rhs.z);
     }
 
     bool Vector3::IsNotEqual(const Vector3& rhs) const
     {
-        return (Math::IsNotEqual(x, rhs.x)
-            || Math::IsNotEqual(y, rhs.y)
-            || Math::IsNotEqual(z, rhs.z));
+        return Math::IsNotEqual(x, rhs.x)
+                || Math::IsNotEqual(y, rhs.y)
+                || Math::IsNotEqual(z, rhs.z);
     }
 
     Real Vector3::GrepVec1(size_t flag0) const
@@ -286,16 +305,16 @@ namespace CS460
 
     bool Vector3::operator==(const Vector3& rhs) const
     {
-        return (Math::IsEqual(x, rhs.x)
-            && Math::IsEqual(y, rhs.y)
-            && Math::IsEqual(z, rhs.z));
+        return Math::IsEqual(x, rhs.x)
+                && Math::IsEqual(y, rhs.y)
+                && Math::IsEqual(z, rhs.z);
     }
 
     bool Vector3::operator!=(const Vector3& rhs) const
     {
-        return (Math::IsNotEqual(x, rhs.x)
-            || Math::IsNotEqual(y, rhs.y)
-            || Math::IsNotEqual(z, rhs.z));
+        return Math::IsNotEqual(x, rhs.x)
+                || Math::IsNotEqual(y, rhs.y)
+                || Math::IsNotEqual(z, rhs.z);
     }
 
     Vector3 Vector3::operator-() const
@@ -443,7 +462,7 @@ namespace CS460
     Vector3 Vector3::operator++(int)
     {
         Vector3 result(*this);
-        ++(*this);
+        ++*this;
         return result;
     }
 
@@ -458,7 +477,7 @@ namespace CS460
     Vector3 Vector3::operator--(int)
     {
         Vector3 result(*this);
-        --(*this);
+        --*this;
         return result;
     }
 
@@ -474,7 +493,7 @@ namespace CS460
 
     Real Vector3::operator*(const Vector3& rhs) const
     {
-        return (x * rhs.x + y * rhs.y + z * rhs.z);
+        return x * rhs.x + y * rhs.y + z * rhs.z;
     }
 
     Real DotProduct(const Vector3& vec1, const Vector3& vec2)
@@ -518,7 +537,7 @@ namespace CS460
 
     Real Radian(const Vector3& a, const Vector3& b)
     {
-        Real cos_theta = (a.Normalize()).DotProduct(b.Normalize());
+        Real cos_theta = a.Normalize().DotProduct(b.Normalize());
         if (fabsf(cos_theta) > 1.0f)
         {
             return 0.0f;

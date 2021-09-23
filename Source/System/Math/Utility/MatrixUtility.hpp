@@ -38,7 +38,7 @@ namespace CS460
             (
                 const CS460::Vector3& scale,
                 const CS460::Vector3& origin,
-                const Quaternion&       rotation,
+                const Quaternion&     rotation,
                 const CS460::Vector3& translation
             );
 

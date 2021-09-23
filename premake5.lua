@@ -18,7 +18,7 @@ debugdir "Bin/%{cfg.buildcfg}"
 systemversion "10.0"
 flags {"MultiProcessorCompile", "NoMinimalRebuild", "NoBufferSecurityCheck"}
 warnings "Extra"
-includedirs {"Include"}
+includedirs {"Include", "Include/FBX"}
 links {
     "dxgi", "d3d11", "d3dcompiler", "d2d1", "dwrite", "dsound", "dxguid",
     "winmm", "Xinput9_1_0", "libfbxsdk-md", "libxml2-md", "zlib-md"
