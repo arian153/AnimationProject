@@ -225,7 +225,7 @@ namespace CS460
         if (mesh->GetElementNormalCount() == 0)
             return;
 
-        FbxGeometryElementNormal* normal    = mesh->GetElementNormal();
+        FbxGeometryElementNormal* normal     = mesh->GetElementNormal();
         U32                       normal_idx = 0;
 
         if (normal->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
@@ -259,7 +259,7 @@ namespace CS460
             return;
         }
 
-        FbxGeometryElementTangent* tangent    = mesh->GetElementTangent();
+        FbxGeometryElementTangent* tangent     = mesh->GetElementTangent();
         U32                        tangent_idx = 0;
 
         if (tangent->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
@@ -442,6 +442,35 @@ namespace CS460
             memcpy(&mesh_info->vertices[v].indices, animBoneIndex, sizeof(Color));
             memcpy(&mesh_info->vertices[v].weights, animBoneWeight, sizeof(Color));
         }
+    }
+
+    Vector3 FBXLoader::GetTranslation(const FbxAMatrix& transform)
+    {
+        FbxVector4 translation = transform.GetT();
+        return Vector3(translation.mData[0], translation.mData[1], translation.mData[2]);
+    }
+
+    Quaternion FBXLoader::GetRotation(const FbxAMatrix& transform)
+    {
+        FbxQuaternion rotation = transform.GetQ();
+        return Quaternion(rotation.GetAt(3), rotation.GetAt(0), rotation.GetAt(1), rotation.GetAt(2));
+    }
+
+    Real FBXLoader::GetScale(const FbxAMatrix& transform)
+    {
+        FbxVector4 scale = transform.GetT();
+        return scale.mData[0];
+    }
+
+    VQSTransform FBXLoader::GetVQSTransform(const FbxAMatrix& transform)
+    {
+        FbxVector4    translation = transform.GetT();
+        FbxQuaternion rotation    = transform.GetQ();
+        FbxVector4    scale       = transform.GetT();
+
+        Vector3    v = Vector3(translation.mData[0], translation.mData[1], translation.mData[2]);
+        Quaternion q(rotation.GetAt(3), rotation.GetAt(0), rotation.GetAt(1), rotation.GetAt(2));
+        return VQSTransform(v, q, scale.mData[0]);
     }
 
     void FBXLoader::LoadBoneWeight(FbxCluster* cluster, I32 bone_idx, FbxMeshInfo* mesh_info)

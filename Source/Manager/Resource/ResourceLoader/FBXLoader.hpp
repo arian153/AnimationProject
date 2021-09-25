@@ -5,9 +5,11 @@
 #include <FBX/fbxsdk.h>
 
 #include "../../../System/Graphics/DataType/Color.hpp"
+#include "../../../System/Math/Algebra/Quaternion.hpp"
 #include "../../../System/Math/Algebra/Vector2.hpp"
 #include "../../../System/Math/Algebra/Vector3.hpp"
 #include "../../../System/Math/Algebra/Vector4.hpp"
+#include "../../../System/Math/Structure/VQSTransform.hpp"
 
 namespace CS460
 {
@@ -118,6 +120,11 @@ namespace CS460
         FbxAMatrix GetTransform(FbxNode* node);
 
         void FillBoneWeight(FbxMesh* mesh, FbxMeshInfo* mesh_info);
+
+        Vector3      GetTranslation(const FbxAMatrix& transform);
+        Quaternion   GetRotation(const FbxAMatrix& transform);
+        Real         GetScale(const FbxAMatrix& transform);
+        VQSTransform GetVQSTransform(const FbxAMatrix& transform);
 
     private:
         FbxManager*  m_manager  = nullptr;
