@@ -1,4 +1,5 @@
 #pragma once
+#include "../../Math/Utility/MathDef.hpp"
 
 namespace CS460
 {
@@ -10,8 +11,11 @@ namespace CS460
         Skeleton();
         ~Skeleton();
 
-
-
+        void Initialize();
+        void Update(Real dt);
+        void Draw();
+        void Shutdown();
+    
     private:
         Bone* m_root_bone = nullptr;
     };
