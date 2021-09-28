@@ -12,6 +12,17 @@ namespace CS460
 
     void Bone::Update(Real dt)
     {
+    }
 
+    void Bone::Shutdown()
+    {
+        parent     = nullptr;
+        parent_idx = -1;
+        my_idx     = -1;
+
+        sibling_idx.clear();
+        children_idx.clear();
+        sibling.clear();
+        children.clear();
     }
 }

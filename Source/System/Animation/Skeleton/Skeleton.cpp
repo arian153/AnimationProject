@@ -1,5 +1,7 @@
 #include "Skeleton.hpp"
 
+#include "Bone.hpp"
+
 namespace CS460
 {
     Skeleton::Skeleton()
@@ -26,5 +28,12 @@ namespace CS460
 
     void Skeleton::Shutdown()
     {
+        for(auto& bone : m_bones)
+        {
+            bone->Shutdown();
+            delete bone;
+        }
+        m_bones.clear();
+
     }
 }
