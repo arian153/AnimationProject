@@ -9,4 +9,9 @@ namespace CS460
     Bone::~Bone()
     {
     }
+
+    void Bone::Update(Real dt)
+    {
+
+    }
 }
