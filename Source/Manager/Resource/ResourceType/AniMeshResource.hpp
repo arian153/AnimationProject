@@ -14,6 +14,7 @@ namespace CS460
         void Initialize() override;
         void Shutdown() override;
 
+
     private:
         FBXLoader m_fbx_loader;
     };

@@ -2,6 +2,7 @@
 #include "ComponentFactory.hpp"
 
 //factories
+#include "EngineFactory/AniMeshFactory.hpp"
 #include "EngineFactory/CameraFactory.hpp"
 #include "EngineFactory/ColliderFactory.hpp"
 #include "EngineFactory/RigidBodyFactory.hpp"
@@ -35,6 +36,8 @@ namespace CS460
         AddFactory(new ParticleEmitterFactory());
         AddFactory(new PointConstraintFactory());
         AddFactory(new SkyFactory());
+        AddFactory(new AniMeshFactory());
+
         return true;
     }
 

@@ -14,10 +14,12 @@ namespace CS460
 
     void AniMeshResource::Initialize()
     {
+    
     }
 
     void AniMeshResource::Shutdown()
     {
         m_fbx_loader.Shutdown();
+        m_b_unloaded = true;
     }
 }

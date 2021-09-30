@@ -29,7 +29,7 @@ buildoptions {"-std:c++17"}
 removefiles {"**Template.cpp"}
 disablewarnings {
     "4505", "4456", "4201", "4100", "4189", "4458", "4819", "4127", "4701",
-    "4291", "6385"
+    "4291", "6385", "26451", "26812", "26495"
 }
 defines {"_CRT_SECURE_NO_WARNINGS", "WIN32_LEAN_AND_MEAN", "CS460_WIN32", "CS460_DIRECTX11", "IMGUI_INCLUDE_IMGUI_USER_H"}
 

@@ -468,19 +468,19 @@ namespace CS460
     Vector3 FBXLoader::GetTranslation(const FbxAMatrix& transform)
     {
         FbxVector4 translation = transform.GetT();
-        return Vector3(translation.mData[0], translation.mData[1], translation.mData[2]);
+        return Vector3((Real)translation.mData[0], (Real)translation.mData[1], (Real)translation.mData[2]);
     }
 
     Quaternion FBXLoader::GetRotation(const FbxAMatrix& transform)
     {
         FbxQuaternion rotation = transform.GetQ();
-        return Quaternion(rotation.GetAt(3), rotation.GetAt(0), rotation.GetAt(1), rotation.GetAt(2));
+        return Quaternion((Real)rotation.mData[3], (Real)rotation.mData[0], (Real)rotation.mData[1], (Real)rotation.mData[2]);
     }
 
     Real FBXLoader::GetScale(const FbxAMatrix& transform)
     {
         FbxVector4 scale = transform.GetT();
-        return scale.mData[0];
+        return (Real)scale.mData[0];
     }
 
     VQSTransform FBXLoader::GetVQSTransform(const FbxAMatrix& transform)
@@ -489,9 +489,9 @@ namespace CS460
         FbxQuaternion rotation    = transform.GetQ();
         FbxVector4    scale       = transform.GetT();
 
-        Vector3    v = Vector3(translation.mData[0], translation.mData[1], translation.mData[2]);
-        Quaternion q(rotation.GetAt(3), rotation.GetAt(0), rotation.GetAt(1), rotation.GetAt(2));
-        return VQSTransform(v, q, scale.mData[0]);
+        Vector3    v = Vector3((Real)translation.mData[0], (Real)translation.mData[1], (Real)translation.mData[2]);
+        Quaternion q((Real)rotation.mData[3], (Real)rotation.mData[0], (Real)rotation.mData[1], (Real)rotation.mData[2]);
+        return VQSTransform(v, q, (Real)scale.mData[0]);
     }
 
     void FBXLoader::LoadBoneWeight(FbxCluster* cluster, I32 bone_idx, FbxMeshInfo* mesh_info)
