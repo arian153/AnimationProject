@@ -29,6 +29,9 @@ namespace CS460
     AnimationSubsystem* AnimationSystem::CreateSubsystem()
     {
         AnimationSubsystem* subsystem = new AnimationSubsystem();
+        subsystem->SetAppUtility(m_time_utility, m_frame_utility);
+
+
         m_subsystems.push_back(subsystem);
         return subsystem;
     }
@@ -43,5 +46,11 @@ namespace CS460
             delete subsystem;
             subsystem = nullptr;
         }
+    }
+
+    void AnimationSystem::SetAppUtility(TimeUtility* time_util, FrameUtility* frame_util)
+    {
+        m_time_utility  = time_util;
+        m_frame_utility = frame_util;
     }
 }

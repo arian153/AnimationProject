@@ -25,4 +25,15 @@ namespace CS460
     void AnimationSubsystem::Shutdown()
     {
     }
+
+    void AnimationSubsystem::SetAppUtility(TimeUtility* time_util, FrameUtility* frame_util)
+    {
+        m_time_utility  = time_util;
+        m_frame_utility = frame_util;
+    }
+
+    void AnimationSubsystem::SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer)
+    {
+        m_primitive_renderer = primitive_renderer;
+    }
 }

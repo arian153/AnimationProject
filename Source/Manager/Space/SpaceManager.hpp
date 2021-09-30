@@ -4,6 +4,7 @@
 
 namespace CS460
 {
+    class AnimationSystem;
     class Level;
     class LogicSystem;
     class ResourceManager;
@@ -24,7 +25,8 @@ namespace CS460
             ObjectFactory*     object_factory,
             ComponentRegistry* component_registry,
             ResourceManager*   resource_manager,
-            LogicSystem*       logic_system);
+            LogicSystem*       logic_system,
+            AnimationSystem*   ani_system);
         ~SpaceManager();
 
         void Initialize();
@@ -52,6 +54,7 @@ namespace CS460
         PhysicsSystem*   m_physics_system   = nullptr;
         RenderSystem*    m_render_system    = nullptr;
         LogicSystem*     m_logic_system     = nullptr;
+        AnimationSystem* m_animation_system = nullptr;
         ResourceManager* m_resource_manager = nullptr;
 
         //factory

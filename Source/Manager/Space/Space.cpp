@@ -6,6 +6,8 @@
 #include "../Component/ComponentManager.hpp"
 #include "../Resource/ResourceType/JsonResource.hpp"
 #include "SpaceManager.hpp"
+#include "../../System/Animation/AnimationSubsystem.hpp"
+#include "../../System/Animation/AnimationSystem.hpp"
 #include "../../System/Logic/LogicSystem.hpp"
 #include "../../System/Logic/LogicSubsystem.hpp"
 
@@ -19,7 +21,7 @@ namespace CS460
     {
     }
 
-    void Space::Initialize(eSubsystemFlag flag, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry, LogicSystem* logic_system)
+    void Space::Initialize(eSubsystemFlag flag, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry, LogicSystem* logic_system, AnimationSystem* ani_system)
     {
         m_creation_flag = flag;
         //create component manager
@@ -60,9 +62,20 @@ namespace CS460
                 m_logic_subsystem->SetPrimitiveRenderer(m_scene->GetPrimitiveRenderer());
             }
         }
+
+        //create animation system
+        if (m_ani_subsystem == nullptr && HasFlag(flag, eSubsystemFlag::Animation))
+        {
+            m_ani_subsystem = ani_system->CreateSubsystem();
+            m_ani_subsystem->Initialize();
+            if (m_scene != nullptr)
+            {
+                m_ani_subsystem->SetPrimitiveRenderer(m_scene->GetPrimitiveRenderer());
+            }
+        }
     }
 
-    void Space::Initialize(JsonResource* space_resource, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry, LogicSystem* logic_system)
+    void Space::Initialize(JsonResource* space_resource, PhysicsSystem* physics_system, RenderSystem* render_system, ObjectFactory* obj_factory, ComponentRegistry* cmp_registry, LogicSystem* logic_system, AnimationSystem* ani_system)
     {
         m_space_resource = space_resource;
         space_resource->LoadSpaceFlag(this);
@@ -104,14 +117,31 @@ namespace CS460
                 m_logic_subsystem->SetPrimitiveRenderer(m_scene->GetPrimitiveRenderer());
             }
         }
+
+        //create animation system
+        if (m_ani_subsystem == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Animation))
+        {
+            m_ani_subsystem = ani_system->CreateSubsystem();
+            m_ani_subsystem->Initialize();
+            if (m_scene != nullptr)
+            {
+                m_ani_subsystem->SetPrimitiveRenderer(m_scene->GetPrimitiveRenderer());
+            }
+        }
+
         space_resource->LoadData(this);
     }
 
-    void Space::Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system, LogicSystem* logic_system)
+    void Space::Shutdown(PhysicsSystem* physics_system, RenderSystem* render_system, LogicSystem* logic_system, AnimationSystem* ani_system)
     {
         //maybe add a save data to file.
+        //shutdown animation
+        if (m_ani_subsystem != nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Animation))
+        {
+            ani_system->RemoveSubsystem(m_ani_subsystem);
+        }
         //shutdown logic
-        if (m_world != nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Logic))
+        if (m_logic_subsystem != nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Logic))
         {
             logic_system->RemoveLogicSubsystem(m_logic_subsystem);
         }
@@ -151,7 +181,10 @@ namespace CS460
         {
             m_world->Update(dt);
         }
-        //update animation
+        if (m_ani_subsystem != nullptr)
+        {
+            m_ani_subsystem->Update(dt);
+        }
         //update sound
         if (m_scene != nullptr)
         {
@@ -171,6 +204,11 @@ namespace CS460
             m_world->Update(dt);
         }
 
+        if (m_ani_subsystem != nullptr && HasFlag(flag, eSubsystemFlag::Animation))
+        {
+            m_ani_subsystem->Update(dt);
+        }
+
         if (m_scene != nullptr && HasFlag(flag, eSubsystemFlag::Scene))
         {
             m_scene->Update(dt);
@@ -187,7 +225,10 @@ namespace CS460
         {
             m_world->Render();
         }
-        //update animation
+        if (m_ani_subsystem != nullptr)
+        {
+            m_ani_subsystem->Render();
+        }
         //update sound
         if (m_scene != nullptr)
         {
@@ -197,13 +238,6 @@ namespace CS460
 
     void Space::UpdateSubsystem(Real dt, eSubsystemFlag flag) const
     {
-        if (flag == eSubsystemFlag::World)
-        {
-            if (m_world != nullptr)
-            {
-                m_world->Update(dt);
-            }
-        }
         if (flag == eSubsystemFlag::Logic)
         {
             if (m_logic_subsystem != nullptr)
@@ -211,6 +245,23 @@ namespace CS460
                 m_logic_subsystem->Update(dt);
             }
         }
+
+        if (flag == eSubsystemFlag::World)
+        {
+            if (m_world != nullptr)
+            {
+                m_world->Update(dt);
+            }
+        }
+
+        if (flag == eSubsystemFlag::Animation)
+        {
+            if (m_ani_subsystem != nullptr)
+            {
+                m_ani_subsystem->Update(dt);
+            }
+        }
+
         if (flag == eSubsystemFlag::Scene)
         {
             if (m_scene != nullptr)
@@ -222,6 +273,14 @@ namespace CS460
 
     void Space::RenderSubsystem(eSubsystemFlag flag) const
     {
+        if (flag == eSubsystemFlag::Logic)
+        {
+            auto logic = GetLogicSubsystem();
+            if (logic != nullptr)
+            {
+                logic->Render();
+            }
+        }
         if (flag == eSubsystemFlag::World)
         {
             auto world = GetWorld();
@@ -230,12 +289,11 @@ namespace CS460
                 world->Render();
             }
         }
-        if (flag == eSubsystemFlag::Logic)
+        if (flag == eSubsystemFlag::Animation)
         {
-            auto logic = GetLogicSubsystem();
-            if (logic != nullptr)
+            if (m_ani_subsystem != nullptr)
             {
-                logic->Render();
+                m_ani_subsystem->Render();
             }
         }
         if (flag == eSubsystemFlag::Scene)
@@ -288,6 +346,14 @@ namespace CS460
         }
     }
 
+    void Space::ConnectSubsystem(AnimationSubsystem* ani_system)
+    {
+        if (m_ani_subsystem == nullptr && HasFlag(m_creation_flag, eSubsystemFlag::Logic) == false)
+        {
+            m_ani_subsystem = ani_system;
+        }
+    }
+
     ObjectManager* Space::GetObjectManager() const
     {
         return m_object_manager;
@@ -316,6 +382,11 @@ namespace CS460
     LogicSubsystem* Space::GetLogicSubsystem() const
     {
         return m_logic_subsystem;
+    }
+
+    AnimationSubsystem* Space::GetAnimationSubsystem() const
+    {
+        return m_ani_subsystem;
     }
 
     bool Space::IsSubsystemUpdate(eSubsystemFlag flag) const

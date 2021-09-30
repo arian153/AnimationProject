@@ -468,6 +468,10 @@ namespace CS460
                     {
                         space->m_creation_flag |= eSubsystemFlag::Logic;
                     }
+                    else if (flag == "Animation")
+                    {
+                        space->m_creation_flag |= eSubsystemFlag::Animation;
+                    }
                 }
             }
         }
@@ -498,6 +502,10 @@ namespace CS460
                     {
                         space->m_update_flag |= eSubsystemFlag::Logic;
                     }
+                    else if (flag == "Animation")
+                    {
+                        space->m_update_flag |= eSubsystemFlag::Animation;
+                    }
                 }
             }
         }
@@ -527,6 +535,10 @@ namespace CS460
                     else if (flag == "Logic")
                     {
                         space->m_fixed_update_flag |= eSubsystemFlag::Logic;
+                    }
+                    else if (flag == "Animation")
+                    {
+                        space->m_fixed_update_flag |= eSubsystemFlag::Animation;
                     }
                 }
             }

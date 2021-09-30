@@ -12,10 +12,11 @@ namespace CS460
                                ObjectFactory*     object_factory,
                                ComponentRegistry* component_registry,
                                ResourceManager*   resource_manager,
-                               LogicSystem*       logic_system)
+                               LogicSystem*       logic_system, AnimationSystem* ani_system)
         : m_physics_system(physics_system),
           m_render_system(render_system),
           m_logic_system(logic_system),
+          m_animation_system(ani_system),
           m_resource_manager(resource_manager),
           m_object_factory(object_factory),
           m_component_registry(component_registry)
@@ -32,14 +33,14 @@ namespace CS460
         {
             m_global_space = new Space();
             m_global_flag  = eSubsystemFlag::ComponentManager | eSubsystemFlag::ObjectManager | eSubsystemFlag::Scene | eSubsystemFlag::World | eSubsystemFlag::Logic;
-            m_global_space->Initialize(m_global_flag, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
+            m_global_space->Initialize(m_global_flag, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system, m_animation_system);
         }
 
-        if(m_archetype_space == nullptr)
+        if (m_archetype_space == nullptr)
         {
-            m_archetype_space = new Space();
+            m_archetype_space   = new Space();
             eSubsystemFlag flag = eSubsystemFlag::ComponentManager | eSubsystemFlag::ObjectManager | eSubsystemFlag::Scene | eSubsystemFlag::World | eSubsystemFlag::Logic;
-            m_archetype_space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
+            m_archetype_space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system, m_animation_system);
             m_object_factory->SetArchetypeSpace(m_archetype_space);
         }
     }
@@ -48,20 +49,20 @@ namespace CS460
     {
         for (auto& space : m_spaces)
         {
-            space->Shutdown(m_physics_system, m_render_system, m_logic_system);
+            space->Shutdown(m_physics_system, m_render_system, m_logic_system, m_animation_system);
             delete space;
             space = nullptr;
         }
         m_spaces.clear();
         if (m_global_space != nullptr)
         {
-            m_global_space->Shutdown(m_physics_system, m_render_system, m_logic_system);
+            m_global_space->Shutdown(m_physics_system, m_render_system, m_logic_system, m_animation_system);
             delete m_global_space;
             m_global_space = nullptr;
         }
         if (m_archetype_space != nullptr)
         {
-            m_archetype_space->Shutdown(m_physics_system, m_render_system, m_logic_system);
+            m_archetype_space->Shutdown(m_physics_system, m_render_system, m_logic_system, m_animation_system);
             delete m_archetype_space;
             m_archetype_space = nullptr;
         }
@@ -79,7 +80,7 @@ namespace CS460
         space->m_creation_flag    = flag;
         space->m_resource_manager = m_resource_manager;
         space->m_level            = level;
-        space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
+        space->Initialize(flag, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system, m_animation_system);
         return space;
     }
 
@@ -91,7 +92,7 @@ namespace CS460
         space->m_resource_manager = m_resource_manager;
         space->m_level            = level;
         space->m_name             = resource->FileName();
-        space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
+        space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system, m_animation_system);
         return space;
     }
 
@@ -104,13 +105,13 @@ namespace CS460
         if (resource != nullptr)
         {
             space->m_name = resource->FileName();
-            space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
+            space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system, m_animation_system);
         }
         else
         {
             space->Initialize(
                               eSubsystemFlag::ComponentManager | eSubsystemFlag::ObjectManager,
-                              m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
+                              m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system, m_animation_system);
         }
         return space;
     }
@@ -124,7 +125,7 @@ namespace CS460
         if (space != nullptr)
         {
             m_spaces.erase(std::find(m_spaces.begin(), m_spaces.end(), space));
-            space->Shutdown(m_physics_system, m_render_system, m_logic_system);
+            space->Shutdown(m_physics_system, m_render_system, m_logic_system, m_animation_system);
             delete space;
             space = nullptr;
         }
@@ -135,8 +136,7 @@ namespace CS460
         if (resource != nullptr)
         {
             space->m_name = resource->FileName();
-            space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system);
+            space->Initialize(resource, m_physics_system, m_render_system, m_object_factory, m_component_registry, m_logic_system, m_animation_system);
         }
     }
-
-   }
+}

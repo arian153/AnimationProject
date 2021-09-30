@@ -18,13 +18,13 @@ namespace CS460
 
     enum class eJsonType : size_t
     {
-        None
-      , Setting
-      , Level
-      , Space
-      , Archetype
-      , MeshData
-      , ParticleData
+        None,
+        Setting,
+        Level,
+        Space,
+        Archetype,
+        MeshData,
+        ParticleData
     };
 
     class JsonResource final : public Resource

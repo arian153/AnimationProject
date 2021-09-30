@@ -3,6 +3,7 @@
 
 namespace CS460
 {
+    class AnimationSystem;
     class GameEditor;
     class GUISystem;
     class LogicSystem;
@@ -35,6 +36,7 @@ namespace CS460
         RenderSystem*      GetRenderSystem() const;
         PhysicsSystem*     GetPhysicsSystem() const;
         LogicSystem*       GetLogicSystem() const;
+        AnimationSystem*   GetAnimationSystem() const;
         FrameUtility*      GetFrameUtility() const;
         TimeUtility*       GetApplicationTimer() const;
         LevelManager*      GetLevelManager() const;
@@ -66,6 +68,7 @@ namespace CS460
         RenderSystem*      m_render_system      = nullptr;
         PhysicsSystem*     m_physics_system     = nullptr;
         LogicSystem*       m_logic_system       = nullptr;
+        AnimationSystem*   m_animation_system   = nullptr;
         GUISystem*         m_gui_system         = nullptr;
         TimeUtility*       m_time_utility       = nullptr;
         FrameUtility*      m_frame_utility      = nullptr;

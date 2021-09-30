@@ -17,6 +17,7 @@
 #include "../Utility/FileUtility.hpp"
 #include "../../../Manager/Resource/ResourceManager.hpp"
 #include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
+#include "../../Animation/AnimationSystem.hpp"
 #include "../Utility/ConsoleUtility.hpp"
 #include "../../Logic/LogicSystem.hpp"
 #include "../../GUI/GUISystem.hpp"
@@ -60,13 +61,25 @@ namespace CS460
         m_logic_system->SetInput(m_input);
         m_logic_system->SetTextRenderer(m_render_system->GetTextRenderer());
         m_logic_system->Initialize();
+
+        m_animation_system = new AnimationSystem();
+        m_animation_system->SetAppUtility(m_time_utility, m_frame_utility);
+        m_animation_system->Initialize();
+
         //create managers
         m_component_registry = new ComponentRegistry();
         m_component_registry->Initialize();
         m_object_factory = new ObjectFactory();
         m_object_factory->Initialize(m_component_registry);
 
-        m_space_manager = new SpaceManager(m_physics_system, m_render_system, m_object_factory, m_component_registry, m_resource_manager, m_logic_system);
+        m_space_manager = new SpaceManager(
+                                           m_physics_system,
+                                           m_render_system,
+                                           m_object_factory,
+                                           m_component_registry,
+                                           m_resource_manager,
+                                           m_logic_system,
+                                           m_animation_system);
         m_space_manager->Initialize();
 
         m_object_factory->LoadArchetype(m_resource_manager);
@@ -159,6 +172,13 @@ namespace CS460
             delete m_logic_system;
             m_logic_system = nullptr;
         }
+
+        if (m_animation_system != nullptr)
+        {
+            m_animation_system->Shutdown();
+            delete m_animation_system;
+            m_animation_system = nullptr;
+        }
         if (m_physics_system != nullptr)
         {
             m_physics_system->Shutdown();
@@ -209,6 +229,11 @@ namespace CS460
     LogicSystem* Application::GetLogicSystem() const
     {
         return m_logic_system;
+    }
+
+    AnimationSystem* Application::GetAnimationSystem() const
+    {
+        return m_animation_system;
     }
 
     FrameUtility* Application::GetFrameUtility() const

@@ -325,7 +325,7 @@ namespace CS460
     {
         level->UpdateSubsystem(dt, eSubsystemFlag::Logic);
         level->UpdateSubsystem(dt, eSubsystemFlag::World);
-        //update animation
+        level->UpdateSubsystem(dt, eSubsystemFlag::Animation);
         //update sound
         level->UpdateSubsystem(dt, eSubsystemFlag::Scene);
         level->Update(dt);
@@ -336,7 +336,7 @@ namespace CS460
     {
         level->FixedUpdateSubsystem(dt, eSubsystemFlag::Logic);
         level->FixedUpdateSubsystem(dt, eSubsystemFlag::World);
-        //update animation
+        level->FixedUpdateSubsystem(dt, eSubsystemFlag::Animation);
         //update sound
         level->FixedUpdateSubsystem(dt, eSubsystemFlag::Scene);
         level->FixedUpdate(dt);
@@ -346,6 +346,7 @@ namespace CS460
     {
         level->DrawSubsystem(eSubsystemFlag::Logic);
         level->DrawSubsystem(eSubsystemFlag::World);
+        level->DrawSubsystem(eSubsystemFlag::Animation);
         //render scene
         m_gui_system->BeginRender();
         m_render_system->BeginUpdate();
