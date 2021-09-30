@@ -79,6 +79,27 @@ namespace CS460
             m_manager->Destroy();
             m_manager = nullptr;
         }
+
+        m_anim_names.Clear();
+
+        for (auto& bone : m_bones)
+        {
+            if (bone != nullptr)
+            {
+                delete bone;
+            }
+        }
+        m_bones.clear();
+
+        for (auto& clips : m_anim_clips)
+        {
+            if (clips != nullptr)
+            {
+                clips->key_frames.clear();
+                delete clips;
+            }
+        }
+        m_anim_clips.clear();
     }
 
     I32 FBXLoader::GetMeshCount() const

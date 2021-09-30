@@ -6,9 +6,9 @@ namespace CS460
 {
     enum class eMeshType : size_t
     {
-        Invalid
-      , CustomTXT
-      , WaveFrontOBJ
+        Invalid,
+        CustomTXT,
+        WaveFrontOBJ
     };
 
     enum class eOBJFaceType
@@ -34,7 +34,7 @@ namespace CS460
         void LoadCustomTXT(std::ifstream& file);
         void CheckMeshType();
 
-        MeshData* GetMeshData() ;
+        MeshData* GetMeshData();
 
     private:
         eMeshType m_mesh_type = eMeshType::Invalid;

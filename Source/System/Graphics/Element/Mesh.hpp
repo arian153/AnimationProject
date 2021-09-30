@@ -51,10 +51,7 @@ namespace CS460
         friend class MeshComponent;
 
     private:
-        ShaderManagerCommon* m_shader_manager   = nullptr;
-        RendererCommon*      m_renderer         = nullptr;
-     
-
+        RendererCommon*    m_renderer  = nullptr;
         MeshData*          m_mesh_data = nullptr;
         TextureArrayCommon m_textures;
 
