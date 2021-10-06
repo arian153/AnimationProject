@@ -89,6 +89,8 @@ namespace CS460
         VertexBufferCommon*            m_face_vertex_buffer = nullptr;
         IndexBufferCommon*             m_face_index_buffer  = nullptr;
 
+        //Do instancing
+
     public:
         const int CIRCULAR_VERTICES_COUNT    = 100;
         const int SPHERICAL_SLICE_COUNT      = 14;

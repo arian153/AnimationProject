@@ -31,7 +31,7 @@ namespace CS460
         friend std::ostream& operator<<(std::ostream& os, const VQSTransform& vqs);
         friend VQSTransform  operator*(Real real, const VQSTransform& vqs);
 
-    private:
+    public:
         Vector3    position;
         Real       scale = 1.0f;
         Quaternion rotation;

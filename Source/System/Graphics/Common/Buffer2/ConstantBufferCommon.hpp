@@ -8,6 +8,7 @@
 
 namespace CS460
 {
+    struct MaterialBufferData;
     struct MultipleLightsBufferData;
     struct TextureBufferData;
     enum class eBindingStage;
@@ -36,6 +37,7 @@ namespace CS460
         void Update(const MatrixBufferDataInstancing& data) const;
         void Update(const TextureBufferData& data) const;
         void Update(const MultipleLightsBufferData& data) const;
+        void Update(const MaterialBufferData& data) const;
 
         void* Map() const;
         void  UnMap() const;

@@ -82,4 +82,12 @@ namespace CS460
         int   norm_type;
         float gamma;
     };
+
+    struct MaterialBufferData
+    {
+        Color ambient;
+        Color diffuse;
+        Color specular;
+        Color reflect;
+    };
 }

@@ -1,11 +1,13 @@
 #pragma once
 #include <vector>
 
+#include "../../Graphics/DataType/Color.hpp"
 #include "../../Math/Utility/MathDef.hpp"
 #include "../AnimationClip/AnimationClip.hpp"
 
 namespace CS460
 {
+    class PrimitiveRenderer;
     class Bone;
 
     class Skeleton
@@ -16,17 +18,28 @@ namespace CS460
 
         void Initialize();
         void Update(Real dt);
-        void Draw();
         void Shutdown();
 
+        void Draw(PrimitiveRenderer* renderer);
+
         void CreateSample();
+    private:
+        friend class AniMeshComponent;
+
+        void DrawRecursive(PrimitiveRenderer* renderer, Bone* bone) const;
+
+        Bone* CreateBone(const VQSTransform& vqs, const std::string& name, Bone* parent);
+        Bone* CreateBone(const VQSTransform& vqs, const std::string& name, I64 p_idx);
+
+        void SetUpSiblingRecursive(Bone* bone);
 
     private:
+        AniMeshComponent*          m_component = nullptr;
         Bone*                      m_root_bone = nullptr;
         std::vector<AnimationClip> m_animation_clips;
         std::vector<Bone*>         m_bones;
 
-        I64 m_clip_id = Core::I64_MAX;
-
+        Color m_color;
+        I64   m_clip_id = Core::I64_MAX;
     };
 }

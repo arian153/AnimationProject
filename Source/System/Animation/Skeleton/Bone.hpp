@@ -6,6 +6,9 @@
 
 namespace CS460
 {
+    class Color;
+    class PrimitiveRenderer;
+
     class Bone
     {
     public:
@@ -15,17 +18,24 @@ namespace CS460
         void Update(Real dt);
         void Shutdown();
 
+        void  Draw(PrimitiveRenderer* renderer, const Color& color);
+        void Push(Bone* child);
+
     private:
-        VQSTransform offset_transform;
-        std::string  name;
+        friend class Skeleton;
 
-        Bone* parent = nullptr;
-        I64   parent_idx = -1;
-        I64   my_idx     = -1;
+    private:
+        Skeleton*    m_skeleton = nullptr;
+        VQSTransform m_offset;
+        std::string  m_name = "";
 
-        std::vector<I64>   sibling_idx;
-        std::vector<I64>   children_idx;
-        std::vector<Bone*> sibling;
-        std::vector<Bone*> children;
+        Bone* m_parent     = nullptr;
+        I64   m_parent_idx = -1;
+        I64   m_own_idx    = -1;
+
+        std::vector<I64>   m_sib_idx;
+        std::vector<I64>   m_chi_idx;
+        std::vector<Bone*> m_sibling;
+        std::vector<Bone*> m_children;
     };
 }

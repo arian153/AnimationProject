@@ -34,7 +34,7 @@ namespace CS460
         void     Clone(AniMeshComponent* origin);
 
     private:
-        //Has AniMesh - Mesh with subset
-        //Has Skeleton - Mesh with ani-clips and bones.
+        AniMesh*  m_ani_mesh = nullptr;
+        Skeleton* m_skeleton = nullptr;
     };
 }

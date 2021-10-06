@@ -6,11 +6,19 @@
 
 namespace CS460
 {
+    class AniMeshComponent;
     class VertexBufferCommon;
     class IndexBufferCommon;
     class ConstantBufferCommon;
     class RendererCommon;
     class MeshData;
+
+    struct SubAniMesh
+    {
+        IndexBufferCommon*    index_buffer    = nullptr;
+        ConstantBufferCommon* material_buffer = nullptr;
+        ConstantBufferCommon* texture_buffer  = nullptr;
+    };
 
     class AniMesh
     {
@@ -31,25 +39,29 @@ namespace CS460
         void RemoveTexture(TextureCommon* texture);
         void SetRenderer(RendererCommon* renderer);
 
-        void SetMaterialIdentifier(const MaterialIdentifier& material_data);
-        void SetSceneID(size_t model_id, size_t material_id);
-
+        void        SetMaterialIdentifier(const MaterialIdentifier& material_data);
         std::string GetShaderType() const;
+
+        I64 SubMeshCount() const;
+
+        void InitSubMesh(SubAniMesh& sub_mesh) const;
+        void ShutdownSubMesh(SubAniMesh& sub_mesh) const;
+
     private:
-        RendererCommon*    m_renderer  = nullptr;
-        MeshData*          m_mesh_data = nullptr;
+        friend class AniMeshComponent;
+
+    private:
+        AniMeshComponent* m_component = nullptr;
+        RendererCommon*   m_renderer  = nullptr;
+        MeshData*         m_mesh_data = nullptr;
+
         TextureArrayCommon m_textures;
+        MaterialIdentifier m_material_info;
+        MaterialColor      m_material_color;
 
-        size_t      m_material_id   = (size_t)-1;
-        size_t      m_model_id      = (size_t)-1;
-        int         m_diffuse_type  = -1;
-        int         m_specular_type = -1;
-        int         m_normal_type   = -1;
-        std::string m_shader_type   = "";
+        VertexBufferCommon*   m_vertex_buffer = nullptr;
+        ConstantBufferCommon* m_matrix_buffer = nullptr;
 
-        VertexBufferCommon*             m_vertex_buffer  = nullptr;
-        ConstantBufferCommon*           m_texture_buffer = nullptr;
-        ConstantBufferCommon*           m_matrix_buffer  = nullptr;
-        std::vector<IndexBufferCommon*> m_index_buffers;
+        std::vector<SubAniMesh> m_sub_meshes;
     };
 }

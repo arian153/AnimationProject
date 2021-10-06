@@ -200,6 +200,23 @@ namespace CS460
         m_device_context->Unmap(m_constant_buffer, 0);
     }
 
+    void ConstantBufferCommon::Update(const MaterialBufferData& data) const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        HRESULT                  result = m_device_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+
+        if (FAILED(result))
+            return;
+
+        MaterialBufferData* data_ptr = (MaterialBufferData*)mapped_resource.pData;
+        data_ptr->ambient            = data.ambient;
+        data_ptr->diffuse            = data.diffuse;
+        data_ptr->specular           = data.specular;
+        data_ptr->reflect            = data.reflect;
+
+        m_device_context->Unmap(m_constant_buffer, 0);
+    }
+
     void* ConstantBufferCommon::Map() const
     {
         D3D11_MAPPED_SUBRESOURCE mapped_resource;

@@ -1,5 +1,6 @@
 #include "Scene.hpp"
 
+#include "AniMesh.hpp"
 #include "Light.hpp"
 #include "../Common/Renderer/RendererCommon.hpp"
 #include "../Common/Shader/ShaderManagerCommon.hpp"
@@ -247,6 +248,28 @@ namespace CS460
                 light = nullptr;
             }
             m_lights.clear();
+        }
+
+        //clear ani_meshes
+        {
+            for (auto& ani_mesh : m_ani_meshes)
+            {
+                ani_mesh->Shutdown();
+                delete ani_mesh;
+                ani_mesh = nullptr;
+            }
+            m_ani_meshes.clear();
+        }
+
+        //clear cube_map_skies
+        {
+            for (auto& sky : m_cube_map_skies)
+            {
+                sky->Shutdown();
+                delete sky;
+                sky = nullptr;
+            }
+            m_cube_map_skies.clear();
         }
 
         //clear meshes
@@ -553,6 +576,25 @@ namespace CS460
         //    auto found = std::find(m_sky_domes.begin(), m_sky_domes.end(), sky_dome);
         //    m_sky_domes.erase(found);
         //}
+    }
+
+    void Scene::AddAniMesh(AniMesh* ani_mesh)
+    {
+        ani_mesh->SetRenderer(m_renderer);
+        auto found = std::find(m_ani_meshes.begin(), m_ani_meshes.end(), ani_mesh);
+        if (found == m_ani_meshes.end())
+        {
+            m_ani_meshes.push_back(ani_mesh);
+        }
+    }
+
+    void Scene::RemoveAniMesh(AniMesh* ani_mesh)
+    {
+        if (!m_ani_meshes.empty())
+        {
+            auto found = std::find(m_ani_meshes.begin(), m_ani_meshes.end(), ani_mesh);
+            m_ani_meshes.erase(found);
+        }
     }
 
     Camera* Scene::AddCamera(Camera* camera)
