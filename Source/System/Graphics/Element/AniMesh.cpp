@@ -1,5 +1,6 @@
 #include "AniMesh.hpp"
 
+#include "../../../Manager/Component/EngineComponent/AniMeshComponent.hpp"
 #include "../Common/Buffer2/ConstantBufferCommon.hpp"
 #include "../Common/Buffer2/ConstantBufferData.hpp"
 #include "../Common/Buffer2/IndexBufferCommon.hpp"
@@ -22,6 +23,11 @@ namespace CS460
 
     void AniMesh::Shutdown()
     {
+        if (m_component != nullptr)
+        {
+            m_component->m_ani_mesh = nullptr;
+        }
+
         if (m_vertex_buffer != nullptr)
         {
             m_vertex_buffer->Shutdown();

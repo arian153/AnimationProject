@@ -1,6 +1,7 @@
 #include "Skeleton.hpp"
 
 #include "Bone.hpp"
+#include "../../../Manager/Component/EngineComponent/AniMeshComponent.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace CS460
@@ -29,6 +30,11 @@ namespace CS460
 
     void Skeleton::Shutdown()
     {
+        if (m_component != nullptr)
+        {
+            m_component->m_skeleton = nullptr;
+        }
+
         for (auto& bone : m_bones)
         {
             bone->Shutdown();
