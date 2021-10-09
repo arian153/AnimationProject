@@ -16,6 +16,7 @@ namespace CS460
 
     void Skeleton::Initialize()
     {
+        CreateSample();
     }
 
     void Skeleton::Update(Real dt)
@@ -88,7 +89,7 @@ namespace CS460
         Vector3 bone_pos = bone->m_offset.position;
         for (auto& child : bone->m_children)
         {
-            Vector3 child_pos = bone->m_offset.position;
+            Vector3 child_pos = child->m_offset.position;
             renderer->DrawSegment(bone_pos, child_pos, m_color);
             DrawRecursive(renderer, child);
         }

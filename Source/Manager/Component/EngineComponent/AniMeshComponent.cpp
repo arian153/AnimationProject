@@ -46,11 +46,23 @@ namespace CS460
     void AniMeshComponent::Shutdown()
     {
         Unsubscribe();
+        if (m_ani_mesh != nullptr)
+        {
+            m_ani_mesh->Shutdown();
+            delete m_ani_mesh;
+            m_ani_mesh = nullptr;
+        }
+
+        if (m_skeleton != nullptr)
+        {
+            m_skeleton->Shutdown();
+            delete m_skeleton;
+            m_skeleton = nullptr;
+        }
     }
 
     bool AniMeshComponent::Load(const Json::Value& data)
     {
-
         return true;
     }
 
@@ -60,6 +72,10 @@ namespace CS460
 
     void AniMeshComponent::Edit(CommandRegistry* command_registry)
     {
+        if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
+        {
+            
+        }
     }
 
     void AniMeshComponent::Subscribe()

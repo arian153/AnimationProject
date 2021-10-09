@@ -37,6 +37,7 @@ namespace CS460
             const CS460::Vector3 POSITIVE_MIN(Math::REAL_POSITIVE_MIN, Math::REAL_POSITIVE_MIN, Math::REAL_POSITIVE_MIN);
             const CS460::Vector3 NEGATIVE_MAX(Math::REAL_NEGATIVE_MAX, Math::REAL_NEGATIVE_MAX, Math::REAL_NEGATIVE_MAX);
             const CS460::Vector3 NEGATIVE_MIN(Math::REAL_NEGATIVE_MIN, Math::REAL_NEGATIVE_MIN, Math::REAL_NEGATIVE_MIN);
+            const CS460::Vector3 UP(0.0f, 1.0f, 0.0f);
             //const CS460::Vector3 INVALID(Math::FNAN, Math::FNAN, Math::FNAN);
             //const CS460::Vector3 INFINITE(Math::INF, Math::INF, Math::INF);
         }

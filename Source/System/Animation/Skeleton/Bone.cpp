@@ -30,12 +30,13 @@ namespace CS460
 
     void Bone::Draw(PrimitiveRenderer* renderer, const Color& color)
     {
-        renderer->DrawPrimitive(Sphere(), eRenderingMode::Face, color);
+        renderer->DrawPrimitive(Sphere(m_offset.position, m_offset.rotation, 0.05f), eRenderingMode::Face, color);
     }
 
     void Bone::Push(Bone* child)
     {
         m_children.push_back(child);
         m_chi_idx.push_back(child->m_own_idx);
+
     }
 }

@@ -8,11 +8,6 @@ namespace CS460
 {
     namespace Math
     {
-        Real LinearInterpolation(Real v0, Real v1, Real t)
-        {
-            return (1.0f - t) * v0 + t * v1;
-        }
-
         Real SmoothStart(Real t)
         {
             return t * t;

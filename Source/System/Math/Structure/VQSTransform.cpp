@@ -1,6 +1,7 @@
 #include "VQSTransform.hpp"
 #include <ostream>
 
+#include "../Utility/Interpolation.hpp"
 #include "../Utility/Utility.hpp"
 #include "../Utility/MatrixUtility.hpp"
 
@@ -83,12 +84,25 @@ namespace CS460
 
     VQSTransform VQSTransform::operator*(const VQSTransform& vqs) const
     {
-        return VQSTransform(position + vqs.position, rotation + vqs.rotation, scale + vqs.scale);
+        return VQSTransform(rotation.Rotate(scale * vqs.position) + position, rotation * vqs.rotation, scale * vqs.scale);
     }
 
     Vector3 VQSTransform::operator*(const Vector3& rhs) const
     {
         return rotation.Rotate(scale * rhs) + position;
+    }
+
+    VQSTransform Multiply(const VQSTransform& a, const VQSTransform& b)
+    {
+        return VQSTransform(a.rotation.Rotate(a.scale * b.position) + a.position, a.rotation * b.rotation, a.scale * b.scale);
+    }
+
+    VQSTransform Interpolation(const VQSTransform& a, const VQSTransform& b, Real t)
+    {
+        return VQSTransform(
+                            Lerp(a.position, b.position, t),
+                            Slerp(a.rotation, b.rotation, t),
+                            Elerp(a.scale, b.scale, t));
     }
 
     std::ostream& operator<<(std::ostream& os, const VQSTransform& vqs)
