@@ -5,6 +5,7 @@
 
 namespace CS460
 {
+    class AniMeshResource;
     class RendererCommon;
     enum class eJsonType : unsigned long long;
     class LevelManager;
@@ -48,6 +49,12 @@ namespace CS460
         TextureResource* GetTextureResourceFileName(const std::wstring& file_name);
         void             GetTextureResources(const std::wstring& file_name, std::vector<TextureResource*>& resources);
         void             InitializeTextureResources(RendererCommon* renderer);
+
+        //ani mesh
+        AniMeshResource* GetAniMeshResource(const std::wstring& path);
+        AniMeshResource* GetAniMeshResourceFileName(const std::wstring& file_name);
+        void          GetAniMeshResources(const std::wstring& file_name, std::vector<AniMeshResource*>& resources);
+
 
         //mesh
         MeshResource* GetMeshResource(const std::wstring& path);
@@ -96,6 +103,7 @@ namespace CS460
         std::unordered_map<std::wstring, AudioResource*>     m_audio_resource_map;
         std::unordered_map<std::wstring, JsonResource*>      m_json_resource_map;
         std::unordered_map<std::wstring, TextResource*>      m_text_resource_map;
+        std::unordered_map<std::wstring, AniMeshResource*>   m_ani_mesh_resource_map;
 
         FileUtility* m_file_utility = nullptr;
     private:

@@ -10,6 +10,7 @@
 #include "ResourceType/UndefinedResource.hpp"
 #include "ResourceType/TextResource.hpp"
 #include "../../System/Core/Utility/CoreUtility.hpp"
+#include "ResourceType/AniMeshResource.hpp"
 
 namespace CS460
 {
@@ -78,6 +79,20 @@ namespace CS460
                 resources.push_back(found);
             }
         }
+
+        for (auto& resource : m_ani_mesh_resource_map)
+        {
+            auto found = resource.second;
+            if (found->WFileName() == file_name)
+            {
+                resources.push_back(found);
+            }
+            else if (found->WFileName() + found->WFileType() == file_name)
+            {
+                resources.push_back(found);
+            }
+        }
+
         for (auto& resource : m_json_resource_map)
         {
             auto found = resource.second;
@@ -154,102 +169,140 @@ namespace CS460
 
     void ResourceManager::RemoveResource(const std::wstring& path)
     {
-        auto found_in_resource = m_undefined_resource_map.find(path);
-        if (found_in_resource != m_undefined_resource_map.end())
         {
-            if (found_in_resource->second->IsLoaded() == true &&
-                found_in_resource->second->IsUnloaded() == true)
+            auto found_in_resource = m_undefined_resource_map.find(path);
+            if (found_in_resource != m_undefined_resource_map.end())
             {
-                if (found_in_resource->second != nullptr)
+                if (found_in_resource->second->IsLoaded() == true &&
+                    found_in_resource->second->IsUnloaded() == true)
                 {
-                    delete found_in_resource->second;
-                    found_in_resource->second = nullptr;
+                    if (found_in_resource->second != nullptr)
+                    {
+                        delete found_in_resource->second;
+                        found_in_resource->second = nullptr;
+                    }
+                    m_undefined_resource_map.erase(found_in_resource);
                 }
-                m_undefined_resource_map.erase(found_in_resource);
             }
         }
-        auto found_in_json = m_json_resource_map.find(path);
-        if (found_in_json != m_json_resource_map.end())
+
         {
-            if (found_in_json->second->IsLoaded() == true &&
-                found_in_json->second->IsUnloaded() == true)
+            auto found_in_json = m_json_resource_map.find(path);
+            if (found_in_json != m_json_resource_map.end())
             {
-                if (found_in_json->second != nullptr)
+                if (found_in_json->second->IsLoaded() == true &&
+                    found_in_json->second->IsUnloaded() == true)
                 {
-                    delete found_in_json->second;
-                    found_in_json->second = nullptr;
+                    if (found_in_json->second != nullptr)
+                    {
+                        delete found_in_json->second;
+                        found_in_json->second = nullptr;
+                    }
+                    m_json_resource_map.erase(found_in_json);
                 }
-                m_json_resource_map.erase(found_in_json);
             }
         }
-        auto found_in_audio = m_audio_resource_map.find(path);
-        if (found_in_audio != m_audio_resource_map.end())
+
         {
-            if (found_in_audio->second->IsLoaded() == true &&
-                found_in_audio->second->IsUnloaded() == true)
+            auto found_in_audio = m_audio_resource_map.find(path);
+            if (found_in_audio != m_audio_resource_map.end())
             {
-                if (found_in_audio->second != nullptr)
+                if (found_in_audio->second->IsLoaded() == true &&
+                    found_in_audio->second->IsUnloaded() == true)
                 {
-                    delete found_in_audio->second;
-                    found_in_audio->second = nullptr;
+                    if (found_in_audio->second != nullptr)
+                    {
+                        delete found_in_audio->second;
+                        found_in_audio->second = nullptr;
+                    }
+                    m_audio_resource_map.erase(found_in_audio);
                 }
-                m_audio_resource_map.erase(found_in_audio);
             }
         }
-        auto found_in_texture = m_texture_resource_map.find(path);
-        if (found_in_texture != m_texture_resource_map.end())
+
+        //
         {
-            if (found_in_texture->second->IsLoaded() == true &&
-                found_in_texture->second->IsUnloaded() == true)
+            auto found_in_texture = m_texture_resource_map.find(path);
+            if (found_in_texture != m_texture_resource_map.end())
             {
-                if (found_in_texture->second != nullptr)
+                if (found_in_texture->second->IsLoaded() == true &&
+                    found_in_texture->second->IsUnloaded() == true)
                 {
-                    delete found_in_texture->second;
-                    found_in_texture->second = nullptr;
+                    if (found_in_texture->second != nullptr)
+                    {
+                        delete found_in_texture->second;
+                        found_in_texture->second = nullptr;
+                    }
+                    m_texture_resource_map.erase(found_in_texture);
                 }
-                m_texture_resource_map.erase(found_in_texture);
             }
         }
-        auto found_in_text = m_text_resource_map.find(path);
-        if (found_in_text != m_text_resource_map.end())
+
         {
-            if (found_in_text->second->IsLoaded() == true &&
-                found_in_text->second->IsUnloaded() == true)
+            auto found_in_text = m_text_resource_map.find(path);
+            if (found_in_text != m_text_resource_map.end())
             {
-                if (found_in_text->second != nullptr)
+                if (found_in_text->second->IsLoaded() == true &&
+                    found_in_text->second->IsUnloaded() == true)
                 {
-                    delete found_in_text->second;
-                    found_in_text->second = nullptr;
+                    if (found_in_text->second != nullptr)
+                    {
+                        delete found_in_text->second;
+                        found_in_text->second = nullptr;
+                    }
+                    m_text_resource_map.erase(found_in_text);
                 }
-                m_text_resource_map.erase(found_in_text);
             }
         }
-        auto found_in_mesh = m_mesh_resource_map.find(path);
-        if (found_in_mesh != m_mesh_resource_map.end())
+
         {
-            if (found_in_mesh->second->IsLoaded() == true &&
-                found_in_mesh->second->IsUnloaded() == true)
+            auto found_in_mesh = m_mesh_resource_map.find(path);
+            if (found_in_mesh != m_mesh_resource_map.end())
             {
-                if (found_in_mesh->second != nullptr)
+                if (found_in_mesh->second->IsLoaded() == true &&
+                    found_in_mesh->second->IsUnloaded() == true)
                 {
-                    delete found_in_mesh->second;
-                    found_in_mesh->second = nullptr;
+                    if (found_in_mesh->second != nullptr)
+                    {
+                        delete found_in_mesh->second;
+                        found_in_mesh->second = nullptr;
+                    }
+                    m_mesh_resource_map.erase(found_in_mesh);
                 }
-                m_mesh_resource_map.erase(found_in_mesh);
             }
         }
-        auto found_in_shader = m_shader_resource_map.find(path);
-        if (found_in_shader != m_shader_resource_map.end())
+
         {
-            if (found_in_shader->second->IsLoaded() == true &&
-                found_in_shader->second->IsUnloaded() == true)
+            auto found_in_ani_mesh = m_ani_mesh_resource_map.find(path);
+            if (found_in_ani_mesh != m_ani_mesh_resource_map.end())
             {
-                if (found_in_shader->second != nullptr)
+                if (found_in_ani_mesh->second->IsLoaded() == true &&
+                    found_in_ani_mesh->second->IsUnloaded() == true)
                 {
-                    delete found_in_shader->second;
-                    found_in_shader->second = nullptr;
+                    if (found_in_ani_mesh->second != nullptr)
+                    {
+                        delete found_in_ani_mesh->second;
+                        found_in_ani_mesh->second = nullptr;
+                    }
+                    m_ani_mesh_resource_map.erase(found_in_ani_mesh);
                 }
-                m_shader_resource_map.erase(found_in_shader);
+            }
+        }
+
+        {
+            auto found_in_shader = m_shader_resource_map.find(path);
+            if (found_in_shader != m_shader_resource_map.end())
+            {
+                if (found_in_shader->second->IsLoaded() == true &&
+                    found_in_shader->second->IsUnloaded() == true)
+                {
+                    if (found_in_shader->second != nullptr)
+                    {
+                        delete found_in_shader->second;
+                        found_in_shader->second = nullptr;
+                    }
+                    m_shader_resource_map.erase(found_in_shader);
+                }
             }
         }
     }
@@ -401,6 +454,33 @@ namespace CS460
             }
         }
         m_text_resource_map.clear();
+        {
+            //remove ani mesh
+            for (auto& resource : m_ani_mesh_resource_map)
+            {
+                auto found = resource.second;
+                if (found != nullptr)
+                {
+                    found->Shutdown();
+                    if (found->IsLoaded() == false)
+                    {
+                        std::wstring result = found->WFileName() + found->WFileType();
+                        result += L" file didn't loaded. this file may not used in engine. \n";
+                        m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
+                    }
+                    if (found->IsUnloaded() == false)
+                    {
+                        std::wstring result = found->WFileName() + found->WFileType();
+                        result += L" file didn't unloaded. this file may not released in engine. \n";
+                        m_file_utility->ReadAndWriteStringToFile(L"Resource Manager Report.txt", result);
+                    }
+                    delete found;
+                    found = nullptr;
+                }
+            }
+            m_ani_mesh_resource_map.clear();
+        }
+
         //remove remains
         for (auto& resource : m_undefined_resource_map)
         {
@@ -530,6 +610,45 @@ namespace CS460
         {
             auto resource = texture.second;
             resource->SetRenderer(renderer);
+        }
+    }
+
+    AniMeshResource* ResourceManager::GetAniMeshResource(const std::wstring& path)
+    {
+        auto found = m_ani_mesh_resource_map.find(path);
+        if (found != m_ani_mesh_resource_map.end())
+        {
+            return found->second;
+        }
+        return nullptr;
+    }
+
+    AniMeshResource* ResourceManager::GetAniMeshResourceFileName(const std::wstring& file_name)
+    {
+        for (auto& mesh : m_ani_mesh_resource_map)
+        {
+            auto resource = mesh.second;
+            if (resource->WFileName() + resource->WFileType() == file_name)
+            {
+                return resource;
+            }
+        }
+        return nullptr;
+    }
+
+    void ResourceManager::GetAniMeshResources(const std::wstring& file_name, std::vector<AniMeshResource*>& resources)
+    {
+        for (auto& mesh : m_ani_mesh_resource_map)
+        {
+            auto resource = mesh.second;
+            if (resource->WFileName() == file_name)
+            {
+                resources.push_back(resource);
+            }
+            else if (resource->WFileName() + resource->WFileType() == file_name)
+            {
+                resources.push_back(resource);
+            }
         }
     }
 
@@ -778,22 +897,22 @@ namespace CS460
 
     Resource* ResourceManager::AddResource(const std::wstring& path)
     {
-        Resource*    resource;
-        std::wstring type = m_file_utility->GetFileTypeFromPath(path);
-        std::wstring name = m_file_utility->GetFileNameFromPath(path);
+        Resource*    resource = nullptr;
+        std::wstring type     = m_file_utility->GetFileTypeFromPath(path);
+        std::wstring name     = m_file_utility->GetFileNameFromPath(path);
         if (type == L".fx" || type == L".hlsl" || type == L".shader")
         {
             resource = new ShaderResource(path);
             ((ShaderResource*)resource)->SetStage(eShaderStage::IntegratedShader);
             m_shader_resource_map.emplace(path, (ShaderResource*)resource);
         }
-        else if( type == L".ps")
+        else if (type == L".ps")
         {
             resource = new ShaderResource(path);
             ((ShaderResource*)resource)->SetStage(eShaderStage::PixelShader);
             m_shader_resource_map.emplace(path, (ShaderResource*)resource);
         }
-        else if( type == L".vs")
+        else if (type == L".vs")
         {
             resource = new ShaderResource(path);
             ((ShaderResource*)resource)->SetStage(eShaderStage::VertexShader);
@@ -831,11 +950,17 @@ namespace CS460
             resource = new TextResource(path);
             m_text_resource_map.emplace(path, (TextResource*)resource);
         }
+        else if (type == L".fbx")
+        {
+            resource = new AniMeshResource(path);
+            m_ani_mesh_resource_map.emplace(path, (AniMeshResource*)resource);
+        }
         else
         {
             resource = new UndefinedResource(path);
             m_undefined_resource_map.emplace(path, (UndefinedResource*)resource);
         }
+
         resource->m_file_name_w      = name;
         resource->m_file_type_w      = type;
         resource->m_file_path_m      = ToString(path);
