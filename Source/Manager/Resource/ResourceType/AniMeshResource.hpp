@@ -5,6 +5,8 @@
 
 namespace CS460
 {
+    class Skeleton;
+
     class AniMeshResource final : public Resource
     {
     public:
@@ -14,6 +16,8 @@ namespace CS460
         void Initialize() override;
         void Shutdown() override;
 
+
+        FBXLoader& GetFBXData();
 
     private:
         FBXLoader m_fbx_loader;

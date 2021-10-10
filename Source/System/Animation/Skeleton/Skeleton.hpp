@@ -7,6 +7,7 @@
 
 namespace CS460
 {
+    class AniMeshResource;
     class PrimitiveRenderer;
     class Bone;
 
@@ -23,16 +24,18 @@ namespace CS460
         void Draw(PrimitiveRenderer* renderer) const;
 
         void CreateSample();
+        void SetAniMeshResource(AniMeshResource* resource);
+
     private:
-        friend class AniMeshComponent;
-
-        void DrawRecursive(PrimitiveRenderer* renderer, Bone* bone) const;
-        void DrawRecursive(PrimitiveRenderer* renderer, Bone* bone, const VQSTransform& parent) const;
-
+        void  DrawRecursive(PrimitiveRenderer* renderer, Bone* bone) const;
+        void  DrawRecursive(PrimitiveRenderer* renderer, Bone* bone, const VQSTransform& parent) const;
         Bone* CreateBone(const VQSTransform& vqs, const std::string& name, Bone* parent);
         Bone* CreateBone(const VQSTransform& vqs, const std::string& name, I64 p_idx);
+        void  SetUpSiblingRecursive(Bone* bone);
 
-        void SetUpSiblingRecursive(Bone* bone);
+    private:
+        friend class AniMeshComponent;
+        friend class AniMeshResource;
 
     private:
         AniMeshComponent*          m_component = nullptr;

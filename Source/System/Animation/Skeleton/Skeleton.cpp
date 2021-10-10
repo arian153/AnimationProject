@@ -2,6 +2,7 @@
 
 #include "Bone.hpp"
 #include "../../../Manager/Component/EngineComponent/AniMeshComponent.hpp"
+#include "../../../Manager/Resource/ResourceType/AniMeshResource.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace CS460
@@ -86,6 +87,11 @@ namespace CS460
             Bone* part_c_a3 = CreateBone(VQSTransform(Vector3(0, 0, 0.5f), Quaternion(EulerAngle(Math::PI_DIV_6))), "Sub-A", part_c_a2);
             Bone* part_c_a4 = CreateBone(VQSTransform(Vector3(0, 0, 0.5f), Quaternion(EulerAngle(Math::PI_DIV_6))), "Sub-A", part_c_a3);
         }
+    }
+
+    void Skeleton::SetAniMeshResource(AniMeshResource* resource)
+    {
+        resource->CopyData(this);
     }
 
     void Skeleton::DrawRecursive(PrimitiveRenderer* renderer, Bone* bone) const

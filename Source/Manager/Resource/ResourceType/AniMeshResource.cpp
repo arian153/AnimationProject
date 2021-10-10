@@ -1,5 +1,7 @@
 #include "AniMeshResource.hpp"
 
+#include "../../../System/Animation/Skeleton/Skeleton.hpp"
+
 namespace CS460
 {
     AniMeshResource::AniMeshResource(const std::wstring& path)
@@ -14,7 +16,11 @@ namespace CS460
 
     void AniMeshResource::Initialize()
     {
-        m_fbx_loader.LoadFbx(m_file_path_w);
+        if (m_file_type_w == L".fbx")
+        {
+            m_fbx_loader.LoadFbx(m_file_path_w);
+        }
+
         m_b_loaded = true;
     }
 
@@ -22,5 +28,11 @@ namespace CS460
     {
         m_fbx_loader.Shutdown();
         m_b_unloaded = true;
+    }
+
+    void AniMeshResource::CopyData(Skeleton* skeleton)
+    {
+        skeleton->m_bones;
+        skeleton->m_animation_clips;
     }
 }
