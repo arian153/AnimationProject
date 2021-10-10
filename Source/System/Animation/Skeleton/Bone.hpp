@@ -18,7 +18,8 @@ namespace CS460
         void Update(Real dt);
         void Shutdown();
 
-        void  Draw(PrimitiveRenderer* renderer, const Color& color);
+        void Draw(PrimitiveRenderer* renderer, const Color& color) const;
+        void Draw(PrimitiveRenderer* renderer, const Color& color, const VQSTransform& parent) const;
         void Push(Bone* child);
 
     private:

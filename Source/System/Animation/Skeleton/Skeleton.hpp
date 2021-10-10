@@ -20,13 +20,14 @@ namespace CS460
         void Update(Real dt);
         void Shutdown();
 
-        void Draw(PrimitiveRenderer* renderer);
+        void Draw(PrimitiveRenderer* renderer) const;
 
         void CreateSample();
     private:
         friend class AniMeshComponent;
 
         void DrawRecursive(PrimitiveRenderer* renderer, Bone* bone) const;
+        void DrawRecursive(PrimitiveRenderer* renderer, Bone* bone, const VQSTransform& parent) const;
 
         Bone* CreateBone(const VQSTransform& vqs, const std::string& name, Bone* parent);
         Bone* CreateBone(const VQSTransform& vqs, const std::string& name, I64 p_idx);
@@ -41,5 +42,6 @@ namespace CS460
 
         Color m_color;
         I64   m_clip_id = Core::I64_MAX;
+        bool  m_b_draw  = true;
     };
 }
