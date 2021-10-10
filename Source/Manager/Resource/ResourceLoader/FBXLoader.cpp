@@ -35,17 +35,16 @@ namespace CS460
 
     void BoneWeight::Normalize()
     {
-        double sum = 0.f;
-        std::for_each(
-                      bone_weights.begin(), bone_weights.end(), [&](Pair& p)
-                      {
-                          sum += p.second;
-                      });
-        std::for_each(
-                      bone_weights.begin(), bone_weights.end(), [=](Pair& p)
-                      {
-                          p.second = p.second / sum;
-                      });
+        double sum = 0.0;
+        for (auto& [idx, weight] : bone_weights)
+        {
+            sum += weight;
+        }
+
+        for (auto& [idx, weight] : bone_weights)
+        {
+            weight = weight / sum;
+        }
     }
 
     FBXLoader::FBXLoader()
@@ -80,6 +79,12 @@ namespace CS460
             m_manager = nullptr;
         }
 
+        const I32 anim_count = m_anim_names.GetCount();
+        for (I32 i = 0; i < anim_count; i++)
+        {
+            m_anim_names[i]->Clear();
+            delete m_anim_names[i];
+        }
         m_anim_names.Clear();
 
         for (auto& bone : m_bones)
@@ -127,9 +132,8 @@ namespace CS460
         m_manager               = FbxManager::Create();
         FbxIOSettings* settings = FbxIOSettings::Create(m_manager, IOSROOT);
         m_manager->SetIOSettings(settings);
-        m_scene              = FbxScene::Create(m_manager, "");
-        m_resource_directory = std::filesystem::path(path).parent_path().wstring() + L"\\" + std::filesystem::path(path).filename().stem().wstring() + L".fbm";
-        m_importer           = FbxImporter::Create(m_manager, "");
+        m_scene    = FbxScene::Create(m_manager, "");
+        m_importer = FbxImporter::Create(m_manager, "");
 
         std::string str_path = ToString(path);
         m_importer->Initialize(str_path.c_str(), -1, m_manager->GetIOSettings());
@@ -316,13 +320,13 @@ namespace CS460
         FbxDouble3 material;
         FbxDouble  factor = 0.f;
 
-        FbxProperty materialProperty = surface->FindProperty(material_name);
-        FbxProperty factorProperty   = surface->FindProperty(factor_name);
+        FbxProperty material_property = surface->FindProperty(material_name);
+        FbxProperty factor_property   = surface->FindProperty(factor_name);
 
-        if (materialProperty.IsValid() && factorProperty.IsValid())
+        if (material_property.IsValid() && factor_property.IsValid())
         {
-            material = materialProperty.Get<FbxDouble3>();
-            factor   = factorProperty.Get<FbxDouble>();
+            material = material_property.Get<FbxDouble3>();
+            factor   = factor_property.Get<FbxDouble>();
         }
 
         Color ret = Color(
@@ -338,14 +342,14 @@ namespace CS460
     {
         std::string name;
 
-        FbxProperty textureProperty = surface->FindProperty(material_property);
-        if (textureProperty.IsValid())
+        FbxProperty texture_property = surface->FindProperty(material_property);
+        if (texture_property.IsValid())
         {
-            U32 count = textureProperty.GetSrcObjectCount();
+            U32 count = texture_property.GetSrcObjectCount();
 
             if (1 <= count)
             {
-                FbxFileTexture* texture = textureProperty.GetSrcObject<FbxFileTexture>(0);
+                FbxFileTexture* texture = texture_property.GetSrcObject<FbxFileTexture>(0);
                 if (texture)
                     name = texture->GetRelativeFileName();
             }
@@ -371,9 +375,11 @@ namespace CS460
             m_bones.push_back(bone);
         }
 
-        const I32 childCount = node->GetChildCount();
-        for (I32 i = 0; i < childCount; i++)
+        I32 child_count = node->GetChildCount();
+        for (I32 i = 0; i < child_count; i++)
+        {
             LoadBones(node->GetChild(i), static_cast<I32>(m_bones.size()), idx);
+        }
     }
 
     void FBXLoader::LoadAnimationInfo()
@@ -391,10 +397,10 @@ namespace CS460
             anim_clip->name            = ToWString(fbx_anim_stack->GetName());
             anim_clip->key_frames.resize(m_bones.size());
 
-            FbxTakeInfo* takeInfo = m_scene->GetTakeInfo(fbx_anim_stack->GetName());
-            anim_clip->start_time = takeInfo->mLocalTimeSpan.GetStart();
-            anim_clip->end_time   = takeInfo->mLocalTimeSpan.GetStop();
-            anim_clip->mode       = m_scene->GetGlobalSettings().GetTimeMode();
+            FbxTakeInfo* fbx_take_info = m_scene->GetTakeInfo(fbx_anim_stack->GetName());
+            anim_clip->start_time      = fbx_take_info->mLocalTimeSpan.GetStart();
+            anim_clip->end_time        = fbx_take_info->mLocalTimeSpan.GetStop();
+            anim_clip->mode            = m_scene->GetGlobalSettings().GetTimeMode();
 
             m_anim_clips.push_back(anim_clip);
         }
@@ -402,38 +408,40 @@ namespace CS460
 
     void FBXLoader::LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* mesh_info)
     {
-        const I32 skinCount = mesh->GetDeformerCount(FbxDeformer::eSkin);
-        if (skinCount <= 0 || m_anim_clips.empty())
+        const I32 skin_count = mesh->GetDeformerCount(FbxDeformer::eSkin);
+        if (skin_count <= 0 || m_anim_clips.empty())
             return;
 
         mesh_info->has_animation = true;
 
-        for (I32 i = 0; i < skinCount; i++)
+        for (I32 i = 0; i < skin_count; i++)
         {
-            FbxSkin* fbxSkin = static_cast<FbxSkin*>(mesh->GetDeformer(i, FbxDeformer::eSkin));
+            FbxSkin* fbx_skin = static_cast<FbxSkin*>(mesh->GetDeformer(i, FbxDeformer::eSkin));
 
-            if (fbxSkin)
+            if (fbx_skin)
             {
-                FbxSkin::EType type = fbxSkin->GetSkinningType();
+                FbxSkin::EType type = fbx_skin->GetSkinningType();
                 if (FbxSkin::eRigid == type || FbxSkin::eLinear)
                 {
-                    const I32 clusterCount = fbxSkin->GetClusterCount();
-                    for (I32 j = 0; j < clusterCount; j++)
+                    I32 cluster_count = fbx_skin->GetClusterCount();
+                    for (I32 j = 0; j < cluster_count; j++)
                     {
-                        FbxCluster* cluster = fbxSkin->GetCluster(j);
+                        FbxCluster* cluster = fbx_skin->GetCluster(j);
                         if (cluster->GetLink() == nullptr)
                             continue;
 
-                        I32 boneIdx = FindBoneIndex(cluster->GetLink()->GetName());
-                        assert(boneIdx >= 0);
+                        I32 bone_idx = FindBoneIndex(cluster->GetLink()->GetName());
+                        assert(bone_idx >= 0);
 
-                        FbxAMatrix matNodeTransform = GetTransform(mesh->GetNode());
-                        LoadBoneWeight(cluster, boneIdx, mesh_info);
-                        LoadOffsetMatrix(cluster, matNodeTransform, boneIdx, mesh_info);
+                        FbxAMatrix node_transform = GetTransform(mesh->GetNode());
+                        LoadBoneWeight(cluster, bone_idx, mesh_info);
+                        LoadOffsetMatrix(cluster, node_transform, bone_idx, mesh_info);
 
-                        const I32 animCount = m_anim_names.Size();
-                        for (I32 k = 0; k < animCount; k++)
-                            LoadKeyframe(k, mesh->GetNode(), cluster, matNodeTransform, boneIdx, mesh_info);
+                        I32 anim_count = m_anim_names.Size();
+                        for (I32 k = 0; k < anim_count; k++)
+                        {
+                            LoadKeyframe(k, mesh->GetNode(), cluster, node_transform, bone_idx, mesh_info);
+                        }
                     }
                 }
             }
@@ -447,21 +455,21 @@ namespace CS460
         const I32 size = static_cast<I32>(mesh_info->bone_weights.size());
         for (I32 v = 0; v < size; v++)
         {
-            BoneWeight& boneWeight = mesh_info->bone_weights[v];
-            boneWeight.Normalize();
+            BoneWeight& bone_weight = mesh_info->bone_weights[v];
+            bone_weight.Normalize();
 
-            float animBoneIndex[4]  = {};
-            float animBoneWeight[4] = {};
+            float anim_bone_index[4]  = {};
+            float anim_bone_weight[4] = {};
 
-            const I32 weightCount = static_cast<I32>(boneWeight.bone_weights.size());
+            const I32 weightCount = static_cast<I32>(bone_weight.bone_weights.size());
             for (I32 w = 0; w < weightCount; w++)
             {
-                animBoneIndex[w]  = static_cast<float>(boneWeight.bone_weights[w].first);
-                animBoneWeight[w] = static_cast<float>(boneWeight.bone_weights[w].second);
+                anim_bone_index[w]  = static_cast<float>(bone_weight.bone_weights[w].first);
+                anim_bone_weight[w] = static_cast<float>(bone_weight.bone_weights[w].second);
             }
 
-            memcpy(&mesh_info->vertices[v].indices, animBoneIndex, sizeof(Color));
-            memcpy(&mesh_info->vertices[v].weights, animBoneWeight, sizeof(Color));
+            memcpy(&mesh_info->vertices[v].indices, anim_bone_index, sizeof(Color));
+            memcpy(&mesh_info->vertices[v].weights, anim_bone_weight, sizeof(Color));
         }
     }
 
@@ -496,12 +504,12 @@ namespace CS460
 
     void FBXLoader::LoadBoneWeight(FbxCluster* cluster, I32 bone_idx, FbxMeshInfo* mesh_info)
     {
-        const I32 indicesCount = cluster->GetControlPointIndicesCount();
-        for (I32 i = 0; i < indicesCount; i++)
+        const I32 indices_count = cluster->GetControlPointIndicesCount();
+        for (I32 i = 0; i < indices_count; i++)
         {
-            double weight = cluster->GetControlPointWeights()[i];
-            I32    vtxIdx = cluster->GetControlPointIndices()[i];
-            mesh_info->bone_weights[vtxIdx].AddWeights(bone_idx, weight);
+            double weight  = cluster->GetControlPointWeights()[i];
+            I32    vtx_idx = cluster->GetControlPointIndices()[i];
+            mesh_info->bone_weights[vtx_idx].AddWeights(bone_idx, weight);
         }
     }
 
@@ -519,14 +527,14 @@ namespace CS460
         FbxVector4 V2 = {0, 1, 0, 0};
         FbxVector4 V3 = {0, 0, 0, 1};
 
-        FbxAMatrix matReflect;
-        matReflect[0] = V0;
-        matReflect[1] = V1;
-        matReflect[2] = V2;
-        matReflect[3] = V3;
+        FbxAMatrix reflect;
+        reflect[0] = V0;
+        reflect[1] = V1;
+        reflect[2] = V2;
+        reflect[3] = V3;
 
         FbxAMatrix offset = cluster_link_transform.Inverse() * cluster_transform;
-        offset            = matReflect * offset * matReflect;
+        offset            = reflect * offset * reflect;
 
         m_bones[bone_idx]->offset = offset.Transpose();
     }
@@ -540,46 +548,45 @@ namespace CS460
         FbxVector4 v2 = {0, 0, 1, 0};
         FbxVector4 v3 = {0, 1, 0, 0};
         FbxVector4 v4 = {0, 0, 0, 1};
-        FbxAMatrix matReflect;
-        matReflect.mData[0] = v1;
-        matReflect.mData[1] = v2;
-        matReflect.mData[2] = v3;
-        matReflect.mData[3] = v4;
+        FbxAMatrix reflect;
+        reflect.mData[0] = v1;
+        reflect.mData[1] = v2;
+        reflect.mData[2] = v3;
+        reflect.mData[3] = v4;
 
-        FbxTime::EMode timeMode = m_scene->GetGlobalSettings().GetTimeMode();
+        FbxTime::EMode time_mode = m_scene->GetGlobalSettings().GetTimeMode();
 
-        // �ִϸ��̼� �����
-        FbxAnimStack* animStack = m_scene->FindMember<FbxAnimStack>(m_anim_names[anim_index]->Buffer());
-        m_scene->SetCurrentAnimationStack(OUT animStack);
+        FbxAnimStack* anim_stack = m_scene->FindMember<FbxAnimStack>(m_anim_names[anim_index]->Buffer());
+        m_scene->SetCurrentAnimationStack(OUT anim_stack);
 
-        FbxLongLong startFrame = m_anim_clips[anim_index]->start_time.GetFrameCount(timeMode);
-        FbxLongLong endFrame   = m_anim_clips[anim_index]->end_time.GetFrameCount(timeMode);
+        FbxLongLong start_frame = m_anim_clips[anim_index]->start_time.GetFrameCount(time_mode);
+        FbxLongLong end_frame   = m_anim_clips[anim_index]->end_time.GetFrameCount(time_mode);
 
-        for (FbxLongLong frame = startFrame; frame < endFrame; frame++)
+        for (FbxLongLong frame = start_frame; frame < end_frame; frame++)
         {
-            FbxKeyFrameInfo keyFrameInfo = {};
-            FbxTime         fbxTime      = 0;
+            FbxKeyFrameInfo key_frame_info = {};
+            FbxTime         time           = 0;
 
-            fbxTime.SetFrame(frame, timeMode);
+            time.SetFrame(frame, time_mode);
 
-            FbxAMatrix matFromNode  = node->EvaluateGlobalTransform(fbxTime);
-            FbxAMatrix matTransform = matFromNode.Inverse() * cluster->GetLink()->EvaluateGlobalTransform(fbxTime);
-            matTransform            = matReflect * matTransform * matReflect;
+            FbxAMatrix mat_from_node = node->EvaluateGlobalTransform(time);
+            FbxAMatrix mat_transform = mat_from_node.Inverse() * cluster->GetLink()->EvaluateGlobalTransform(time);
+            mat_transform            = reflect * mat_transform * reflect;
 
-            keyFrameInfo.time          = fbxTime.GetSecondDouble();
-            keyFrameInfo.transform_mat = matTransform;
+            key_frame_info.time          = time.GetSecondDouble();
+            key_frame_info.transform_mat = mat_transform;
 
-            m_anim_clips[anim_index]->key_frames[bone_idx].push_back(keyFrameInfo);
+            m_anim_clips[anim_index]->key_frames[bone_idx].push_back(key_frame_info);
         }
     }
 
     I32 FBXLoader::FindBoneIndex(std::string name)
     {
-        std::wstring boneName = std::wstring(name.begin(), name.end());
+        std::wstring bone_name = std::wstring(name.begin(), name.end());
 
         for (U32 i = 0; i < m_bones.size(); ++i)
         {
-            if (m_bones[i]->bone_name == boneName)
+            if (m_bones[i]->bone_name == bone_name)
                 return i;
         }
 

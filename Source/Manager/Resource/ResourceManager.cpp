@@ -41,6 +41,7 @@ namespace CS460
         Resource* resource = nullptr;
         //find resource
         resource = resource != nullptr ? resource : GetAudioResource(path);
+        resource = resource != nullptr ? resource : GetAniMeshResource(path);
         resource = resource != nullptr ? resource : GetJsonResource(path);
         resource = resource != nullptr ? resource : GetMeshResource(path);
         resource = resource != nullptr ? resource : GetShaderResource(path);
@@ -56,6 +57,7 @@ namespace CS460
         Resource* resource = nullptr;
         //find resource
         resource = resource != nullptr ? resource : GetAudioResourceFileName(file_name);
+        resource = resource != nullptr ? resource : GetAniMeshResourceFileName(file_name);
         resource = resource != nullptr ? resource : GetJsonResourceFileName(file_name);
         resource = resource != nullptr ? resource : GetMeshResourceFileName(file_name);
         resource = resource != nullptr ? resource : GetShaderResourceFileName(file_name);
@@ -897,9 +899,9 @@ namespace CS460
 
     Resource* ResourceManager::AddResource(const std::wstring& path)
     {
-        Resource*    resource = nullptr;
-        std::wstring type     = m_file_utility->GetFileTypeFromPath(path);
-        std::wstring name     = m_file_utility->GetFileNameFromPath(path);
+        Resource*    resource;
+        std::wstring type = m_file_utility->GetFileTypeFromPath(path);
+        std::wstring name = m_file_utility->GetFileNameFromPath(path);
         if (type == L".fx" || type == L".hlsl" || type == L".shader")
         {
             resource = new ShaderResource(path);
