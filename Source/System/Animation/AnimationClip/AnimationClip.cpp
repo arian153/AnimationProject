@@ -12,6 +12,5 @@ namespace CS460
 
     void AnimationClip::Update(Bone* root_bone, Real dt)
     {
-        root_bone;
     }
 }

@@ -372,6 +372,8 @@ namespace CS460
             FbxBoneInfo* bone  = new FbxBoneInfo();
             bone->bone_name    = ToWString(node->GetName());
             bone->parent_index = parent_idx;
+            //bone->transform = GetVQSTransform(GetTransform(node));
+            //bone->transform    = GetVQSTransform(node);
             m_bones.push_back(bone);
         }
 
@@ -487,7 +489,7 @@ namespace CS460
 
     Real FBXLoader::GetScale(const FbxAMatrix& transform)
     {
-        FbxVector4 scale = transform.GetT();
+        FbxVector4 scale = transform.GetS();
         return (Real)scale.mData[0];
     }
 
@@ -495,7 +497,7 @@ namespace CS460
     {
         FbxVector4    translation = transform.GetT();
         FbxQuaternion rotation    = transform.GetQ();
-        FbxVector4    scale       = transform.GetT();
+        FbxVector4    scale       = transform.GetS();
 
         Vector3    v = Vector3((Real)translation.mData[0], (Real)translation.mData[1], (Real)translation.mData[2]);
         Quaternion q((Real)rotation.mData[3], (Real)rotation.mData[0], (Real)rotation.mData[1], (Real)rotation.mData[2]);
@@ -536,6 +538,7 @@ namespace CS460
         FbxAMatrix offset = cluster_link_transform.Inverse() * cluster_transform;
         offset            = reflect * offset * reflect;
 
+        
         m_bones[bone_idx]->offset = offset.Transpose();
     }
 
@@ -600,4 +603,5 @@ namespace CS460
         const FbxVector4 scaling     = node->GetGeometricScaling(FbxNode::eSourcePivot);
         return FbxAMatrix(translation, rotation, scaling);
     }
-}
+
+   }

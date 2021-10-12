@@ -5,14 +5,14 @@
 
 namespace CS460
 {
-    class BoneData
+    class PoseBone
     {
     public:
-        BoneData();
-        ~BoneData();
+        PoseBone();
+        ~PoseBone();
 
-    private:
-        I64          frame = -1;
+    public:
+        I32          frame = -1;
         Real         time  = 0.0f;
         VQSTransform transform;
     };

@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "BoneData.hpp"
+#include "PoseBone.hpp"
 
 namespace CS460
 {
@@ -10,7 +10,7 @@ namespace CS460
         KeyFrame();
         ~KeyFrame();
 
-    private:
-        std::vector<BoneData> bone_data;
+    public:
+        std::vector<PoseBone> poses;
     };
 }

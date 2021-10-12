@@ -1,6 +1,7 @@
 #include "AniMeshResource.hpp"
 
 #include "../../../System/Animation/Skeleton/Skeleton.hpp"
+#include "../../../System/Core/Utility/CoreUtility.hpp"
 
 namespace CS460
 {
@@ -32,7 +33,11 @@ namespace CS460
 
     void AniMeshResource::CopyData(Skeleton* skeleton)
     {
-        skeleton->m_bones;
+        for (auto& bone : m_fbx_loader.m_bones)
+        {
+            skeleton->CreateBone(bone->transform, ToString(bone->bone_name), bone->parent_index);
+        }
+
         skeleton->m_animation_clips;
     }
 }

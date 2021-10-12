@@ -52,8 +52,7 @@
           "Type": "class CS460::AniMeshComponent",
           "Value": {
             "Mesh": {
-              "Type": "File",
-              "Path": "../../Resource/Mesh/CS300/bunny_high_poly.obj"
+              "Path": "../../Resource/AniMesh/Tad.fbx"
             },
             "Color": {
               "Ambient": [ 1, 1, 1, 1 ],
@@ -67,10 +66,8 @@
               "Diffuse2": "",
               "Specular": 0,
               "NormalMap": 0
-
             },
             "Shader Type": "PhongInstancing"
-
           }
         }
       ],

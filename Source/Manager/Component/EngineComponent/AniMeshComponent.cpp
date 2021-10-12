@@ -1,9 +1,14 @@
 #include "AniMeshComponent.hpp"
 
+#include "../../../External/JSONCPP/json/json.h"
 #include "../../../System/Animation/AnimationSubsystem.hpp"
 #include "../../../System/Animation/Skeleton/Skeleton.hpp"
+#include "../../../System/Core/Utility/CoreUtility.hpp"
 #include "../../../System/Graphics/Element/AniMesh.hpp"
 #include "../../../System/Graphics/Element/Scene.hpp"
+#include "../../Resource/ResourceManager.hpp"
+#include "../../Resource/ResourceType/AniMeshResource.hpp"
+#include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../Space/Space.hpp"
 
 namespace CS460
@@ -63,6 +68,22 @@ namespace CS460
 
     bool AniMeshComponent::Load(const Json::Value& data)
     {
+        if (JsonResource::HasMember(data, "Mesh"))
+        {
+            auto mesh_data = data["Mesh"];
+
+            if (mesh_data["Path"].isString())
+            {
+                m_mesh_resource_path = mesh_data["Path"].asString();
+                m_mesh_resource      = m_space->GetResourceManager()->GetAniMeshResource(ToWString(m_mesh_resource_path));
+
+                if (m_mesh_resource != nullptr)
+                {
+                    m_mesh_resource->CopyData(m_skeleton);
+                }
+            }
+        }
+
         return true;
     }
 
@@ -74,7 +95,6 @@ namespace CS460
     {
         if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
         {
-            
         }
     }
 

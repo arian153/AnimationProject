@@ -7,6 +7,7 @@
 
 namespace CS460
 {
+    class VQSTransform;
     class AniMeshResource;
     class PrimitiveRenderer;
     class Bone;
@@ -30,7 +31,7 @@ namespace CS460
         void  DrawRecursive(PrimitiveRenderer* renderer, Bone* bone) const;
         void  DrawRecursive(PrimitiveRenderer* renderer, Bone* bone, const VQSTransform& parent) const;
         Bone* CreateBone(const VQSTransform& vqs, const std::string& name, Bone* parent);
-        Bone* CreateBone(const VQSTransform& vqs, const std::string& name, I64 p_idx);
+        Bone* CreateBone(const VQSTransform& vqs, const std::string& name, I32 p_idx);
         void  SetUpSiblingRecursive(Bone* bone);
 
     private:
@@ -44,7 +45,7 @@ namespace CS460
         std::vector<Bone*>         m_bones;
 
         Color m_color;
-        I64   m_clip_id = Core::I64_MAX;
+        I32   m_clip_id = Core::I32_MAX;
         bool  m_b_draw  = true;
     };
 }

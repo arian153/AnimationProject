@@ -66,6 +66,7 @@ namespace CS460
         std::wstring bone_name;
         I32          parent_index;
         FbxAMatrix   offset;
+        VQSTransform transform;
     };
 
     struct FbxAnimClipInfo
@@ -125,6 +126,9 @@ namespace CS460
         Quaternion   GetRotation(const FbxAMatrix& transform);
         Real         GetScale(const FbxAMatrix& transform);
         VQSTransform GetVQSTransform(const FbxAMatrix& transform);
+
+    private:
+        friend class AniMeshResource;
 
     private:
         FbxManager*  m_manager  = nullptr;

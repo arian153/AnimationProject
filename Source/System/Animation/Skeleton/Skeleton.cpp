@@ -17,7 +17,7 @@ namespace CS460
 
     void Skeleton::Initialize()
     {
-        CreateSample();
+        //CreateSample();
     }
 
     void Skeleton::Update(Real dt)
@@ -128,9 +128,18 @@ namespace CS460
         created->m_offset   = vqs;
         created->m_name     = name;
 
-        created->m_parent     = parent;
-        created->m_parent_idx = parent == nullptr ? -1 : parent->m_own_idx;
-        created->m_own_idx    = (I64)m_bones.size();
+        if (m_bones.empty())
+        {
+            m_root_bone           = created;
+            created->m_parent     = nullptr;
+            created->m_parent_idx = -1;
+        }
+        else
+        {
+            created->m_parent     = parent;
+            created->m_parent_idx = parent->m_own_idx;
+        }
+        created->m_own_idx = (I32)m_bones.size();
 
         m_bones.push_back(created);
 
@@ -142,16 +151,25 @@ namespace CS460
         return created;
     }
 
-    Bone* Skeleton::CreateBone(const VQSTransform& vqs, const std::string& name, I64 p_idx)
+    Bone* Skeleton::CreateBone(const VQSTransform& vqs, const std::string& name, I32 p_idx)
     {
         Bone* created       = new Bone();
         created->m_skeleton = this;
         created->m_offset   = vqs;
         created->m_name     = name;
 
-        created->m_parent     = p_idx < 0 ? nullptr : m_bones[p_idx];
-        created->m_parent_idx = p_idx;
-        created->m_own_idx    = (I64)m_bones.size();
+        if (m_bones.empty())
+        {
+            m_root_bone           = created;
+            created->m_parent     = nullptr;
+            created->m_parent_idx = -1;
+        }
+        else
+        {
+            created->m_parent     = m_bones[p_idx];
+            created->m_parent_idx = p_idx;
+        }
+        created->m_own_idx = (I32)m_bones.size();
 
         m_bones.push_back(created);
 

@@ -31,11 +31,11 @@ namespace CS460
         std::string  m_name = "";
 
         Bone* m_parent     = nullptr;
-        I64   m_parent_idx = -1;
-        I64   m_own_idx    = -1;
+        I32   m_parent_idx = -1;
+        I32   m_own_idx    = -1;
 
-        std::vector<I64>   m_sib_idx;
-        std::vector<I64>   m_chi_idx;
+        std::vector<I32>   m_sib_idx;
+        std::vector<I32>   m_chi_idx;
         std::vector<Bone*> m_sibling;
         std::vector<Bone*> m_children;
     };

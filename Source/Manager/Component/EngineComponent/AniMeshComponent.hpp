@@ -5,6 +5,8 @@
 
 namespace CS460
 {
+    class AniMeshResource;
+
     class AniMeshComponent final : public Component
     {
     public:
@@ -36,5 +38,8 @@ namespace CS460
     private:
         AniMesh*  m_ani_mesh = nullptr;
         Skeleton* m_skeleton = nullptr;
+
+        std::string      m_mesh_resource_path;
+        AniMeshResource* m_mesh_resource = nullptr;
     };
 }

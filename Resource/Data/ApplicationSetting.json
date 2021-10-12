@@ -3,7 +3,7 @@
         "Confine Cursor": false,
         "Screen Resolution": [ 2880, 1800 ],
         "Show Cursor": true,
-        "V-Sync": true,
+        "V-Sync": false,
         "Window Caption": "CS460-Animation-Project",
         "Window Mode": "Windowed",
         "Initial Level": ""
