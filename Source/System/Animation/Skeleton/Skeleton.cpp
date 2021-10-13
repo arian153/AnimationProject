@@ -25,8 +25,8 @@ namespace CS460
         //update by keyframe
         if (m_clip_id != Core::I64_MAX)
         {
-            auto& clip = m_animation_clips[m_clip_id];
-            clip.Update(m_root_bone, dt);
+            //auto& clip = m_animation_clips[m_clip_id];
+            //clip.Update(m_root_bone, dt);
         }
     }
 
@@ -43,28 +43,38 @@ namespace CS460
             delete bone;
         }
         m_bones.clear();
+
+        for (auto& clip : m_animation_clips)
+        {
+            clip->Shutdown();
+            delete clip;
+        }
+        m_animation_clips.clear();
     }
 
     void Skeleton::Draw(PrimitiveRenderer* renderer) const
     {
-        if (m_root_bone != nullptr && m_b_draw)
+        if (!m_root_bones.empty() && m_b_draw)
         {
-            DrawRecursive(renderer, m_root_bone);
+            for (auto& root : m_root_bones)
+            {
+                DrawRecursive(renderer, root);
+            }
         }
     }
 
     void Skeleton::CreateSample()
     {
-        if (m_root_bone == nullptr)
         {
-            m_root_bone = CreateBone(VQSTransform(Vector3(0, 2, 0), Quaternion(EulerAngle(Math::PI_DIV_4, Math::PI_DIV_4, Math::PI_DIV_6))), "root", -1);
+            Bone* root = CreateBone(VQSTransform(Vector3(0, 2, 0), Quaternion(EulerAngle(Math::PI_DIV_4, Math::PI_DIV_4, Math::PI_DIV_6))), "root", -1);
+            m_root_bones.push_back(root);
 
-            Bone* part_a = CreateBone(VQSTransform(Vector3(1, 0, 0), Quaternion(EulerAngle(0.0f, 0.0f, Math::PI_DIV_6))), "Part-A", m_root_bone);
-            Bone* part_b = CreateBone(VQSTransform(Vector3(0, 1, 0), Quaternion()), "Part-B", m_root_bone);
-            Bone* part_c = CreateBone(VQSTransform(Vector3(0, 0, 1), Quaternion()), "Part-C", m_root_bone);
-            Bone* part_d = CreateBone(VQSTransform(Vector3(-1, 0, 0), Quaternion()), "Part-D", m_root_bone);
-            Bone* part_e = CreateBone(VQSTransform(Vector3(0, -1, 0), Quaternion()), "Part-E", m_root_bone);
-            Bone* part_f = CreateBone(VQSTransform(Vector3(0, 0, -1), Quaternion()), "Part-F", m_root_bone);
+            Bone* part_a = CreateBone(VQSTransform(Vector3(1, 0, 0), Quaternion(EulerAngle(0.0f, 0.0f, Math::PI_DIV_6))), "Part-A", root);
+            Bone* part_b = CreateBone(VQSTransform(Vector3(0, 1, 0), Quaternion()), "Part-B", root);
+            Bone* part_c = CreateBone(VQSTransform(Vector3(0, 0, 1), Quaternion()), "Part-C", root);
+            Bone* part_d = CreateBone(VQSTransform(Vector3(-1, 0, 0), Quaternion()), "Part-D", root);
+            Bone* part_e = CreateBone(VQSTransform(Vector3(0, -1, 0), Quaternion()), "Part-E", root);
+            Bone* part_f = CreateBone(VQSTransform(Vector3(0, 0, -1), Quaternion()), "Part-F", root);
 
             Bone* part_a_a = CreateBone(VQSTransform(Vector3(0.5f, 0.5f, 0), Quaternion()), "Sub-A", part_a);
             Bone* part_a_b = CreateBone(VQSTransform(Vector3(0, 0.5f, 0.5f), Quaternion()), "Sub-B", part_a);
@@ -98,47 +108,53 @@ namespace CS460
     {
         //only call root bone
         bone->Draw(renderer, m_color);
-        Vector3 bone_pos = bone->m_offset.position;
+        Vector3 bone_pos = bone->m_to_bone.position;
         for (auto& child : bone->m_children)
         {
-            Vector3 child_pos = Multiply(bone->m_offset, child->m_offset).position;
+            Vector3 child_pos = Multiply(bone->m_to_bone, child->m_to_bone).position;
             renderer->DrawSegment(bone_pos, child_pos, m_color);
-            DrawRecursive(renderer, child, bone->m_offset);
+            DrawRecursive(renderer, child, bone->m_to_bone);
         }
     }
 
     void Skeleton::DrawRecursive(PrimitiveRenderer* renderer, Bone* bone, const VQSTransform& parent) const
     {
         bone->Draw(renderer, m_color, parent);
-        VQSTransform offset   = Multiply(parent, bone->m_offset);
+        VQSTransform offset   = Multiply(parent, bone->m_to_bone);
         Vector3      bone_pos = offset.position;
 
         for (auto& child : bone->m_children)
         {
-            Vector3 child_pos = Multiply(offset, child->m_offset).position;
+            Vector3 child_pos = Multiply(offset, child->m_to_bone).position;
             renderer->DrawSegment(bone_pos, child_pos, m_color);
             DrawRecursive(renderer, child, offset);
         }
     }
 
-    Bone* Skeleton::CreateBone(const VQSTransform& vqs, const std::string& name, Bone* parent)
+    Bone* Skeleton::CreateBone(const VQSTransform& to_bone, const VQSTransform& to_root, const std::string& name, Bone* parent)
     {
         Bone* created       = new Bone();
         created->m_skeleton = this;
-        created->m_offset   = vqs;
+        created->m_to_bone  = to_bone;
+        created->m_to_root  = to_root;
         created->m_name     = name;
 
         if (m_bones.empty())
         {
-            m_root_bone           = created;
             created->m_parent     = nullptr;
             created->m_parent_idx = -1;
         }
         else
         {
             created->m_parent     = parent;
-            created->m_parent_idx = parent->m_own_idx;
+            created->m_parent_idx = parent == nullptr ? -1 : parent->m_own_idx;
         }
+
+        if (created->m_parent == nullptr)
+        {
+            m_root_bones.push_back(created);
+        }
+
         created->m_own_idx = (I32)m_bones.size();
 
         m_bones.push_back(created);
@@ -151,25 +167,30 @@ namespace CS460
         return created;
     }
 
-    Bone* Skeleton::CreateBone(const VQSTransform& vqs, const std::string& name, I32 p_idx)
+    Bone* Skeleton::CreateBone(const VQSTransform& to_bone, const VQSTransform& to_root, const std::string& name, I32 p_idx)
     {
         Bone* created       = new Bone();
         created->m_skeleton = this;
-        created->m_offset   = vqs;
+        created->m_to_bone  = to_bone;
+        created->m_to_root  = to_root;
         created->m_name     = name;
 
         if (m_bones.empty())
         {
-            m_root_bone           = created;
             created->m_parent     = nullptr;
             created->m_parent_idx = -1;
         }
         else
         {
-            created->m_parent     = m_bones[p_idx];
+            created->m_parent     = p_idx < 0 ? nullptr : m_bones[p_idx];
             created->m_parent_idx = p_idx;
         }
         created->m_own_idx = (I32)m_bones.size();
+
+        if (created->m_parent == nullptr)
+        {
+            m_root_bones.push_back(created);
+        }
 
         m_bones.push_back(created);
 
@@ -179,6 +200,16 @@ namespace CS460
         }
 
         return created;
+    }
+
+    Bone* Skeleton::CreateBone(const VQSTransform& to_bone, const std::string& name, Bone* parent)
+    {
+        return CreateBone(to_bone, to_bone.Inverse(), name, parent);
+    }
+
+    Bone* Skeleton::CreateBone(const VQSTransform& to_bone, const std::string& name, I32 p_idx)
+    {
+        return CreateBone(to_bone, to_bone.Inverse(), name, p_idx);
     }
 
     void Skeleton::SetUpSiblingRecursive(Bone* bone)

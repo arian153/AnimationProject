@@ -36,6 +36,7 @@ namespace CS460
         if (m_ani_mesh != nullptr)
         {
             m_ani_mesh->Initialize();
+            m_ani_mesh->CreateBuffer();
         }
 
         if (m_skeleton != nullptr)
@@ -68,6 +69,11 @@ namespace CS460
 
     bool AniMeshComponent::Load(const Json::Value& data)
     {
+        if (JsonResource::HasMember(data, "Shader Type"))
+        {
+            m_shader_type = data["Shader Type"].asString();
+        }
+       
         if (JsonResource::HasMember(data, "Mesh"))
         {
             auto mesh_data = data["Mesh"];
@@ -79,6 +85,7 @@ namespace CS460
 
                 if (m_mesh_resource != nullptr)
                 {
+                    m_mesh_resource->CopyData(m_ani_mesh);
                     m_mesh_resource->CopyData(m_skeleton);
                 }
             }

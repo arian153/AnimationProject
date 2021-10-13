@@ -13,4 +13,9 @@ namespace CS460
     void AnimationClip::Update(Bone* root_bone, Real dt)
     {
     }
+
+    void AnimationClip::Shutdown()
+    {
+        key_frames.clear();
+    }
 }

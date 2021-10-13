@@ -952,7 +952,7 @@ namespace CS460
             resource = new TextResource(path);
             m_text_resource_map.emplace(path, (TextResource*)resource);
         }
-        else if (type == L".fbx")
+        else if (type == L".fbx" || type == L".bin")
         {
             resource = new AniMeshResource(path);
             m_ani_mesh_resource_map.emplace(path, (AniMeshResource*)resource);

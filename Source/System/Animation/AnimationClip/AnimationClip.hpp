@@ -17,6 +17,9 @@ namespace CS460
 
         void Update(Bone* root_bone, Real dt);
 
+        void Shutdown();
+
+
     private:
         std::string name;
         std::vector<KeyFrame> key_frames;

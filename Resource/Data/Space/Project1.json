@@ -52,7 +52,7 @@
           "Type": "class CS460::AniMeshComponent",
           "Value": {
             "Mesh": {
-              "Path": "../../Resource/AniMesh/Tad.fbx"
+              "Path": "../../Resource/AniMesh/Salamander.bin"
             },
             "Color": {
               "Ambient": [ 1, 1, 1, 1 ],

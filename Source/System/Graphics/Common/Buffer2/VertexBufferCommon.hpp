@@ -10,6 +10,7 @@
 #include "../Vertex/NormalVertexCommon.hpp"
 #include "../Vertex/VertexCommon.hpp"
 #include "../Vertex/TextureVertexCommon.hpp"
+#include "../Vertex/SkinnedVertexCommon.hpp"
 
 namespace CS460
 {
@@ -27,12 +28,15 @@ namespace CS460
         bool Init(RendererCommon* renderer, const std::vector<VertexCommon>& vertices, bool is_dynamic = false);
         bool Init(RendererCommon* renderer, const std::vector<NormalVertexCommon>& vertices, bool is_dynamic = false);
         bool Init(RendererCommon* renderer, const std::vector<Vector3>& vertices, bool is_dynamic = false);
+        bool Init(RendererCommon* renderer, const std::vector<SkinnedVertexCommon>& vertices, bool is_dynamic = false);
 
         void Update(const std::vector<ColorVertexCommon>& vertices) const;
         void Update(const std::vector<TextureVertexCommon>& vertices) const;
         void Update(const std::vector<VertexCommon>& vertices) const;
         void Update(const std::vector<NormalVertexCommon>& vertices) const;
         void Update(const std::vector<Vector3>& vertices) const;
+        void Update(const std::vector<SkinnedVertexCommon>& vertices) const;
+
 
         bool Init(RendererCommon* renderer, void* data, size_t vertex_size, size_t vertex_count, bool is_dynamic = false);
         void Update(void* data, size_t vertex_count) const;

@@ -13,6 +13,7 @@ namespace CS460
         VQSTransform(const Vector3& pos, const Quaternion& rot, Real s = 1.0f);
         ~VQSTransform();
 
+        void Set(const Vector3& pos, const Quaternion& rot, Real s);
         Matrix44 ToMatrix() const;
 
         VQSTransform Identity();
@@ -24,6 +25,7 @@ namespace CS460
         friend VQSTransform Multiply(const VQSTransform& a, const VQSTransform& b);
         friend VQSTransform Interpolation(const VQSTransform& a, const VQSTransform& b, Real t);
 
+     
 
     public:
         VQSTransform& operator=(const VQSTransform& vqs);

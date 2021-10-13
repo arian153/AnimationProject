@@ -27,7 +27,8 @@ namespace CS460
 
     private:
         Skeleton*    m_skeleton = nullptr;
-        VQSTransform m_offset;
+        VQSTransform m_to_bone;
+        VQSTransform m_to_root;
         std::string  m_name = "";
 
         Bone* m_parent     = nullptr;

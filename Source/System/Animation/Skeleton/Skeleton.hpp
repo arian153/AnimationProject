@@ -30,9 +30,14 @@ namespace CS460
     private:
         void  DrawRecursive(PrimitiveRenderer* renderer, Bone* bone) const;
         void  DrawRecursive(PrimitiveRenderer* renderer, Bone* bone, const VQSTransform& parent) const;
-        Bone* CreateBone(const VQSTransform& vqs, const std::string& name, Bone* parent);
-        Bone* CreateBone(const VQSTransform& vqs, const std::string& name, I32 p_idx);
-        void  SetUpSiblingRecursive(Bone* bone);
+        Bone* CreateBone(const VQSTransform& to_bone, const VQSTransform& to_root, const std::string& name, Bone* parent);
+        Bone* CreateBone(const VQSTransform& to_bone, const VQSTransform& to_root, const std::string& name, I32 p_idx);
+        Bone* CreateBone(const VQSTransform& to_bone, const std::string& name, Bone* parent);
+        Bone* CreateBone(const VQSTransform& to_bone, const std::string& name, I32 p_idx);
+
+        void SetUpSiblingRecursive(Bone* bone);
+
+        void AddAnimationClip(const AnimationClip& clip);
 
     private:
         friend class AniMeshComponent;
@@ -40,8 +45,8 @@ namespace CS460
 
     private:
         AniMeshComponent*          m_component = nullptr;
-        Bone*                      m_root_bone = nullptr;
-        std::vector<AnimationClip> m_animation_clips;
+        std::vector<Bone*>         m_root_bones;
+        std::vector<AnimationClip*> m_animation_clips;
         std::vector<Bone*>         m_bones;
 
         Color m_color;

@@ -70,34 +70,14 @@ namespace CS460
         }
     }
 
-    void AniMesh::SetModelData(MeshData* data)
-    {
-    }
-
-    void AniMesh::AddTexture(TextureCommon* texture)
-    {
-    }
-
-    void AniMesh::ClearTexture()
-    {
-    }
-
-    void AniMesh::RemoveTexture(TextureCommon* texture)
-    {
-    }
-
     void AniMesh::SetRenderer(RendererCommon* renderer)
     {
         m_renderer = renderer;
     }
 
-    void AniMesh::SetMaterialIdentifier(const MaterialIdentifier& material_data)
-    {
-    }
-
     std::string AniMesh::GetShaderType() const
     {
-        return m_material_info.shader_type;
+        return m_shader_type;
     }
 
     I64 AniMesh::SubMeshCount() const
@@ -105,7 +85,7 @@ namespace CS460
         return (I64)m_sub_meshes.size();
     }
 
-    void AniMesh::InitSubMesh(SubAniMesh& sub_mesh) const
+    void AniMesh::CreateSubMesh(SubAniMesh& sub_mesh) const
     {
         if (sub_mesh.index_buffer == nullptr)
         {
@@ -122,6 +102,22 @@ namespace CS460
         {
             sub_mesh.texture_buffer = new ConstantBufferCommon();
             sub_mesh.texture_buffer->Init(m_renderer, eBindingStage::PixelShader, sizeof(TextureBufferData), 0);
+        }
+    }
+
+    void AniMesh::SetUpSubIndexBuffer(SubAniMesh& sub_mesh, const std::vector<U32>& indices) const
+    {
+        if (sub_mesh.index_buffer != nullptr)
+        {
+            sub_mesh.index_buffer->Init(m_renderer, indices);
+        }
+    }
+
+    void AniMesh::SetVertexBuffer(const std::vector<SkinnedVertexCommon>& vertices) const
+    {
+        if (m_vertex_buffer != nullptr)
+        {
+            m_vertex_buffer->Init(m_renderer, vertices, false);
         }
     }
 

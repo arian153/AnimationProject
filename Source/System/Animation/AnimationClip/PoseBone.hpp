@@ -14,6 +14,6 @@ namespace CS460
     public:
         I32          frame = -1;
         Real         time  = 0.0f;
-        VQSTransform transform;
+        VQSTransform to_parent;
     };
 }

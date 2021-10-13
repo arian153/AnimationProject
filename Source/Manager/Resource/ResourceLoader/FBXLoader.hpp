@@ -4,6 +4,7 @@
 #include <vector>
 #include <FBX/fbxsdk.h>
 
+#include "../../../System/Graphics/Common/Vertex/SkinnedVertexCommon.hpp"
 #include "../../../System/Graphics/DataType/Color.hpp"
 #include "../../../System/Math/Algebra/Quaternion.hpp"
 #include "../../../System/Math/Algebra/Vector2.hpp"
@@ -24,16 +25,6 @@ namespace CS460
         std::wstring specular_texture;
     };
 
-    struct FBXVertex
-    {
-        Vector3 pos;
-        Vector2 uv;
-        Vector3 normal;
-        Vector3 tangent;
-        Vector4 weights;
-        Vector4 indices;
-    };
-
     struct BoneWeight
     {
     public:
@@ -47,12 +38,13 @@ namespace CS460
 
     struct FbxMeshInfo
     {
-        std::wstring                  name;
-        std::vector<FBXVertex>        vertices;
-        std::vector<std::vector<U32>> indices;
-        std::vector<FbxMaterialInfo>  materials;
-        std::vector<BoneWeight>       bone_weights;
-        bool                          has_animation;
+        std::wstring                     name;
+        std::vector<SkinnedVertexCommon> vertices;
+        std::vector<std::vector<U32>>    indices;
+        std::vector<FbxMaterialInfo>     materials;
+        std::vector<BoneWeight>          bone_weights;
+        bool                             has_animation;
+        bool                             has_tangent;
     };
 
     struct FbxKeyFrameInfo

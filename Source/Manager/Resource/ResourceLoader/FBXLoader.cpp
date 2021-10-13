@@ -63,6 +63,24 @@ namespace CS460
         LoadAnimationInfo();
 
         ParseNode(m_scene->GetRootNode());
+
+        for (auto& mesh : m_meshes)
+        {
+            if (mesh.has_tangent)
+            {
+                for (auto& vertex : mesh.vertices)
+                {
+                    vertex.CalculateBinormal();
+                }
+            }
+            else
+            {
+                for (auto& vertex : mesh.vertices)
+                {
+                    vertex.CalculateTangentAndBinormal();
+                }
+            }
+        }
     }
 
     void FBXLoader::Shutdown()
@@ -188,9 +206,9 @@ namespace CS460
         FbxVector4* control_points = mesh->GetControlPoints();
         for (I32 i = 0; i < vertex_count; ++i)
         {
-            fbx_mesh_info.vertices[i].pos.x = static_cast<float>(control_points[i].mData[0]);
-            fbx_mesh_info.vertices[i].pos.y = static_cast<float>(control_points[i].mData[2]);
-            fbx_mesh_info.vertices[i].pos.z = static_cast<float>(control_points[i].mData[1]);
+            fbx_mesh_info.vertices[i].position.x = static_cast<float>(control_points[i].mData[0]);
+            fbx_mesh_info.vertices[i].position.y = static_cast<float>(control_points[i].mData[2]);
+            fbx_mesh_info.vertices[i].position.z = static_cast<float>(control_points[i].mData[1]);
         }
 
         const I32 material_count = mesh->GetNode()->GetMaterialCount();
@@ -204,7 +222,8 @@ namespace CS460
         U32 arr_idx[3];
         U32 vertex_counter = 0;
 
-        const I32 face_count = mesh->GetPolygonCount();
+        const I32 face_count      = mesh->GetPolygonCount();
+        fbx_mesh_info.has_tangent = !(mesh->GetElementTangentCount() == 0);
         for (I32 i = 0; i < face_count; i++)
         {
             for (I32 j = 0; j < 3; j++)
@@ -310,9 +329,9 @@ namespace CS460
 
     void FBXLoader::GetUV(FbxMesh* mesh, FbxMeshInfo* mesh_info, I32 idx, I32 uv_index)
     {
-        FbxVector2 uv                 = mesh->GetElementUV()->GetDirectArray().GetAt(uv_index);
-        mesh_info->vertices[idx].uv.x = static_cast<float>(uv.mData[0]);
-        mesh_info->vertices[idx].uv.y = 1.f - static_cast<float>(uv.mData[1]);
+        FbxVector2 uv                  = mesh->GetElementUV()->GetDirectArray().GetAt(uv_index);
+        mesh_info->vertices[idx].tex.x = static_cast<float>(uv.mData[0]);
+        mesh_info->vertices[idx].tex.y = 1.f - static_cast<float>(uv.mData[1]);
     }
 
     Color FBXLoader::GetMaterialData(FbxSurfaceMaterial* surface, const char* material_name, const char* factor_name)
@@ -538,8 +557,8 @@ namespace CS460
         FbxAMatrix offset = cluster_link_transform.Inverse() * cluster_transform;
         offset            = reflect * offset * reflect;
 
-        
-        m_bones[bone_idx]->offset = offset.Transpose();
+        m_bones[bone_idx]->transform = GetVQSTransform(offset);
+        m_bones[bone_idx]->offset    = offset.Transpose();
     }
 
     void FBXLoader::LoadKeyframe(I32 anim_index, FbxNode* node, FbxCluster* cluster, const FbxAMatrix& node_transform, I32 bone_idx, FbxMeshInfo* meshInfo)
@@ -603,5 +622,4 @@ namespace CS460
         const FbxVector4 scaling     = node->GetGeometricScaling(FbxNode::eSourcePivot);
         return FbxAMatrix(translation, rotation, scaling);
     }
-
-   }
+}

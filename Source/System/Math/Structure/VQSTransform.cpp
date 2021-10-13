@@ -25,6 +25,13 @@ namespace CS460
     {
     }
 
+    void VQSTransform::Set(const Vector3& pos, const Quaternion& rot, Real s)
+    {
+        position = pos;
+        rotation = rot;
+        scale    = s;
+    }
+
     Matrix44 VQSTransform::ToMatrix() const
     {
         Matrix44 scale_mat = Math::Matrix44::Scale(Vector3(scale, scale, scale), 1.0f);

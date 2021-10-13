@@ -1,6 +1,7 @@
 #pragma once
 
 #include "..//Component.hpp"
+#include "../../../System/Graphics/DataType/MaterialData.hpp"
 #include "../../../System/Math/Utility/VectorDef.hpp"
 
 namespace CS460
@@ -41,5 +42,7 @@ namespace CS460
 
         std::string      m_mesh_resource_path;
         AniMeshResource* m_mesh_resource = nullptr;
+
+        std::string m_shader_type = "Default";
     };
 }

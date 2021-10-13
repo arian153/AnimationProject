@@ -30,12 +30,12 @@ namespace CS460
 
     void Bone::Draw(PrimitiveRenderer* renderer, const Color& color) const
     {
-        renderer->DrawPrimitive(Sphere(m_offset.position, m_offset.rotation, 0.05f), eRenderingMode::Face, color);
+        renderer->DrawPrimitive(Sphere(m_to_bone.position, m_to_bone.rotation, 0.05f), eRenderingMode::Face, color);
     }
 
     void Bone::Draw(PrimitiveRenderer* renderer, const Color& color, const VQSTransform& parent) const
     {
-        VQSTransform offset = Multiply(parent, m_offset);
+        VQSTransform offset = Multiply(parent, m_to_bone);
         renderer->DrawPrimitive(Sphere(offset.position, offset.rotation, 0.05f), eRenderingMode::Face, color);
     }
 
