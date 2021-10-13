@@ -237,4 +237,12 @@ namespace CS460
             }
         }
     }
+
+    AnimationClip* Skeleton::CreateAnimationClip()
+    {
+        AnimationClip* created = new AnimationClip();
+        created->bone_count    = m_bones.size();
+        m_animation_clips.push_back(created);
+        return created;
+    }
 }

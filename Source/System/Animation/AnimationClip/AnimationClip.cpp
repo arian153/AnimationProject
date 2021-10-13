@@ -16,6 +16,11 @@ namespace CS460
 
     void AnimationClip::Shutdown()
     {
-        key_frames.clear();
+        track.clear();
+    }
+
+    KeyFrame AnimationClip::Interpolate(Real t)
+    {
+        return KeyFrame();
     }
 }

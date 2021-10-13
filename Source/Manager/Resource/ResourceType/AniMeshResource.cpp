@@ -46,25 +46,12 @@ namespace CS460
             auto bin_skeleton = m_bin_model.GetSkeleton();
             auto bones        = bin_skeleton.GetBones();
 
-            VQSTransform to_bone;
-            VQSTransform to_root;
-
             for (auto& bone : bones)
             {
-                const BinParser::Vqs& bfm = bone.GetToBoneFromModel();
-                const BinParser::Vqs& mfb = bone.GetToModelFromBone();
+                const BinParser::Vqs& to_bone = bone.GetToBoneFromModel();
+                const BinParser::Vqs& to_root = bone.GetToModelFromBone();
 
-                to_bone.Set(
-                            Vector3(bfm.v.x, bfm.v.y, bfm.v.z),
-                            Quaternion(bfm.q.s, bfm.q.x, bfm.q.y, bfm.q.z),
-                            bfm.s);
-
-                to_root.Set(
-                            Vector3(mfb.v.x, mfb.v.y, mfb.v.z),
-                            Quaternion(mfb.q.s, mfb.q.x, mfb.q.y, mfb.q.z),
-                            mfb.s);
-
-                skeleton->CreateBone(to_bone, to_root, bone.GetName(), bone.GetParentID());
+                skeleton->CreateBone(ToVQS(to_bone), ToVQS(to_root), bone.GetName(), bone.GetParentID());
             }
 
             //set up siblings
@@ -76,8 +63,33 @@ namespace CS460
             //copy animation clip
             auto bin_animations = m_bin_model.GetAnimations();
 
+            size_t size = bin_animations.size();
 
+            for (size_t i = 0; i < size; ++i)
+            {
+                auto clip      = skeleton->CreateAnimationClip();
+                clip->duration = bin_animations[i].GetDuration();
+                clip->name     = "Animation Clip " + std::to_string(i);
 
+                if (clip->bone_count == (size_t)bin_animations[i].GetTrackCount())
+                {
+                    size_t bone_count = clip->bone_count;
+                    auto   bin_track  = bin_animations[i].GetTracks();
+                    size_t track_size = bin_track.front().GetKeyFrameCount();
+                    clip->track.resize(track_size);
+
+                    for (size_t j = 0; j < bone_count; ++j)
+                    {
+                        for (size_t k = 0; k < track_size; ++k)
+                        {
+                            const BinParser::KeyFrame& bin_data = bin_track[j].GetKeyFrame(k);
+                            clip->track[k].pose.resize(bone_count);
+                            clip->track[k].pose[j].to_parent = ToVQS(bin_data.GetToParentFromBone());
+                            clip->track[k].pose[j].time      = bin_data.GetTime();
+                        }
+                    }
+                }
+            }
         }
         else if (m_ani_mesh_type == eAniMeshType::FBX)
         {
@@ -108,5 +120,13 @@ namespace CS460
                 ani_mesh->SetUpSubIndexBuffer(ani_mesh->m_sub_meshes[i], mesh_info.indices[i]);
             }
         }
+    }
+
+    VQSTransform AniMeshResource::ToVQS(const BinParser::Vqs& vqs) const
+    {
+        return VQSTransform(
+                            Vector3(vqs.v.x, vqs.v.y, vqs.v.z),
+                            Quaternion(vqs.q.s, vqs.q.x, vqs.q.y, vqs.q.z),
+                            vqs.s);
     }
 }

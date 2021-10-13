@@ -11,6 +11,6 @@ namespace CS460
         ~KeyFrame();
 
     public:
-        std::vector<PoseBone> poses;
+        std::vector<PoseBone> pose;
     };
 }

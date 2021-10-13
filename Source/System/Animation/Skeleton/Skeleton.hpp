@@ -37,17 +37,17 @@ namespace CS460
 
         void SetUpSiblingRecursive(Bone* bone);
 
-        void AddAnimationClip(const AnimationClip& clip);
+        AnimationClip* CreateAnimationClip();
 
     private:
         friend class AniMeshComponent;
         friend class AniMeshResource;
 
     private:
-        AniMeshComponent*          m_component = nullptr;
-        std::vector<Bone*>         m_root_bones;
+        AniMeshComponent*           m_component = nullptr;
+        std::vector<Bone*>          m_root_bones;
         std::vector<AnimationClip*> m_animation_clips;
-        std::vector<Bone*>         m_bones;
+        std::vector<Bone*>          m_bones;
 
         Color m_color;
         I32   m_clip_id = Core::I32_MAX;

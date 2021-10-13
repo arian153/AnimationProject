@@ -12,7 +12,6 @@ namespace CS460
         ~PoseBone();
 
     public:
-        I32          frame = -1;
         Real         time  = 0.0f;
         VQSTransform to_parent;
     };

@@ -27,6 +27,8 @@ namespace CS460
         void CopyData(Skeleton* skeleton) const;
         void CopyData(AniMesh* ani_mesh);
 
+        VQSTransform ToVQS(const BinParser::Vqs& vqs) const;
+
     private:
         eAniMeshType     m_ani_mesh_type = eAniMeshType::FBX;
         FBXLoader        m_fbx_loader;

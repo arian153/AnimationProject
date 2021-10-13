@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 
-
 #include "KeyFrame.hpp"
 #include "../../Math/Utility/MathDef.hpp"
 
@@ -15,15 +14,18 @@ namespace CS460
         AnimationClip();
         ~AnimationClip();
 
-        void Update(Bone* root_bone, Real dt);
-
-        void Shutdown();
-
+        void     Update(Bone* root_bone, Real dt);
+        void     Shutdown();
+        KeyFrame Interpolate(Real t);
 
     private:
-        std::string name;
-        std::vector<KeyFrame> key_frames;
+        friend class Skeleton;
+        friend class AniMeshResource;
 
+    private:
+        std::string           name;
+        Real                  duration   = -1.0f;
+        size_t                bone_count = 0;
+        std::vector<KeyFrame> track;
     };
-
 }
