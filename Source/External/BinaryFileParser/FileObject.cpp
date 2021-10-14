@@ -13,6 +13,8 @@
 /******************************************************************************/
 #pragma once
 
+#pragma warning(disable : 4244)
+
 #include "FileObject.hpp"
 #include <string>
 

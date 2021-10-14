@@ -18,19 +18,12 @@ namespace CS460
 
     void AniMeshResource::Initialize()
     {
-       /* if (m_file_type_w == L".fbx")
-        {
-            m_fbx_loader.LoadFbx(m_file_path_w);
-            m_b_loaded      = true;
-            m_ani_mesh_type = eAniMeshType::FBX;
-        }*/
-
         if (m_file_type_w == L".bin")
         {
             m_ani_mesh_type = eAniMeshType::BIN;
-            m_b_loaded      = m_bin_model.LoadFile(m_file_path_m.c_str());
+            m_b_loaded      = m_binary_model.LoadFile(m_file_path_m.c_str());
 
-            const BinParser::Mesh& mesh     = m_bin_model.GetMesh();
+            const BinParser::Mesh& mesh     = m_binary_model.GetMesh();
             auto                   vertices = mesh.GetVertexes();
             U32                    size     = mesh.GetVertexCount();
 
@@ -55,7 +48,6 @@ namespace CS460
 
     void AniMeshResource::Shutdown()
     {
-        //m_fbx_loader.Shutdown();
         m_vertices.clear();
         m_b_unloaded = true;
     }
@@ -65,7 +57,7 @@ namespace CS460
         if (m_ani_mesh_type == eAniMeshType::BIN)
         {
             //copy bone
-            auto bin_skeleton = m_bin_model.GetSkeleton();
+            auto bin_skeleton = m_binary_model.GetSkeleton();
             auto bones        = bin_skeleton.GetBones();
 
             for (auto& bone : bones)
@@ -83,7 +75,7 @@ namespace CS460
             }
 
             //copy animation clip
-            auto bin_animations = m_bin_model.GetAnimations();
+            auto bin_animations = m_binary_model.GetAnimations();
 
             size_t size = bin_animations.size();
 
@@ -113,22 +105,13 @@ namespace CS460
                 }
             }
         }
- //       else if (m_ani_mesh_type == eAniMeshType::FBX)
- //       {
- //           /* for (auto& bone : m_fbx_loader.m_bones)
- //            {
- //                skeleton->CreateBone(bone->transform, ToString(bone->bone_name), bone->parent_index);
- //            }
- //
- //            skeleton->m_animation_clips;*/
- //       }
     }
 
-    void AniMeshResource::CopyData(AniMesh* ani_mesh)
+    void AniMeshResource::CopyData(AniMesh* ani_mesh) const
     {
         if (m_ani_mesh_type == eAniMeshType::BIN)
         {
-            const BinParser::Mesh& mesh = m_bin_model.GetMesh();
+            const BinParser::Mesh& mesh = m_binary_model.GetMesh();
 
             ani_mesh->m_sub_meshes.resize(1);
             ani_mesh->SetVertexBuffer(m_vertices);
@@ -136,25 +119,6 @@ namespace CS460
             ani_mesh->SetUpSubIndexBuffer(ani_mesh->m_sub_meshes[0], mesh.GetIndexes());
             //no material info from BIN file.
         }
-      /*  else if (m_ani_mesh_type == eAniMeshType::FBX)
-        {
-            if (m_fbx_loader.m_meshes.empty())
-                return;
-
-            if (m_fbx_loader.m_meshes.size() == 1)
-            {
-                auto&  mesh_info = m_fbx_loader.m_meshes.front();
-                size_t size      = mesh_info.indices.size();
-                ani_mesh->m_sub_meshes.resize(size);
-                ani_mesh->SetVertexBuffer(mesh_info.vertices);
-
-                for (size_t i = 0; i < size; ++i)
-                {
-                    ani_mesh->CreateSubMesh(ani_mesh->m_sub_meshes[i]);
-                    ani_mesh->SetUpSubIndexBuffer(ani_mesh->m_sub_meshes[i], mesh_info.indices[i]);
-                }
-            }
-        }*/
     }
 
     VQSTransform AniMeshResource::ToVQS(const BinParser::Vqs& vqs) const

@@ -13,7 +13,6 @@ namespace CS460
 
     enum class eAniMeshType
     {
-        FBX,
         BIN
     };
 
@@ -27,16 +26,15 @@ namespace CS460
         void Shutdown() override;
 
         void CopyData(Skeleton* skeleton) const;
-        void CopyData(AniMesh* ani_mesh);
+        void CopyData(AniMesh* ani_mesh) const;
 
         VQSTransform ToVQS(const BinParser::Vqs& vqs) const;
         Vector2      ToVector2(const BinParser::Vector2& v2) const;
         Vector3      ToVector3(const BinParser::Vector3& v3) const;
 
     private:
-        eAniMeshType m_ani_mesh_type = eAniMeshType::FBX;
-        //FBXLoader        m_fbx_loader;
-        BinParser::Model m_bin_model;
+        eAniMeshType     m_ani_mesh_type = eAniMeshType::BIN;
+        BinParser::Model m_binary_model;
 
         std::vector<SkinnedVertexCommon> m_vertices;
     };
