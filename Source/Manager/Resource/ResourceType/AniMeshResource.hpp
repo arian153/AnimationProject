@@ -2,7 +2,9 @@
 
 #include "../Resource.hpp"
 #include "../../../External/BinaryFileParser/BinParserModel.hpp"
-#include "../ResourceLoader/FBXLoader.hpp"
+#include "../../../System/Graphics/Common/Vertex/SkinnedVertexCommon.hpp"
+#include "../../../System/Math/Structure/VQSTransform.hpp"
+//#include "../ResourceLoader/FBXLoader.hpp"
 
 namespace CS460
 {
@@ -28,10 +30,14 @@ namespace CS460
         void CopyData(AniMesh* ani_mesh);
 
         VQSTransform ToVQS(const BinParser::Vqs& vqs) const;
+        Vector2      ToVector2(const BinParser::Vector2& v2) const;
+        Vector3      ToVector3(const BinParser::Vector3& v3) const;
 
     private:
-        eAniMeshType     m_ani_mesh_type = eAniMeshType::FBX;
-        FBXLoader        m_fbx_loader;
+        eAniMeshType m_ani_mesh_type = eAniMeshType::FBX;
+        //FBXLoader        m_fbx_loader;
         BinParser::Model m_bin_model;
+
+        std::vector<SkinnedVertexCommon> m_vertices;
     };
 }

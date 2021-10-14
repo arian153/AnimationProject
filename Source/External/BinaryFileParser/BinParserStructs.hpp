@@ -17,6 +17,8 @@
 #include <vector>
 #include <string>
 
+#pragma warning(disable : 4267)
+
 namespace BinParser
 {
     struct Vector2

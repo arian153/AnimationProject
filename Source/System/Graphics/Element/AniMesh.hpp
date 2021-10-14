@@ -54,9 +54,9 @@ namespace CS460
         friend class AniMeshResource;
 
     private:
-        AniMeshComponent* m_component = nullptr;
-        RendererCommon*   m_renderer  = nullptr;
-        std::string m_shader_type = "";
+        AniMeshComponent* m_component   = nullptr;
+        RendererCommon*   m_renderer    = nullptr;
+        std::string       m_shader_type = "";
 
         VertexBufferCommon*     m_vertex_buffer = nullptr;
         ConstantBufferCommon*   m_matrix_buffer = nullptr;

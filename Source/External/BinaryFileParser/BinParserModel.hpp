@@ -14,6 +14,7 @@
 #ifndef BIN_PARSER_MODEL_HPP
 #define BIN_PARSER_MODEL_HPP
 
+#pragma warning(disable : 4267)
 #include "BinParserStructs.hpp"
 #include <vector>
 #include "FileObject.hpp"

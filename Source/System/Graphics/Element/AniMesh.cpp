@@ -123,6 +123,8 @@ namespace CS460
 
     void AniMesh::ShutdownSubMesh(SubAniMesh& sub_mesh) const
     {
+        sub_mesh.texture_array.Clear();
+
         if (sub_mesh.index_buffer != nullptr)
         {
             sub_mesh.index_buffer->Shutdown();
