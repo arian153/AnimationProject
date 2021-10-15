@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "PoseBone.hpp"
+#include "../../Math/Structure/VQSTransform.hpp"
 
 namespace CS460
 {
@@ -10,7 +10,11 @@ namespace CS460
         KeyFrame();
         ~KeyFrame();
 
+        VQSTransform ToParent(size_t bone_idx);
+
     public:
-        std::vector<PoseBone> pose;
+        //to parent transform per bone
+        std::vector<VQSTransform> to_parents;
+        Real                      time = -1.0f;
     };
 }

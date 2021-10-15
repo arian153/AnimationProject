@@ -90,6 +90,7 @@ namespace CS460
                     size_t bone_count = clip->bone_count;
                     auto   bin_track  = bin_animations[i].GetTracks();
                     size_t track_size = bin_track.front().GetKeyFrameCount();
+                    clip->track_size  = track_size;
                     clip->track.resize(track_size);
 
                     for (size_t j = 0; j < bone_count; ++j)
@@ -97,13 +98,14 @@ namespace CS460
                         for (size_t k = 0; k < track_size; ++k)
                         {
                             const BinParser::KeyFrame& bin_data = bin_track[j].GetKeyFrame((U32)k);
-                            clip->track[k].pose.resize(bone_count);
-                            clip->track[k].pose[j].to_parent = ToVQS(bin_data.GetToParentFromBone());
-                            clip->track[k].pose[j].time      = bin_data.GetTime();
+                            clip->track[k].to_parents.resize(bone_count);
+                            clip->track[k].to_parents[j] = ToVQS(bin_data.GetToParentFromBone());
+                            clip->track[k].time          = bin_data.GetTime();
                         }
                     }
                 }
             }
+
         }
     }
 

@@ -35,7 +35,7 @@ namespace CS460
 
     void Bone::Draw(PrimitiveRenderer* renderer, const Color& color, const VQSTransform& parent) const
     {
-        VQSTransform offset = Multiply(parent, m_to_bone);
+        VQSTransform offset = Concatenate(parent, m_to_bone);
         renderer->DrawPrimitive(Sphere(offset.position, offset.rotation, 0.05f), eRenderingMode::Face, color);
     }
 

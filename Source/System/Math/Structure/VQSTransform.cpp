@@ -99,17 +99,17 @@ namespace CS460
         return rotation.Rotate(scale * rhs) + position;
     }
 
-    VQSTransform Multiply(const VQSTransform& a, const VQSTransform& b)
+    VQSTransform Concatenate(const VQSTransform& a, const VQSTransform& b)
     {
         return VQSTransform(a.rotation.Rotate(a.scale * b.position) + a.position, a.rotation * b.rotation, a.scale * b.scale);
     }
 
-    VQSTransform Interpolation(const VQSTransform& a, const VQSTransform& b, Real t)
+    VQSTransform Interpolation(const VQSTransform& start, const VQSTransform& end, Real t)
     {
         return VQSTransform(
-                            Lerp(a.position, b.position, t),
-                            Slerp(a.rotation, b.rotation, t),
-                            Elerp(a.scale, b.scale, t));
+                            Lerp(start.position, end.position, t),
+                            Slerp(start.rotation, end.rotation, t),
+                            Elerp(start.scale, end.scale, t));
     }
 
     std::ostream& operator<<(std::ostream& os, const VQSTransform& vqs)

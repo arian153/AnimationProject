@@ -111,7 +111,7 @@ namespace CS460
         Vector3 bone_pos = bone->m_to_bone.position;
         for (auto& child : bone->m_children)
         {
-            Vector3 child_pos = Multiply(bone->m_to_bone, child->m_to_bone).position;
+            Vector3 child_pos = Concatenate(bone->m_to_bone, child->m_to_bone).position;
             renderer->DrawSegment(bone_pos, child_pos, m_color);
             DrawRecursive(renderer, child, bone->m_to_bone);
         }
@@ -120,12 +120,12 @@ namespace CS460
     void Skeleton::DrawRecursive(PrimitiveRenderer* renderer, Bone* bone, const VQSTransform& parent) const
     {
         bone->Draw(renderer, m_color, parent);
-        VQSTransform offset   = Multiply(parent, bone->m_to_bone);
+        VQSTransform offset   = Concatenate(parent, bone->m_to_bone);
         Vector3      bone_pos = offset.position;
 
         for (auto& child : bone->m_children)
         {
-            Vector3 child_pos = Multiply(offset, child->m_to_bone).position;
+            Vector3 child_pos = Concatenate(offset, child->m_to_bone).position;
             renderer->DrawSegment(bone_pos, child_pos, m_color);
             DrawRecursive(renderer, child, offset);
         }
@@ -241,6 +241,7 @@ namespace CS460
     AnimationClip* Skeleton::CreateAnimationClip()
     {
         AnimationClip* created = new AnimationClip();
+        created->skeleton      = this;
         created->bone_count    = m_bones.size();
         m_animation_clips.push_back(created);
         return created;

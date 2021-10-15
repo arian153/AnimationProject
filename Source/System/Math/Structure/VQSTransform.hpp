@@ -22,8 +22,8 @@ namespace CS460
         Vector3 ApplyTransform(const Vector3& point) const;
         Vector3 ApplyInverse(const Vector3& point) const;
 
-        friend VQSTransform Multiply(const VQSTransform& a, const VQSTransform& b);
-        friend VQSTransform Interpolation(const VQSTransform& a, const VQSTransform& b, Real t);
+        friend VQSTransform Concatenate(const VQSTransform& a, const VQSTransform& b);
+        friend VQSTransform Interpolation(const VQSTransform& start, const VQSTransform& end, Real t);
 
      
 

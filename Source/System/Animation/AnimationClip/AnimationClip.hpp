@@ -6,6 +6,7 @@
 
 namespace CS460
 {
+    class Skeleton;
     class Bone;
 
     class AnimationClip
@@ -14,18 +15,24 @@ namespace CS460
         AnimationClip();
         ~AnimationClip();
 
-        void     Update(Bone* root_bone, Real dt);
-        void     Shutdown();
-        KeyFrame Interpolate(Real t);
+        void Update(Real dt);
+        void Shutdown();
+        void Interpolate(Real t, const KeyFrame& start, const KeyFrame& end, KeyFrame& result) const;
 
     private:
         friend class Skeleton;
         friend class AniMeshResource;
 
     private:
-        std::string           name;
-        Real                  duration   = -1.0f;
-        size_t                bone_count = 0;
+        Skeleton*   skeleton = nullptr;
+        std::string name;
+        Real        duration       = -1.0f;
+        Real        track_scale    = 1.0f;
+        Real        track_position = 0.0f;
+        size_t      bone_count     = 0;
+        size_t      current_idx    = 0;
+        size_t      track_size     = 0;
+
         std::vector<KeyFrame> track;
     };
 }

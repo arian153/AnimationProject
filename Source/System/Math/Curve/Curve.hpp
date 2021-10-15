@@ -5,8 +5,6 @@
 
 namespace CS460
 {
- 
-
     class Curve
     {
     public:
