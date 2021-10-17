@@ -83,29 +83,31 @@ namespace CS460
             {
                 auto clip      = skeleton->CreateAnimationClip();
                 clip->duration = bin_animations[i].GetDuration();
+                clip->speed    = 1.0f / clip->duration;
                 clip->name     = "Animation Clip " + std::to_string(i);
+                clip->key_frames.resize(clip->bone_count);
 
                 if (clip->bone_count == (size_t)bin_animations[i].GetTrackCount())
                 {
                     size_t bone_count = clip->bone_count;
                     auto   bin_track  = bin_animations[i].GetTracks();
-                    size_t track_size = bin_track.front().GetKeyFrameCount();
-                    clip->track_size  = track_size;
-                    clip->track.resize(track_size);
+                    clip->tracks.resize(bone_count);
 
                     for (size_t j = 0; j < bone_count; ++j)
                     {
+                        size_t track_size = bin_track[j].GetKeyFrameCount();
+                        clip->tracks[j].key_frames.resize(track_size);
+                        clip->tracks[j].track_size = track_size;
+                        clip->tracks[j].duration   = clip->duration;
                         for (size_t k = 0; k < track_size; ++k)
                         {
-                            const BinParser::KeyFrame& bin_data = bin_track[j].GetKeyFrame((U32)k);
-                            clip->track[k].to_parents.resize(bone_count);
-                            clip->track[k].to_parents[j] = ToVQS(bin_data.GetToParentFromBone());
-                            clip->track[k].time          = bin_data.GetTime();
+                            const BinParser::KeyFrame& key_frame    = bin_track[j].GetKeyFrame((U32)k);
+                            clip->tracks[j].key_frames[k].to_parent = ToVQS(key_frame.GetToParentFromBone());
+                            clip->tracks[j].key_frames[k].time      = key_frame.GetTime() / clip->duration;
                         }
                     }
                 }
             }
-
         }
     }
 

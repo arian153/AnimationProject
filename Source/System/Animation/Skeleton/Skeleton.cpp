@@ -57,47 +57,6 @@ namespace CS460
         if (!m_root_bones.empty() && m_b_draw)
         {
             DrawFinalVQS(renderer);
-
-            /* for (auto& root : m_root_bones)
-             {
-                 DrawRecursive(renderer, root);
-             }*/
-        }
-    }
-
-    void Skeleton::CreateSample()
-    {
-        {
-            Bone* root = CreateBone(VQSTransform(Vector3(0, 2, 0), Quaternion(EulerAngle(Math::PI_DIV_4, Math::PI_DIV_4, Math::PI_DIV_6))), "root", -1);
-            m_root_bones.push_back(root);
-
-            Bone* part_a = CreateBone(VQSTransform(Vector3(1, 0, 0), Quaternion(EulerAngle(0.0f, 0.0f, Math::PI_DIV_6))), "Part-A", root);
-            Bone* part_b = CreateBone(VQSTransform(Vector3(0, 1, 0), Quaternion()), "Part-B", root);
-            Bone* part_c = CreateBone(VQSTransform(Vector3(0, 0, 1), Quaternion()), "Part-C", root);
-            Bone* part_d = CreateBone(VQSTransform(Vector3(-1, 0, 0), Quaternion()), "Part-D", root);
-            Bone* part_e = CreateBone(VQSTransform(Vector3(0, -1, 0), Quaternion()), "Part-E", root);
-            Bone* part_f = CreateBone(VQSTransform(Vector3(0, 0, -1), Quaternion()), "Part-F", root);
-
-            Bone* part_a_a = CreateBone(VQSTransform(Vector3(0.5f, 0.5f, 0), Quaternion()), "Sub-A", part_a);
-            Bone* part_a_b = CreateBone(VQSTransform(Vector3(0, 0.5f, 0.5f), Quaternion()), "Sub-B", part_a);
-            Bone* part_a_c = CreateBone(VQSTransform(Vector3(0.5f, 0, 0.5f), Quaternion()), "Sub-C", part_a);
-            Bone* part_a_d = CreateBone(VQSTransform(Vector3(-0.5f, -0.5f, 0), Quaternion()), "Sub-D", part_a);
-            Bone* part_a_e = CreateBone(VQSTransform(Vector3(0, -0.5f, -0.5f), Quaternion()), "Sub-E", part_a);
-            Bone* part_a_f = CreateBone(VQSTransform(Vector3(-0.5f, 0, -0.5f), Quaternion()), "Sub-F", part_a);
-
-            Bone* part_b_a = CreateBone(VQSTransform(Vector3(0.5f, 0, 0), Quaternion()), "Sub-A", part_b);
-            Bone* part_b_b = CreateBone(VQSTransform(Vector3(-0.5f, 0, 0), Quaternion()), "Sub-B", part_b);
-            Bone* part_b_c = CreateBone(VQSTransform(Vector3(0, 0, 0.5f), Quaternion()), "Sub-C", part_b);
-            Bone* part_b_d = CreateBone(VQSTransform(Vector3(0, 0, -0.5f), Quaternion()), "Sub-D", part_b);
-
-            Bone* part_c_a = CreateBone(VQSTransform(Vector3(0.5f, 0, 0), Quaternion()), "Sub-A", part_c);
-            Bone* part_c_b = CreateBone(VQSTransform(Vector3(-0.5f, 0, 0), Quaternion()), "Sub-B", part_c);
-            Bone* part_c_c = CreateBone(VQSTransform(Vector3(0, 0, 0.5f), Quaternion()), "Sub-C", part_c);
-
-            Bone* part_c_a1 = CreateBone(VQSTransform(Vector3(0, 0, 0.5f), Quaternion(EulerAngle(Math::PI_DIV_6))), "Sub-A", part_c_c);
-            Bone* part_c_a2 = CreateBone(VQSTransform(Vector3(0, 0, 0.5f), Quaternion(EulerAngle(Math::PI_DIV_6))), "Sub-A", part_c_a1);
-            Bone* part_c_a3 = CreateBone(VQSTransform(Vector3(0, 0, 0.5f), Quaternion(EulerAngle(Math::PI_DIV_6))), "Sub-A", part_c_a2);
-            Bone* part_c_a4 = CreateBone(VQSTransform(Vector3(0, 0, 0.5f), Quaternion(EulerAngle(Math::PI_DIV_6))), "Sub-A", part_c_a3);
         }
     }
 
@@ -106,9 +65,9 @@ namespace CS460
         resource->CopyData(this);
     }
 
-    void Skeleton::UpdateKeyFrame(const KeyFrame& key_frame)
+    void Skeleton::UpdateKeyFrame(std::vector<KeyFrame>& key_frames)
     {
-        I32 size = (I32)key_frame.to_parents.size();
+        I32 size = (I32)key_frames.size();
 
         if (size != m_bones.size())
         {
@@ -122,13 +81,15 @@ namespace CS460
         for (I32 i = 0; i < size; ++i)
         {
             I32          parent_idx     = m_bones[i]->m_parent_idx;
-            VQSTransform parent_to_root = parent_idx >= 0 ? key_frame.to_parents[parent_idx] : VQSTransform();
-            to_roots[i]                 = Concatenate(key_frame.to_parents[i], parent_to_root);
+            VQSTransform parent_to_root = parent_idx >= 0 ? key_frames[parent_idx].to_parent : VQSTransform();
+            to_roots[i]                 = Concatenate(key_frames[i].to_parent, parent_to_root);
+            to_roots[i].rotation.SetNormalize();
         }
 
         for (I32 i = 0; i < size; ++i)
         {
             m_final_vqs[i] = Concatenate(m_bones[i]->m_to_root, to_roots[i]);
+            m_final_vqs[i].rotation.SetNormalize();
         }
     }
 
@@ -290,10 +251,12 @@ namespace CS460
 
         for (size_t i = 0; i < size; ++i)
         {
-            renderer->DrawPrimitive(Sphere(m_final_vqs[i].position, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
             if (m_bones[i]->m_parent_idx >= 0)
             {
-                renderer->DrawSegment(m_final_vqs[m_bones[i]->m_parent_idx].position, m_final_vqs[i].position, m_color);
+                renderer->DrawPrimitive(Sphere(m_final_vqs[i].position, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
+                Vector3 parent_pos = m_final_vqs[m_bones[i]->m_parent_idx].position;
+                Vector3 child_pos  = m_final_vqs[i].position;
+                renderer->DrawSegment(parent_pos, child_pos, m_color);
             }
         }
     }

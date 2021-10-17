@@ -24,10 +24,9 @@ namespace CS460
 
         void Draw(PrimitiveRenderer* renderer) const;
 
-        void CreateSample();
         void SetAniMeshResource(AniMeshResource* resource);
 
-        void UpdateKeyFrame(const KeyFrame& key_frame);
+        void UpdateKeyFrame( std::vector<KeyFrame>& key_frames);
 
     private:
         void  DrawRecursive(PrimitiveRenderer* renderer, Bone* bone) const;

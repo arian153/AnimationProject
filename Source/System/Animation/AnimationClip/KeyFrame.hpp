@@ -7,14 +7,11 @@ namespace CS460
     class KeyFrame
     {
     public:
-        KeyFrame();
-        ~KeyFrame();
-
-        VQSTransform ToParent(size_t bone_idx);
+        KeyFrame() = default;
+        ~KeyFrame() = default;
 
     public:
-        //to parent transform per bone
-        std::vector<VQSTransform> to_parents;
-        Real                      time = -1.0f;
+        VQSTransform to_parent;
+        Real         time = -1.0f;
     };
 }
