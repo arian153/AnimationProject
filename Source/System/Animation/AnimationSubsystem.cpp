@@ -18,6 +18,10 @@ namespace CS460
 
     void AnimationSubsystem::Update(Real dt)
     {
+        for (auto& skeleton : m_skeletons)
+        {
+            skeleton->Update(dt);
+        }
     }
 
     void AnimationSubsystem::Render() const

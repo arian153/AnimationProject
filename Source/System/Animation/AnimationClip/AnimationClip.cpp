@@ -1,5 +1,7 @@
 #include "AnimationClip.hpp"
 
+#include "../Skeleton/Skeleton.hpp"
+
 namespace CS460
 {
     AnimationClip::AnimationClip()
@@ -18,6 +20,7 @@ namespace CS460
 
         Interpolate(track_position, track[i], track[j], result);
         //find final result & matrix
+        skeleton->UpdateKeyFrame(result);
 
         //do after interpolation calculation
         track_position += dt;

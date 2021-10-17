@@ -25,8 +25,8 @@ namespace CS460
         //update by keyframe
         if (m_clip_id != Core::I64_MAX)
         {
-            //auto& clip = m_animation_clips[m_clip_id];
-            //clip.Update(m_root_bone, dt);
+            auto& clip = m_animation_clips[m_clip_id];
+            clip->Update(dt);
         }
     }
 
@@ -56,10 +56,12 @@ namespace CS460
     {
         if (!m_root_bones.empty() && m_b_draw)
         {
-            for (auto& root : m_root_bones)
-            {
-                DrawRecursive(renderer, root);
-            }
+            DrawFinalVQS(renderer);
+
+            /* for (auto& root : m_root_bones)
+             {
+                 DrawRecursive(renderer, root);
+             }*/
         }
     }
 
@@ -102,6 +104,32 @@ namespace CS460
     void Skeleton::SetAniMeshResource(AniMeshResource* resource)
     {
         resource->CopyData(this);
+    }
+
+    void Skeleton::UpdateKeyFrame(const KeyFrame& key_frame)
+    {
+        I32 size = (I32)key_frame.to_parents.size();
+
+        if (size != m_bones.size())
+        {
+            return;
+        }
+
+        std::vector<VQSTransform> to_roots;
+        to_roots.resize(size);
+        m_final_vqs.resize(size);
+
+        for (I32 i = 0; i < size; ++i)
+        {
+            I32          parent_idx     = m_bones[i]->m_parent_idx;
+            VQSTransform parent_to_root = parent_idx >= 0 ? key_frame.to_parents[parent_idx] : VQSTransform();
+            to_roots[i]                 = Concatenate(key_frame.to_parents[i], parent_to_root);
+        }
+
+        for (I32 i = 0; i < size; ++i)
+        {
+            m_final_vqs[i] = Concatenate(m_bones[i]->m_to_root, to_roots[i]);
+        }
     }
 
     void Skeleton::DrawRecursive(PrimitiveRenderer* renderer, Bone* bone) const
@@ -238,6 +266,10 @@ namespace CS460
         }
     }
 
+    void Skeleton::SetUpFinalBones()
+    {
+    }
+
     AnimationClip* Skeleton::CreateAnimationClip()
     {
         AnimationClip* created = new AnimationClip();
@@ -245,5 +277,24 @@ namespace CS460
         created->bone_count    = m_bones.size();
         m_animation_clips.push_back(created);
         return created;
+    }
+
+    void Skeleton::DrawFinalVQS(PrimitiveRenderer* renderer) const
+    {
+        size_t size = m_bones.size();
+
+        if (size != m_final_vqs.size())
+        {
+            return;
+        }
+
+        for (size_t i = 0; i < size; ++i)
+        {
+            renderer->DrawPrimitive(Sphere(m_final_vqs[i].position, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
+            if (m_bones[i]->m_parent_idx >= 0)
+            {
+                renderer->DrawSegment(m_final_vqs[m_bones[i]->m_parent_idx].position, m_final_vqs[i].position, m_color);
+            }
+        }
     }
 }
