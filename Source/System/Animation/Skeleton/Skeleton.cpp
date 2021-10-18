@@ -249,15 +249,24 @@ namespace CS460
             return;
         }
 
+       
         for (size_t i = 0; i < size; ++i)
         {
-            if (m_bones[i]->m_parent_idx >= 0)
+            Bone*  bone       = m_bones[i];
+            size_t child_size = bone->m_children.size();
+            for (size_t j = 0; j < child_size; ++j)
             {
-                renderer->DrawPrimitive(Sphere(m_final_vqs[i].position, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
-                Vector3 parent_pos = m_final_vqs[m_bones[i]->m_parent_idx].position;
-                Vector3 child_pos  = m_final_vqs[i].position;
+                Vector3 parent_pos = m_final_vqs[bone->m_own_idx].position;
+                Vector3 child_pos  = m_final_vqs[bone->m_children[j]->m_own_idx].position;
                 renderer->DrawSegment(parent_pos, child_pos, m_color);
             }
+
+           /* if (m_bones[i]->m_parent_idx >= 0)
+            {
+                renderer->DrawPrimitive(Sphere(m_final_vqs[i].position, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
+
+               
+            }*/
         }
     }
 }
