@@ -77,7 +77,8 @@ namespace CS460
             //copy animation clip
             auto bin_animations = m_binary_model.GetAnimations();
 
-            size_t size = bin_animations.size();
+            size_t size         = bin_animations.size();
+            skeleton->m_clip_id = (int)size - 1;
 
             for (size_t i = 0; i < size; ++i)
             {

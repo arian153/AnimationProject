@@ -29,10 +29,10 @@ namespace CS460
     private:
         Skeleton*   skeleton = nullptr;
         std::string name;
-        Real        duration = -1.0f;
-        Real        speed    = 1.0f;
+        Real        duration     = -1.0f;
+        Real        speed        = 1.0f;
         Real        elapsed_time = 0.0f;
-        size_t      bone_count = 0;
+        size_t      bone_count   = 0;
 
         std::vector<Track>    tracks;
         std::vector<KeyFrame> key_frames;

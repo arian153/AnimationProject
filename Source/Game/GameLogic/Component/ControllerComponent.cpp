@@ -83,12 +83,12 @@ namespace Game
                     eye_pos.y = m_radius * cosf(m_phi);
                     camera->LookAt(target_pos + eye_pos, target_pos);
                 }
-                if (keyboard->IsDown(eKeyCodeKeyboard::W))
+                if (keyboard->IsDown(eKeyCodeKeyboard::R))
                 {
                     target_pos += basis.j * dt * 10.0f;
                     camera->LookAt(target_pos + eye_pos, target_pos);
                 }
-                if (keyboard->IsDown(eKeyCodeKeyboard::S))
+                if (keyboard->IsDown(eKeyCodeKeyboard::F))
                 {
                     target_pos += basis.j * -dt * 10.0f;
                     camera->LookAt(target_pos + eye_pos, target_pos);
@@ -103,12 +103,12 @@ namespace Game
                     target_pos += basis.i * dt * 10.0f;
                     camera->LookAt(target_pos + eye_pos, target_pos);
                 }
-                if (keyboard->IsDown(eKeyCodeKeyboard::Q))
+                if (keyboard->IsDown(eKeyCodeKeyboard::W))
                 {
                     target_pos += basis.k * dt * 10.0f;
                     camera->LookAt(target_pos + eye_pos, target_pos);
                 }
-                if (keyboard->IsDown(eKeyCodeKeyboard::E))
+                if (keyboard->IsDown(eKeyCodeKeyboard::S))
                 {
                     target_pos += basis.k * -dt * 10.0f;
                     camera->LookAt(target_pos + eye_pos, target_pos);

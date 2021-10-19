@@ -17,7 +17,7 @@ namespace CS460
 
     void Skeleton::Initialize()
     {
-        //CreateSample();
+        
     }
 
     void Skeleton::Update(Real dt)
@@ -54,21 +54,42 @@ namespace CS460
 
     void Skeleton::Draw(PrimitiveRenderer* renderer) const
     {
+        //Render skeleton structure
         if (!m_root_bones.empty() && m_b_draw)
         {
-            DrawFinalVQS(renderer);
-        }
-    }
+            size_t size = m_bones.size();
 
-    void Skeleton::SetAniMeshResource(AniMeshResource* resource)
-    {
-        resource->CopyData(this);
+            if (size != m_final_vqs.size())
+            {
+                return;
+            }
+
+            Matrix44 world = Matrix44::Identity();
+            if (m_transform != nullptr)
+            {
+                world = m_transform->LocalToWorldMatrix();
+            }
+
+            for (size_t i = 0; i < size; ++i)
+            {
+                Bone*   bone       = m_bones[i];
+                size_t  child_size = bone->m_children.size();
+                Vector3 parent_pos = world.TransformPoint(m_final_vqs[i].position);
+                renderer->DrawPrimitive(Sphere(parent_pos, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
+                for (size_t j = 0; j < child_size; ++j)
+                {
+                    //has a child draw line segment.
+                    Vector3 child_pos = world.TransformPoint(m_final_vqs[bone->m_children[j]->m_own_idx].position);
+                    renderer->DrawSegment(parent_pos, child_pos, m_color);
+                }
+            }
+        }
     }
 
     void Skeleton::UpdateKeyFrame(std::vector<KeyFrame>& key_frames)
     {
+        //apply key frame transformation data to bone structure.
         I32 size = (I32)key_frames.size();
-
         if (size != m_bones.size())
         {
             return;
@@ -93,35 +114,9 @@ namespace CS460
         }
     }
 
-    void Skeleton::DrawRecursive(PrimitiveRenderer* renderer, Bone* bone) const
-    {
-        //only call root bone
-        bone->Draw(renderer, m_color);
-        Vector3 bone_pos = bone->m_to_bone.position;
-        for (auto& child : bone->m_children)
-        {
-            Vector3 child_pos = Concatenate(bone->m_to_bone, child->m_to_bone).position;
-            renderer->DrawSegment(bone_pos, child_pos, m_color);
-            DrawRecursive(renderer, child, bone->m_to_bone);
-        }
-    }
-
-    void Skeleton::DrawRecursive(PrimitiveRenderer* renderer, Bone* bone, const VQSTransform& parent) const
-    {
-        bone->Draw(renderer, m_color, parent);
-        VQSTransform offset   = Concatenate(parent, bone->m_to_bone);
-        Vector3      bone_pos = offset.position;
-
-        for (auto& child : bone->m_children)
-        {
-            Vector3 child_pos = Concatenate(offset, child->m_to_bone).position;
-            renderer->DrawSegment(bone_pos, child_pos, m_color);
-            DrawRecursive(renderer, child, offset);
-        }
-    }
-
     Bone* Skeleton::CreateBone(const VQSTransform& to_bone, const VQSTransform& to_root, const std::string& name, Bone* parent)
     {
+        //create bone data
         Bone* created       = new Bone();
         created->m_skeleton = this;
         created->m_to_bone  = to_bone;
@@ -158,6 +153,7 @@ namespace CS460
 
     Bone* Skeleton::CreateBone(const VQSTransform& to_bone, const VQSTransform& to_root, const std::string& name, I32 p_idx)
     {
+        //create bone data
         Bone* created       = new Bone();
         created->m_skeleton = this;
         created->m_to_bone  = to_bone;
@@ -203,6 +199,7 @@ namespace CS460
 
     void Skeleton::SetUpSiblingRecursive(Bone* bone)
     {
+        //Set up sibling relation ship
         if (bone->m_children.empty())
             return;
 
@@ -227,41 +224,14 @@ namespace CS460
         }
     }
 
-    void Skeleton::SetUpFinalBones()
-    {
-    }
-
+   
     AnimationClip* Skeleton::CreateAnimationClip()
     {
+        //Create Animation clip data.
         AnimationClip* created = new AnimationClip();
         created->skeleton      = this;
         created->bone_count    = m_bones.size();
         m_animation_clips.push_back(created);
         return created;
-    }
-
-    void Skeleton::DrawFinalVQS(PrimitiveRenderer* renderer) const
-    {
-        size_t size = m_bones.size();
-
-        if (size != m_final_vqs.size())
-        {
-            return;
-        }
-
-        renderer->DrawPrimitive(Sphere(m_final_vqs[0].position, m_final_vqs[0].rotation, 0.05f), eRenderingMode::Face, m_color);
-
-        for (size_t i = 0; i < size; ++i)
-        {
-            Bone*   bone       = m_bones[i];
-            size_t  child_size = bone->m_children.size();
-            Vector3 parent_pos = m_final_vqs[i].position;
-            //renderer->DrawPrimitive(Sphere(parent_pos, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
-            for (size_t j = 0; j < child_size; ++j)
-            {
-                Vector3 child_pos = m_final_vqs[bone->m_children[j]->m_own_idx].position;
-                renderer->DrawSegment(parent_pos, child_pos, m_color);
-            }
-        }
     }
 }

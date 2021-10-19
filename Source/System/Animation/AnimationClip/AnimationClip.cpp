@@ -14,14 +14,15 @@ namespace CS460
 
     void AnimationClip::Update(Real dt)
     {
+        //elapsed time for animation track
         elapsed_time += speed * dt;
-
         if (elapsed_time > duration)
         {
-            elapsed_time = 0.0f;
+            //if finished, reset timer for animation cycle
             ResetTracks();
         }
 
+        //update track
         UpdateTracks();
     }
 
@@ -31,12 +32,13 @@ namespace CS460
         {
             tracks[i].Update(elapsed_time, key_frames[i]);
         }
-        //find final result & matrix
+        //apply final result
         skeleton->UpdateKeyFrame(key_frames);
     }
 
     void AnimationClip::ResetTracks()
     {
+        elapsed_time = 0.0f;
         for(size_t i = 0; i < bone_count; ++i)
         {
             tracks[i].current_idx = 0;

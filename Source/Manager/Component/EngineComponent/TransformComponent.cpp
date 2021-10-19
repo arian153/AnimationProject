@@ -321,6 +321,37 @@ namespace CS460
             }
             ImGui::Separator();
             ImGui::Text("Orientation");
+
+            ImGui::Text("Add Rotation");
+            if (ImGui::Button("X + 90"))
+            {
+                AddRotationX(Math::HALF_PI);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Y + 90"))
+            {
+                AddRotationY(Math::HALF_PI);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Z + 90"))
+            {
+                AddRotationZ(Math::HALF_PI);
+            }
+            if (ImGui::Button("X - 90"))
+            {
+                AddRotationX(-Math::HALF_PI);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Y - 90"))
+            {
+                AddRotationY(-Math::HALF_PI);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Z - 90"))
+            {
+                AddRotationZ(-Math::HALF_PI);
+            }
+
             ImGui::Text("Axis");
             ImGui::InputFloat3("##TransformEdit2", axis, 3);
             if (ImGui::IsItemEdited() == true)
@@ -336,10 +367,10 @@ namespace CS460
                                                   &TransformComponent::SetOrientation>(this, prev, next));
             }
             ImGui::Text("Radian");
-            if(ImGui::SliderAngle("##TransformEdit3", &radian))
+            if (ImGui::SliderAngle("##TransformEdit3", &radian))
             {
                 AxisRadian prev = m_axis_holder;
-                prev.radian = radian;
+                prev.radian     = radian;
                 m_transform.orientation.Set(prev);
             }
             if (ImGui::IsItemEdited())
@@ -356,7 +387,7 @@ namespace CS460
                                                   &TransformComponent::SetOrientation>(this, m_axis_holder, m_edit_radian));
             }
             ImGui::Text("Quaternion");
-            if(ImGui::SliderFloat4("##TransformEdit4", quaternion, -1.0f, 1.0f))
+            if (ImGui::SliderFloat4("##TransformEdit4", quaternion, -1.0f, 1.0f))
             {
                 Quaternion edited(quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
                 edited.SetNormalize();

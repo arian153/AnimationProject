@@ -11,10 +11,8 @@ namespace CS460
         Track();
         ~Track();
         void Update(Real elapsed_time, KeyFrame& result);
-
         void Interpolate(Real t, const KeyFrame& start, const KeyFrame& end, KeyFrame& result) const;
-
-        void SearchCurrentIDX(Real elapsed_time);
+        void SetUpCurrentIDX(Real elapsed_time);
 
     public:
         size_t                current_idx = 0;

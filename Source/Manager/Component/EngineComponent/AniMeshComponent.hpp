@@ -6,6 +6,7 @@
 
 namespace CS460
 {
+    class Transform;
     class AniMeshResource;
 
     class AniMeshComponent final : public Component
@@ -37,8 +38,9 @@ namespace CS460
         void     Clone(AniMeshComponent* origin);
 
     private:
-        AniMesh*  m_ani_mesh = nullptr;
-        Skeleton* m_skeleton = nullptr;
+        AniMesh*   m_ani_mesh  = nullptr;
+        Skeleton*  m_skeleton  = nullptr;
+        Transform* m_transform = nullptr;
 
         std::string      m_mesh_resource_path;
         AniMeshResource* m_mesh_resource = nullptr;

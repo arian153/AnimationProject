@@ -28,17 +28,6 @@ namespace CS460
         m_children.clear();
     }
 
-    void Bone::Draw(PrimitiveRenderer* renderer, const Color& color) const
-    {
-        renderer->DrawPrimitive(Sphere(m_to_bone.position, m_to_bone.rotation, 0.05f), eRenderingMode::Face, color);
-    }
-
-    void Bone::Draw(PrimitiveRenderer* renderer, const Color& color, const VQSTransform& parent) const
-    {
-        VQSTransform offset = Concatenate(parent, m_to_bone);
-        renderer->DrawPrimitive(Sphere(offset.position, offset.rotation, 0.05f), eRenderingMode::Face, color);
-    }
-
     void Bone::Push(Bone* child)
     {
         m_children.push_back(child);

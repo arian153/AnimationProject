@@ -1,11 +1,13 @@
 #include "AniMeshComponent.hpp"
 
+#include "TransformComponent.hpp"
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../../System/Animation/AnimationSubsystem.hpp"
 #include "../../../System/Animation/Skeleton/Skeleton.hpp"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
 #include "../../../System/Graphics/Element/AniMesh.hpp"
 #include "../../../System/Graphics/Element/Scene.hpp"
+#include "../../Object/Object.hpp"
 #include "../../Resource/ResourceManager.hpp"
 #include "../../Resource/ResourceType/AniMeshResource.hpp"
 #include "../../Resource/ResourceType/JsonResource.hpp"
@@ -42,6 +44,15 @@ namespace CS460
         if (m_skeleton != nullptr)
         {
             m_skeleton->Initialize();
+        }
+
+        if (m_transform == nullptr)
+        {
+            if (m_owner->HasComponent<TransformComponent>())
+            {
+                m_transform             = m_owner->GetComponent<TransformComponent>()->GetTransform();
+                m_skeleton->m_transform = m_transform;
+            }
         }
     }
 
@@ -100,15 +111,18 @@ namespace CS460
 
     void AniMeshComponent::Edit(CommandRegistry* command_registry)
     {
+        //GUI Editing.
         if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
         {
-            ImGui::Text("Bone Color");
-            ImGui::ColorEdit4("##Bone Color", &m_skeleton->m_color.r);
+            ImGui::Text("Bone ");
             ImGui::SameLine();
             ImGui::Checkbox("##Draw Bone", &m_skeleton->m_b_draw);
+            ImGui::Text("Bone Color");
+            ImGui::ColorEdit4("##Bone Color", &m_skeleton->m_color.r);
 
             ImGui::Text("Animation : ");
-            const char* pause_label = m_skeleton->m_b_pause ? "Resume" : "Pause";
+            const char* pause_label = m_skeleton->m_b_pause ? "Play" : "Pause";
+            ImGui::SameLine();
             if (ImGui::Button(pause_label))
             {
                 m_skeleton->m_b_pause = !m_skeleton->m_b_pause;
@@ -121,7 +135,13 @@ namespace CS460
                 clip_id = m_skeleton->m_clip_id;
             }
 
-            ImGui::Text("Animation Speed");
+            ImGui::Text("Animation Speed ");
+            ImGui::SameLine();
+            if (ImGui::Button("Reset"))
+            {
+                m_skeleton->m_animation_clips[clip_id]->speed = 1.0f;
+            }
+
             Real duration = m_skeleton->m_animation_clips[clip_id]->duration;
             ImGui::SliderFloat("##Animation Speed", &m_skeleton->m_animation_clips[clip_id]->speed, 0.1f * duration, 5.0f * duration);
 
