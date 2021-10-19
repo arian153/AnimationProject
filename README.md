@@ -45,30 +45,30 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
 
 ### Relevant Source Codes
 - GUI support
-    File     Source/Manager/Component/EngineComponent/AniMeshComponent.cpp
-    File     Source/Manager/Component/EngineComponent/AniMeshComponent.hpp
+    Source/Manager/Component/EngineComponent/AniMeshComponent.cpp
+    Source/Manager/Component/EngineComponent/AniMeshComponent.hpp
 
 - Skeleton structure
-    File     Source/System/Animation/Skeleton/Skeleton.cpp
-    File     Source/System/Animation/Skeleton/Skeleton.hpp
-    File     Source/System/Animation/Skeleton/Bone.cpp
-    File     Source/System/Animation/Skeleton/Bone.hpp
+    Source/System/Animation/Skeleton/Skeleton.cpp
+    Source/System/Animation/Skeleton/Skeleton.hpp
+    Source/System/Animation/Skeleton/Bone.cpp
+    Source/System/Animation/Skeleton/Bone.hpp
 
 - Animation Clip & Tracks
-File     Source/System/Animation/AnimationClip/AnimationClip.cpp
-File     Source/System/Animation/AnimationClip/AnimationClip.hpp
-File     Source/System/Animation/AnimationClip/KeyFrame.hpp
-File     Source/System/Animation/AnimationClip/Track.cpp
-File     Source/System/Animation/AnimationClip/Track.hpp
+    Source/System/Animation/AnimationClip/AnimationClip.cpp
+    Source/System/Animation/AnimationClip/AnimationClip.hpp
+    Source/System/Animation/AnimationClip/KeyFrame.hpp
+    Source/System/Animation/AnimationClip/Track.cpp
+    Source/System/Animation/AnimationClip/Track.hpp
 
 - VQS Structure
-File     Source/System/Math/Structure/VQSTransform.cpp
-File     Source/System/Math/Structure/VQSTransform.hpp
+    Source/System/Math/Structure/VQSTransform.cpp
+    Source/System/Math/Structure/VQSTransform.hpp
 
 - Quaternion, SLerp
-File     Source/System/Math/Algebra/Quaternion.cpp
-File     Source/System/Math/Algebra/Quaternion.hpp
+    Source/System/Math/Algebra/Quaternion.cpp
+    Source/System/Math/Algebra/Quaternion.hpp
 
 - Lerp, ELerp
-File     Source/System/Math/Utility/Interpolation.cpp
-File     Source/System/Math/Utility/Interpolation.hpp
+    Source/System/Math/Utility/Interpolation.cpp
+    Source/System/Math/Utility/Interpolation.hpp
