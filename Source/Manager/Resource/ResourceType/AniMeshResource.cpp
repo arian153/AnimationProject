@@ -85,6 +85,7 @@ namespace CS460
                 clip->duration = bin_animations[i].GetDuration();
                 clip->speed    = 1.0f / clip->duration;
                 clip->name     = "Animation Clip " + std::to_string(i);
+                skeleton->m_clip_names.push_back(clip->name);
                 clip->key_frames.resize(clip->bone_count);
 
                 if (clip->bone_count == (size_t)bin_animations[i].GetTrackCount())
@@ -98,12 +99,11 @@ namespace CS460
                         size_t track_size = bin_track[j].GetKeyFrameCount();
                         clip->tracks[j].key_frames.resize(track_size);
                         clip->tracks[j].track_size = track_size;
-                        clip->tracks[j].duration   = clip->duration;
                         for (size_t k = 0; k < track_size; ++k)
                         {
                             const BinParser::KeyFrame& key_frame    = bin_track[j].GetKeyFrame((U32)k);
                             clip->tracks[j].key_frames[k].to_parent = ToVQS(key_frame.GetToParentFromBone());
-                            clip->tracks[j].key_frames[k].time      = key_frame.GetTime() / clip->duration;
+                            clip->tracks[j].key_frames[k].time      = key_frame.GetTime();
                         }
                     }
                 }

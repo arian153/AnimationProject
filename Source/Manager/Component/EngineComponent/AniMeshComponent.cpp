@@ -73,7 +73,7 @@ namespace CS460
         {
             m_shader_type = data["Shader Type"].asString();
         }
-       
+
         if (JsonResource::HasMember(data, "Mesh"))
         {
             auto mesh_data = data["Mesh"];
@@ -102,6 +102,34 @@ namespace CS460
     {
         if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
         {
+            ImGui::Text("Bone Color");
+            ImGui::ColorEdit4("##Bone Color", &m_skeleton->m_color.r);
+            ImGui::SameLine();
+            ImGui::Checkbox("##Draw Bone", &m_skeleton->m_b_draw);
+
+            ImGui::Text("Animation : ");
+            const char* pause_label = m_skeleton->m_b_pause ? "Resume" : "Pause";
+            if (ImGui::Button(pause_label))
+            {
+                m_skeleton->m_b_pause = !m_skeleton->m_b_pause;
+            }
+
+            int clip_count = (int)m_skeleton->m_clip_names.size();
+            int clip_id    = m_skeleton->m_clip_id;
+            if (ImGui::Combo("##Animation Clip", &m_skeleton->m_clip_id, VectorStringGetter, (void*)&m_skeleton->m_clip_names, clip_count))
+            {
+                clip_id = m_skeleton->m_clip_id;
+            }
+
+            ImGui::Text("Animation Speed");
+            Real duration = m_skeleton->m_animation_clips[clip_id]->duration;
+            ImGui::SliderFloat("##Animation Speed", &m_skeleton->m_animation_clips[clip_id]->speed, 0.1f * duration, 5.0f * duration);
+
+            ImGui::Text("Track Status");
+            if (ImGui::SliderFloat("##Elapsed time", &m_skeleton->m_animation_clips[clip_id]->elapsed_time, 0.0f, duration))
+            {
+                m_skeleton->m_animation_clips[clip_id]->UpdateTracks();
+            }
         }
     }
 

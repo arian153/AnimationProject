@@ -10,33 +10,18 @@ namespace CS460
     {
     }
 
-    void Track::Update(Real dt, KeyFrame& result)
+    void Track::Update(Real elapsed_time, KeyFrame& result)
     {
-        size_t i = current_idx;
-        size_t j = i < track_size - 1 ? i + 1 : 0;
-
-        Interpolate(track_pos, key_frames[i], key_frames[j], result);
-
-        track_pos += dt;
-        if (track_pos >= 1.0f)
+        SearchCurrentIDX(elapsed_time);
+        if (current_idx == track_size - 1)
         {
-            //reset track
-            track_pos   = 0.0f;
-            current_idx = 0;
+            result.to_parent = key_frames[current_idx].to_parent;
         }
         else
         {
-            if (track_pos >= key_frames[j].time)
-            {
-                for (size_t k = j; k < track_size - 1; ++k)
-                {
-                    if (key_frames[k + 1].time > track_pos)
-                    {
-                        current_idx = k;
-                        break;
-                    }
-                }
-            }
+            size_t i = current_idx;
+            size_t j = current_idx + 1;
+            Interpolate(elapsed_time, key_frames[i], key_frames[j], result);
         }
     }
 
@@ -53,7 +38,31 @@ namespace CS460
             return;
         }
 
-        result.to_parent = Interpolation(start.to_parent, end.to_parent, t);
+        Real t1 = start.time;
+        Real t2 = end.time;
+
+        //Normalize the distance between the two keyframes
+        Real seg_len          = t2 - t1;
+        Real seg_start        = t - t1;
+        Real seg_normalized_t = seg_start / seg_len;
+
+        result.to_parent = Interpolation(start.to_parent, end.to_parent, seg_normalized_t);
         result.to_parent.rotation.SetNormalize();
+    }
+
+    void Track::SearchCurrentIDX(Real elapsed_time)
+    {
+        size_t last_idx = track_size - 1;
+        //Search Forward in the keyframes for the interval
+        while (current_idx != last_idx && key_frames[current_idx + 1].time < elapsed_time)
+        {
+            ++current_idx;
+        }
+
+        //Search Backward in the keyframes for the interval
+        while (current_idx != 0 && key_frames[current_idx].time > elapsed_time)
+        {
+            --current_idx;
+        }
     }
 }

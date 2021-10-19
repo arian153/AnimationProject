@@ -26,7 +26,7 @@ namespace CS460
 
         void SetAniMeshResource(AniMeshResource* resource);
 
-        void UpdateKeyFrame( std::vector<KeyFrame>& key_frames);
+        void UpdateKeyFrame(std::vector<KeyFrame>& key_frames);
 
     private:
         void  DrawRecursive(PrimitiveRenderer* renderer, Bone* bone) const;
@@ -40,7 +40,7 @@ namespace CS460
         void SetUpFinalBones();
 
         AnimationClip* CreateAnimationClip();
-        void DrawFinalVQS(PrimitiveRenderer* renderer) const;
+        void           DrawFinalVQS(PrimitiveRenderer* renderer) const;
 
     private:
         friend class AniMeshComponent;
@@ -53,8 +53,10 @@ namespace CS460
         std::vector<Bone*>          m_bones;
         std::vector<VQSTransform>   m_final_vqs;
 
-        Color m_color;
-        I32   m_clip_id = 0;
-        bool  m_b_draw  = true;
+        std::vector<std::string> m_clip_names;
+        I32                      m_clip_id = 0;
+        Color                    m_color;
+        bool                     m_b_draw  = true;
+        bool                     m_b_pause = false;
     };
 }

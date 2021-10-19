@@ -26,14 +26,18 @@ namespace CS460
         friend class Skeleton;
 
     private:
-        Skeleton*    m_skeleton = nullptr;
-        VQSTransform m_to_bone;
+        I32          m_parent_idx = -1;
         VQSTransform m_to_root;
+        VQSTransform m_to_bone;
+
+        Skeleton*    m_skeleton   = nullptr;
+       
+      
         std::string  m_name = "";
 
-        Bone* m_parent     = nullptr;
-        I32   m_parent_idx = -1;
-        I32   m_own_idx    = -1;
+        Bone* m_parent = nullptr;
+
+        I32 m_own_idx = -1;
 
         std::vector<I32>   m_sib_idx;
         std::vector<I32>   m_chi_idx;

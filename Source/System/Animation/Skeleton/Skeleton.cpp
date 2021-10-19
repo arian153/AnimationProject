@@ -23,7 +23,7 @@ namespace CS460
     void Skeleton::Update(Real dt)
     {
         //update by keyframe
-        if (m_clip_id != Core::I64_MAX)
+        if (m_clip_id != -1 && !m_b_pause)
         {
             auto& clip = m_animation_clips[m_clip_id];
             clip->Update(dt);
@@ -81,7 +81,7 @@ namespace CS460
         for (I32 i = 0; i < size; ++i)
         {
             I32          parent_idx     = m_bones[i]->m_parent_idx;
-            VQSTransform parent_to_root = parent_idx >= 0 ? key_frames[parent_idx].to_parent : VQSTransform();
+            VQSTransform parent_to_root = parent_idx >= 0 ? to_roots[parent_idx] : VQSTransform();
             to_roots[i]                 = Concatenate(key_frames[i].to_parent, parent_to_root);
             to_roots[i].rotation.SetNormalize();
         }
@@ -249,24 +249,19 @@ namespace CS460
             return;
         }
 
-       
+        renderer->DrawPrimitive(Sphere(m_final_vqs[0].position, m_final_vqs[0].rotation, 0.05f), eRenderingMode::Face, m_color);
+
         for (size_t i = 0; i < size; ++i)
         {
-            Bone*  bone       = m_bones[i];
-            size_t child_size = bone->m_children.size();
+            Bone*   bone       = m_bones[i];
+            size_t  child_size = bone->m_children.size();
+            Vector3 parent_pos = m_final_vqs[i].position;
+            //renderer->DrawPrimitive(Sphere(parent_pos, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
             for (size_t j = 0; j < child_size; ++j)
             {
-                Vector3 parent_pos = m_final_vqs[bone->m_own_idx].position;
-                Vector3 child_pos  = m_final_vqs[bone->m_children[j]->m_own_idx].position;
+                Vector3 child_pos = m_final_vqs[bone->m_children[j]->m_own_idx].position;
                 renderer->DrawSegment(parent_pos, child_pos, m_color);
             }
-
-           /* if (m_bones[i]->m_parent_idx >= 0)
-            {
-                renderer->DrawPrimitive(Sphere(m_final_vqs[i].position, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
-
-               
-            }*/
         }
     }
 }
