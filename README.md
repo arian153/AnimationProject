@@ -45,14 +45,14 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
 
 ### Relevant Source Codes
 - GUI support
-File     Source/Manager/Component/EngineComponent/AniMeshComponent.cpp
-File     Source/Manager/Component/EngineComponent/AniMeshComponent.hpp
+    File     Source/Manager/Component/EngineComponent/AniMeshComponent.cpp
+    File     Source/Manager/Component/EngineComponent/AniMeshComponent.hpp
 
 - Skeleton structure
-File     Source/System/Animation/Skeleton/Skeleton.cpp
-File     Source/System/Animation/Skeleton/Skeleton.hpp
-File     Source/System/Animation/Skeleton/Bone.cpp
-File     Source/System/Animation/Skeleton/Bone.hpp
+    File     Source/System/Animation/Skeleton/Skeleton.cpp
+    File     Source/System/Animation/Skeleton/Skeleton.hpp
+    File     Source/System/Animation/Skeleton/Bone.cpp
+    File     Source/System/Animation/Skeleton/Bone.hpp
 
 - Animation Clip & Tracks
 File     Source/System/Animation/AnimationClip/AnimationClip.cpp
