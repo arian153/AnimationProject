@@ -70,6 +70,8 @@ namespace CS460
                 m_level_editor.Update(dt);
                 UpdateCommandWindow();
             }
+
+            ShowReadMe();
         }
     }
 
@@ -221,5 +223,32 @@ namespace CS460
         {
         }
         ImGui::End();
+    }
+
+    void GameEditor::ShowReadMe()
+    {
+        if (m_show_readme)
+        {
+            if (ImGui::Begin("Read Me", &m_show_readme))
+            {
+                ImGui::Text("Usage");
+                ImGui::Text("1. Click File Tab, and Open Space.");
+                ImGui::Text("2. Camera Control");
+                ImGui::Text("    Hold Mouse LB & move - Change camera view direction on spherically");
+                ImGui::Text("    Roll Mouse Wheel     - Change spherical camera's radius on same view");
+                ImGui::Text("    Press W, S           - Change camera position Front & Back");
+                ImGui::Text("    Press A, D           - Change camera position Left & Right");
+                ImGui::Text("    Press R, F           - Change camera position Up & Down");
+                ImGui::Text("3. Select Object in Hierarchy Window");
+                ImGui::Text("4. Open Component detail in Inspector Window");
+
+                ImGui::NewLine();
+                if (ImGui::Button("  Close  "))
+                {
+                    m_show_readme = false;
+                }
+                ImGui::End();
+            }
+        }
     }
 }
