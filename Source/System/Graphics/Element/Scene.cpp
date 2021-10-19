@@ -1,6 +1,6 @@
 #include "Scene.hpp"
 
-#include "AniMesh.hpp"
+#include "SkinnedMesh.hpp"
 #include "Light.hpp"
 #include "../Common/Renderer/RendererCommon.hpp"
 #include "../Common/Shader/ShaderManagerCommon.hpp"
@@ -578,7 +578,7 @@ namespace CS460
         //}
     }
 
-    void Scene::AddAniMesh(AniMesh* ani_mesh)
+    void Scene::AddAniMesh(SkinnedMesh* ani_mesh)
     {
         ani_mesh->SetRenderer(m_renderer);
         auto found = std::find(m_ani_meshes.begin(), m_ani_meshes.end(), ani_mesh);
@@ -588,7 +588,7 @@ namespace CS460
         }
     }
 
-    void Scene::RemoveAniMesh(AniMesh* ani_mesh)
+    void Scene::RemoveAniMesh(SkinnedMesh* ani_mesh)
     {
         if (!m_ani_meshes.empty())
         {

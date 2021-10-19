@@ -66,6 +66,14 @@ namespace CS460
         }
     }
 
+    void TextureArrayCommon::Replace(TextureCommon* texture, size_t idx)
+    {
+        if (m_textures.size() > idx)
+        {
+            m_textures[idx] = texture->GetTexture();
+        }
+    }
+
     void TextureArrayCommon::Clear()
     {
         m_textures.clear();

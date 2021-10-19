@@ -10,7 +10,7 @@
 
 namespace CS460
 {
-    class AniMesh;
+    class SkinnedMesh;
     class TextureSky;
     class CubeMapSky;
     class Light;
@@ -81,8 +81,8 @@ namespace CS460
         void AddSkyDome(TextureSky* sky);
         void RemoveSkyDome(TextureSky* sky);
 
-        void AddAniMesh(AniMesh* ani_mesh);
-        void RemoveAniMesh(AniMesh* ani_mesh);
+        void AddAniMesh(SkinnedMesh* ani_mesh);
+        void RemoveAniMesh(SkinnedMesh* ani_mesh);
 
         //add
         Camera* AddCamera(Camera* camera);
@@ -124,7 +124,7 @@ namespace CS460
 
         std::vector<Light*>      m_lights;
         std::vector<CubeMapSky*> m_cube_map_skies;
-        std::vector<AniMesh*>    m_ani_meshes;
+        std::vector<SkinnedMesh*>    m_ani_meshes;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;

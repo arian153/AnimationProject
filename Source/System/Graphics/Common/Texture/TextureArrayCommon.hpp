@@ -15,6 +15,7 @@ namespace CS460
         void PushFront(TextureCommon* texture);
         void PushBack(TextureCommon* texture);
         void Erase(TextureCommon* texture);
+        void Replace(TextureCommon* texture, size_t idx);
         void Clear();
 
         TextureCommon* Front() const;

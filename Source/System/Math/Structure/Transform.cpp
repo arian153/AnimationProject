@@ -15,9 +15,9 @@ namespace CS460
     {
         if (this != &rhs)
         {
-            position        = rhs.position;
-            scale           = rhs.scale;
-            orientation     = rhs.orientation;
+            position    = rhs.position;
+            scale       = rhs.scale;
+            orientation = rhs.orientation;
         }
         return *this;
     }
@@ -25,9 +25,7 @@ namespace CS460
     Matrix44 Transform::LocalToWorldMatrix() const
     {
         Matrix44 result = Math::Matrix44::Scale(scale, 1.0f);
-        //result.AddVectorColumn(3, -rotating_origin);
-        result = Math::Matrix44::Rotation(orientation) * result;
-        //result.AddVectorColumn(3, rotating_origin);
+        result          = Math::Matrix44::Rotation(orientation) * result;
         result.AddVectorColumn(3, position);
         result.SetTranspose();
         return result;
@@ -36,7 +34,7 @@ namespace CS460
     Vector3 Transform::LocalToWorldPoint(const Vector3& local_point) const
     {
         //return orientation.Rotate(local_point - rotating_origin) + rotating_origin + position;
-        return orientation.Rotate(local_point)  + position;
+        return orientation.Rotate(local_point) + position;
     }
 
     Vector3 Transform::WorldToLocalPoint(const Vector3& world_point) const
@@ -54,5 +52,4 @@ namespace CS460
     {
         return orientation.Inverse().Rotate(world_vector);
     }
-
-   }
+}

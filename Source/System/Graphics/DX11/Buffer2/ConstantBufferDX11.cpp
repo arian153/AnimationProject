@@ -217,6 +217,48 @@ namespace CS460
         m_device_context->Unmap(m_constant_buffer, 0);
     }
 
+    void ConstantBufferCommon::Update(const SkinnedBufferData& data) const
+    {
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        HRESULT                  result = m_device_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+
+        if (FAILED(result))
+            return;
+
+        SkinnedBufferData* data_ptr = (SkinnedBufferData*)mapped_resource.pData;
+        int                count    = data.bone_count;
+        data_ptr->bone_count        = data.bone_count;
+        for (int i = 0; i < count; ++i)
+        {
+            data_ptr->data[i] = data.data[i];
+        }
+        m_device_context->Unmap(m_constant_buffer, 0);
+    }
+
+    void ConstantBufferCommon::Update(const std::vector<VQSTransform>& data) const
+    {
+        int bone_count = (int)data.size();
+        if (bone_count > 128)
+        {
+            //fail to bind over size
+            return;
+        }
+
+        D3D11_MAPPED_SUBRESOURCE mapped_resource;
+        HRESULT                  result = m_device_context->Map(m_constant_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource);
+
+        if (FAILED(result))
+            return;
+
+        SkinnedBufferData* data_ptr = (SkinnedBufferData*)mapped_resource.pData;
+        data_ptr->bone_count        = bone_count;
+        for (int i = 0; i < bone_count; ++i)
+        {
+            data_ptr->data[i] = data[i].ToMatrix();
+        }
+        m_device_context->Unmap(m_constant_buffer, 0);
+    }
+
     void* ConstantBufferCommon::Map() const
     {
         D3D11_MAPPED_SUBRESOURCE mapped_resource;

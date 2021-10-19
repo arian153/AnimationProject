@@ -2,7 +2,7 @@
 
 #include "../../../System/Animation/Skeleton/Skeleton.hpp"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
-#include "../../../System/Graphics/Element/AniMesh.hpp"
+#include "../../../System/Graphics/Element/SkinnedMesh.hpp"
 
 namespace CS460
 {
@@ -112,7 +112,7 @@ namespace CS460
         }
     }
 
-    void AniMeshResource::CopyData(AniMesh* ani_mesh) const
+    void AniMeshResource::CopyData(SkinnedMesh* ani_mesh) const
     {
         if (m_ani_mesh_type == eAniMeshType::BIN)
         {

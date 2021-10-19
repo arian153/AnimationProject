@@ -5,12 +5,13 @@
 #include "../../../System/Animation/AnimationSubsystem.hpp"
 #include "../../../System/Animation/Skeleton/Skeleton.hpp"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
-#include "../../../System/Graphics/Element/AniMesh.hpp"
+#include "../../../System/Graphics/Element/SkinnedMesh.hpp"
 #include "../../../System/Graphics/Element/Scene.hpp"
 #include "../../Object/Object.hpp"
 #include "../../Resource/ResourceManager.hpp"
 #include "../../Resource/ResourceType/AniMeshResource.hpp"
 #include "../../Resource/ResourceType/JsonResource.hpp"
+#include "../../Resource/ResourceType/TextureResource.hpp"
 #include "../../Space/Space.hpp"
 
 namespace CS460
@@ -23,7 +24,7 @@ namespace CS460
     {
         if (m_ani_mesh == nullptr)
         {
-            m_ani_mesh              = new AniMesh();
+            m_ani_mesh              = new SkinnedMesh();
             m_ani_mesh->m_component = this;
         }
 
@@ -52,17 +53,23 @@ namespace CS460
             {
                 m_transform             = m_owner->GetComponent<TransformComponent>()->GetTransform();
                 m_skeleton->m_transform = m_transform;
+                m_ani_mesh->m_transform = m_transform;
             }
         }
     }
 
     void AniMeshComponent::Update(Real dt)
     {
+        if (m_ani_mesh != nullptr && m_skeleton != nullptr)
+        {
+            m_ani_mesh->UpdateSkeletonTransforms(m_skeleton->m_final_vqs);
+        }
     }
 
     void AniMeshComponent::Shutdown()
     {
         Unsubscribe();
+        m_sub_materials.clear();
         if (m_ani_mesh != nullptr)
         {
             m_ani_mesh->Shutdown();
@@ -82,7 +89,7 @@ namespace CS460
     {
         if (JsonResource::HasMember(data, "Shader Type"))
         {
-            m_shader_type = data["Shader Type"].asString();
+            m_ani_mesh->m_shader_type = data["Shader Type"].asString();
         }
 
         if (JsonResource::HasMember(data, "Mesh"))
@@ -101,6 +108,229 @@ namespace CS460
                 }
             }
         }
+
+        if (JsonResource::HasMember(data, "Material"))
+        {
+            if (data["Material"].isArray())
+            {
+                Json::ArrayIndex size = data["Material"].size();
+                m_sub_materials.resize((size_t)size);
+                if ((I64)size <= m_ani_mesh->SubMeshCount())
+                {
+                    for (Json::ArrayIndex i = 0; i < size; ++i)
+                    {
+                        auto texture_data = data["Material"][i]["Texture"];
+                        if (JsonResource::HasMember(texture_data, "Diffuse") && texture_data["Diffuse"].isArray())
+                        {
+                            int idx = 0;
+                            for (auto it = texture_data["Diffuse"].begin(); it != texture_data["Diffuse"].end(); ++it)
+                            {
+                                if ((*it).isString())
+                                {
+                                    if (idx == 0)
+                                    {
+                                        m_sub_materials[i].material_info.diffuse0 = (*it).asString();
+                                    }
+                                    if (idx == 1)
+                                    {
+                                        m_sub_materials[i].material_info.diffuse1 = (*it).asString();
+                                    }
+                                    if (idx == 2)
+                                    {
+                                        m_sub_materials[i].material_info.diffuse2 = (*it).asString();
+                                    }
+                                }
+                                idx++;
+                            }
+                        }
+
+                        if (JsonResource::HasMember(texture_data, "Diffuse0"))
+                        {
+                            if (texture_data["Diffuse0"].isString())
+                            {
+                                m_sub_materials[i].material_info.diffuse0 = texture_data["Diffuse0"].asString();
+                            }
+                        }
+
+                        if (JsonResource::HasMember(texture_data, "Diffuse1"))
+                        {
+                            if (texture_data["Diffuse1"].isString())
+                            {
+                                m_sub_materials[i].material_info.diffuse0 = texture_data["Diffuse1"].asString();
+                            }
+                        }
+
+                        if (JsonResource::HasMember(texture_data, "Diffuse2"))
+                        {
+                            if (texture_data["Diffuse2"].isString())
+                            {
+                                m_sub_materials[i].material_info.diffuse0 = texture_data["Diffuse2"].asString();
+                            }
+                        }
+
+                        if (JsonResource::HasMember(texture_data, "DiffuseType"))
+                        {
+                            if (texture_data["DiffuseType"].isString())
+                            {
+                                std::string type = texture_data["DiffuseType"].asString();
+                                if (type == "Texture")
+                                {
+                                    m_sub_materials[i].material_info.diffuse_type = 1;
+                                }
+                                else if (type == "AlphaMapping")
+                                {
+                                    m_sub_materials[i].material_info.diffuse_type = 2;
+                                }
+                                else if (type == "LightMapping")
+                                {
+                                    m_sub_materials[i].material_info.diffuse_type = 3;
+                                }
+                                else if (type == "Multi-Texture")
+                                {
+                                    m_sub_materials[i].material_info.diffuse_type = 4;
+                                }
+                                else
+                                {
+                                    m_sub_materials[i].material_info.diffuse_type = 0;
+                                }
+                            }
+                        }
+
+                        if (JsonResource::HasMember(texture_data, "Specular"))
+                        {
+                            if (texture_data["Specular"].isString())
+                            {
+                                m_sub_materials[i].material_info.specular0     = texture_data["Specular"].asString();
+                                m_sub_materials[i].material_info.specular_type = 1;
+                            }
+                            else
+                            {
+                                m_sub_materials[i].material_info.specular_type = 0;
+                            }
+                        }
+                        else
+                        {
+                            m_sub_materials[i].material_info.specular_type = 0;
+                        }
+
+                        if (JsonResource::HasMember(texture_data, "NormalMap"))
+                        {
+                            if (texture_data["NormalMap"].isString())
+                            {
+                                m_sub_materials[i].material_info.normal0     = texture_data["NormalMap"].asString();
+                                m_sub_materials[i].material_info.normal_type = 1;
+                            }
+                            else
+                            {
+                                m_sub_materials[i].material_info.normal_type = 0;
+                            }
+                        }
+                        else
+                        {
+                            m_sub_materials[i].material_info.normal_type = 0;
+                        }
+                        m_ani_mesh->SetMaterialIdentifier((int)i, m_sub_materials[i].material_info);
+
+                       
+
+                        if (JsonResource::HasMember(data["Material"][i], "Color"))
+                        {
+                            auto color_data = data["Material"][i]["Color"];
+
+                            if (JsonResource::IsColor(color_data["Ambient"]))
+                            {
+                                m_sub_materials[i].material_color.ambient = JsonResource::AsColor(color_data["Ambient"]);
+                            }
+
+                            if (JsonResource::IsColor(color_data["Diffuse"]))
+                            {
+                                m_sub_materials[i].material_color.diffuse = JsonResource::AsColor(color_data["Diffuse"]);
+                            }
+
+                            if (JsonResource::IsColor(color_data["Specular"]))
+                            {
+                                m_sub_materials[i].material_color.specular = JsonResource::AsColor(color_data["Specular"]);
+                            }
+
+                            if (JsonResource::IsColor(color_data["Reflect"]))
+                            {
+                                m_sub_materials[i].material_color.reflect = JsonResource::AsColor(color_data["Reflect"]);
+                            }
+                        }
+                        m_ani_mesh->SetMaterialColor((int)i, m_sub_materials[i].material_color);
+
+                        //diffuse texture0
+                        if (m_sub_materials[i].material_info.diffuse0 != "")
+                        {
+                            m_ani_mesh->SetSubMeshTexture(
+                                m_space->GetResourceManager()->GetTextureResource(
+                                    ToWString(m_sub_materials[i].material_info.diffuse0))->GetTexture(), i, 0);
+                        }
+                        else
+                        {
+                            m_ani_mesh->SetSubMeshTexture(
+                                m_space->GetResourceManager()->GetTextureResource(
+                                    L"DefaultTexture")->GetTexture(), i, 0);
+                        }
+                        //diffuse texture1
+                        if (m_sub_materials[i].material_info.diffuse1 != "")
+                        {
+                            m_ani_mesh->SetSubMeshTexture(
+                                m_space->GetResourceManager()->GetTextureResource(
+                                    ToWString(m_sub_materials[i].material_info.diffuse1))->GetTexture(), i, 1);
+                        }
+                        else
+                        {
+                            m_ani_mesh->SetSubMeshTexture(
+                                m_space->GetResourceManager()->GetTextureResource(
+                                    L"DefaultTexture")->GetTexture(), i, 1);
+                        }
+                        //diffuse texture2
+                        if (m_sub_materials[i].material_info.diffuse2 != "")
+                        {
+                            m_ani_mesh->SetSubMeshTexture(
+                                m_space->GetResourceManager()->GetTextureResource(
+                                    ToWString(m_sub_materials[i].material_info.diffuse2))->GetTexture(), i, 2);
+                        }
+                        else
+                        {
+                            m_ani_mesh->SetSubMeshTexture(
+                                m_space->GetResourceManager()->GetTextureResource(
+                                    L"DefaultTexture")->GetTexture(), i, 2);
+                                                   }
+                        //specular texture
+                        if (m_sub_materials[i].material_info.specular0 != "")
+                        {
+                            m_ani_mesh->SetSubMeshTexture(
+                                m_space->GetResourceManager()->GetTextureResource(
+                                    ToWString(m_sub_materials[i].material_info.specular0))->GetTexture(), i, 3);
+                        }
+                        else
+                        {
+                            m_ani_mesh->SetSubMeshTexture(
+                                m_space->GetResourceManager()->GetTextureResource(
+                                    L"DefaultTexture")->GetTexture(), i, 3);
+                        }
+                        //normal texture
+                        if (m_sub_materials[i].material_info.normal0 != "")
+                        {
+                            m_ani_mesh->SetSubMeshTexture(
+                                m_space->GetResourceManager()->GetTextureResource(
+                                    ToWString(m_sub_materials[i].material_info.normal0))->GetTexture(), i, 4);
+
+                        }
+                        else
+                        {
+                            m_ani_mesh->SetSubMeshTexture(
+                                m_space->GetResourceManager()->GetTextureResource(
+                                    L"DefaultTexture")->GetTexture(), i, 4);
+                        }
+                    }
+                }
+            }
+        }
+
+       
 
         return true;
     }

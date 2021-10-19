@@ -29,6 +29,8 @@ namespace CS460
             //scale
             CS460::Matrix44 Scale(const CS460::Vector4& scale);
             CS460::Matrix44 Scale(const CS460::Vector3& scale, Real w = 1.0f);
+            CS460::Matrix44 Scale(Real x, Real y, Real z, Real w = 1.0f);
+
 
             //translation
             CS460::Matrix44 Translation(const CS460::Vector3& translation);

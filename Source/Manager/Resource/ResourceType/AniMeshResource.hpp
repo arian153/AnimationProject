@@ -8,7 +8,7 @@
 
 namespace CS460
 {
-    class AniMesh;
+    class SkinnedMesh;
     class Skeleton;
 
     enum class eAniMeshType
@@ -26,7 +26,7 @@ namespace CS460
         void Shutdown() override;
 
         void CopyData(Skeleton* skeleton) const;
-        void CopyData(AniMesh* ani_mesh) const;
+        void CopyData(SkinnedMesh* ani_mesh) const;
 
         VQSTransform ToVQS(const BinParser::Vqs& vqs) const;
         Vector2      ToVector2(const BinParser::Vector2& v2) const;

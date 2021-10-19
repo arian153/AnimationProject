@@ -9,6 +9,12 @@ namespace CS460
     class Transform;
     class AniMeshResource;
 
+    struct SubMaterial
+    {
+        MaterialIdentifier material_info;
+        MaterialColor      material_color;
+    };
+
     class AniMeshComponent final : public Component
     {
     public:
@@ -31,20 +37,19 @@ namespace CS460
     private:
         friend class AniMeshFactory;
         friend class Skeleton;
-        friend class AniMesh;
+        friend class SkinnedMesh;
 
     private:
         explicit AniMeshComponent(Object* owner);
         void     Clone(AniMeshComponent* origin);
 
     private:
-        AniMesh*   m_ani_mesh  = nullptr;
-        Skeleton*  m_skeleton  = nullptr;
-        Transform* m_transform = nullptr;
+        SkinnedMesh* m_ani_mesh  = nullptr;
+        Skeleton*    m_skeleton  = nullptr;
+        Transform*   m_transform = nullptr;
 
-        std::string      m_mesh_resource_path;
-        AniMeshResource* m_mesh_resource = nullptr;
-
-        std::string m_shader_type = "Default";
+        std::string              m_mesh_resource_path;
+        AniMeshResource*         m_mesh_resource = nullptr;
+        std::vector<SubMaterial> m_sub_materials;
     };
 }

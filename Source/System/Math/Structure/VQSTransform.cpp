@@ -34,12 +34,10 @@ namespace CS460
 
     Matrix44 VQSTransform::ToMatrix() const
     {
-        Matrix44 scale_mat = Math::Matrix44::Scale(Vector3(scale, scale, scale), 1.0f);
-        Matrix44 rot_mat   = Math::Matrix44::Rotation(rotation);
-        Matrix44 trans_mat = Math::Matrix44::Translation(position);
-
-        //E5_TODO : need to test is this order is correct.
-        return (trans_mat * (rot_mat * scale_mat));
+        Matrix44 result = Math::Matrix44::Scale(scale, scale, scale, 1.0f);
+        result          = Math::Matrix44::Rotation(rotation) * result;
+        result.AddVectorColumn(3, position);
+        return result;
     }
 
     VQSTransform VQSTransform::Identity()

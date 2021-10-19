@@ -53,6 +53,13 @@ namespace CS460
         Vector3         padding;
     };
 
+    struct SkinnedBufferData
+    {
+        Matrix44 data[127];
+        int      bone_count;
+        Vector3  padding;
+    };
+
     struct MatrixBufferDataInstancing
     {
         Matrix44 view;

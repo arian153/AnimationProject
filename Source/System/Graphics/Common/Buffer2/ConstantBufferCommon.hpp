@@ -1,9 +1,12 @@
 #pragma once
 
+#include <vector>
+
 #include "../../GraphicsAPI.hpp"
 #include IncludeConstantBufferAPI
 
 #include "../../../Core/Utility/CoreDef.hpp"
+#include "../../../Math/Structure/VQSTransform.hpp"
 #include "../../DataType/BufferBindType.hpp"
 
 namespace CS460
@@ -18,6 +21,7 @@ namespace CS460
     struct LightBufferData;
     struct MatrixBufferData;
     struct MatrixBufferDataInstancing;
+    struct SkinnedBufferData;
     class Color;
     class RendererCommon;
 
@@ -38,6 +42,8 @@ namespace CS460
         void Update(const TextureBufferData& data) const;
         void Update(const MultipleLightsBufferData& data) const;
         void Update(const MaterialBufferData& data) const;
+        void Update(const SkinnedBufferData& data) const;
+        void Update(const std::vector<VQSTransform>& data) const;
 
         void* Map() const;
         void  UnMap() const;
