@@ -115,7 +115,7 @@ namespace CS460
             {
                 Json::ArrayIndex size = data["Material"].size();
                 m_sub_materials.resize((size_t)size);
-                if ((I64)size <= m_ani_mesh->SubMeshCount())
+                if (size <= m_ani_mesh->SubMeshCount())
                 {
                     for (Json::ArrayIndex i = 0; i < size; ++i)
                     {
@@ -349,6 +349,15 @@ namespace CS460
             ImGui::Checkbox("##Draw Bone", &m_skeleton->m_b_draw);
             ImGui::Text("Bone Color");
             ImGui::ColorEdit4("##Bone Color", &m_skeleton->m_color.r);
+
+            ImGui::Text("Bone Mode");
+
+            const char* bone_mode[] = { "VQS", "MAT", "BIND" };
+
+            if (ImGui::Combo("##Bone Type", &m_skeleton->m_render_mode, bone_mode, 3))
+            {
+            }
+
 
             ImGui::Text("Animation : ");
             const char* pause_label = m_skeleton->m_b_pause ? "Play" : "Pause";

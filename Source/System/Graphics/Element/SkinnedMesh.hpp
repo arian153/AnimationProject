@@ -34,7 +34,6 @@ namespace CS460
         void Update(Real dt);
         void Shutdown();
 
-        void BindSharedBuffer() const;
         void Bind(size_t idx) const;
         void Draw(size_t idx) const;
         void CreateBuffer();
@@ -43,7 +42,7 @@ namespace CS460
 
         std::string GetShaderType() const;
 
-        I64 SubMeshCount() const;
+        size_t SubMeshCount() const;
 
         void SetVertexBuffer(const std::vector<SkinnedVertexCommon>& vertices) const;
         void CreateSubMesh(SubSkinnedMesh& sub_mesh) const;

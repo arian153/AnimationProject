@@ -31,6 +31,7 @@ namespace CS460
         Bone* CreateBone(const VQSTransform& to_bone, const std::string& name, Bone* parent);
         Bone* CreateBone(const VQSTransform& to_bone, const std::string& name, I32 p_idx);
         void  SetUpSiblingRecursive(Bone* bone);
+        void SetUpBind();
 
         AnimationClip* CreateAnimationClip();
 
@@ -47,10 +48,17 @@ namespace CS460
         bool  m_b_draw  = true;
         bool  m_b_pause = false;
 
+        int m_render_mode = 0;
+
         std::vector<Bone*>          m_root_bones;
         std::vector<Bone*>          m_bones;
         std::vector<AnimationClip*> m_animation_clips;
         std::vector<VQSTransform>   m_final_vqs;
+        std::vector<VQSTransform>   m_to_roots;
         std::vector<std::string>    m_clip_names;
+
+        std::vector<Matrix44>   m_final_mats;
+        std::vector<Matrix44>   m_to_root_mats;
+        std::vector<Matrix44>   m_bind_mats;
     };
 }

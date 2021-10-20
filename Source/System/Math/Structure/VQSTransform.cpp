@@ -110,6 +110,11 @@ namespace CS460
                             Elerp(start.scale, end.scale, t));
     }
 
+    Matrix44 Concatenate(const Matrix44& a, const Matrix44& b)
+    {
+        return a * b;
+    }
+
     std::ostream& operator<<(std::ostream& os, const VQSTransform& vqs)
     {
         os << "[" << vqs.position << ", " << vqs.rotation << ", " << vqs.scale << "]";

@@ -19,16 +19,16 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 0, -60],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 0, -60 ],
+            "Scale": [ 1, 1, 1 ]
           }
         },
         {
           "Type": "class CS460::CameraComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 0, -60],
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 0, -60 ],
             "Zoom": 1.0
           }
         },
@@ -43,9 +43,9 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [0.5, -0.5, -0.5, -0.5],
-            "Position": [0, 0, 0],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 0.5, -0.5, -0.5, -0.5 ],
+            "Position": [ 0, 0, 0 ],
+            "Scale": [ 1, 1, 1 ]
           }
         },
         {
@@ -54,10 +54,53 @@
             "Mesh": {
               "Path": "../../Resource/AniMesh/Salamander.bin"
             },
+
+            "Material": [
+              {
+                "Color": {
+                  "Ambient": [ 1, 1, 1, 1 ],
+                  "Diffuse": [ 1, 1, 1, 1 ],
+                  "Specular": [ 1, 1, 1, 64 ]
+                },
+                "Texture": {
+                  "DiffuseType": "None",
+                  "Diffuse0": "",
+                  "Diffuse1": "",
+                  "Diffuse2": "",
+                  "Specular": 0,
+                  "NormalMap": 0
+                }
+              }
+            ],
+
+
+            "Shader Type": "SkinnedPhong"
+          }
+        }
+      ],
+      "Name": "AniMesh"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 10, 0, 0 ],
+            "Scale": [ 0.1, 0.1, 0.1 ]
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
             "Color": {
-              "Ambient": [1, 1, 1, 1],
-              "Diffuse": [1, 1, 1, 1],
-              "Specular": [1, 1, 1, 64]
+              "Ambient": [ 1, 1, 1, 1 ],
+              "Diffuse": [ 1, 1, 1, 1 ],
+              "Specular": [ 1, 1, 1, 64 ]
             },
             "Texture": {
               "DiffuseType": "None",
@@ -66,12 +109,324 @@
               "Diffuse2": "",
               "Specular": 0,
               "NormalMap": 0
+
             },
-            "Shader Type": "PhongInstancing"
+            "Shader Type": "TextureInstancing"
+
           }
+        },
+        {
+          "Type": "class CS460::LightComponent",
+          "Value": {
+            "Type": 0,
+            "Ambient Color": [ 0, 0, 0, 1.0 ],
+            "Ambient Range": [ 0, 0, 0, 1.0 ],
+            "Diffuse Color": [ 0.55, 0.55, 0.55, 1.0 ],
+            "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+            "Intensity": 1.0,
+            "Direction": [ 1.0, 0.0, 0.0 ],
+            "Position": [ 0.0, 0.0, 0.0 ],
+            "Attenuation": [ 1.0, 0.045, 0.0075 ],
+            "Length": 1.0,
+            "Range": 15.0,
+            "Spot": 15.0
+          }
+        },
+        {
+          "Type": "class Game::RotatingComponent"
         }
       ],
-      "Name": "AniMesh"
+      "Name": "Ambient Light"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 10, 0, 0 ],
+            "Scale": [ 0.1, 0.1, 0.1 ]
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
+            "Color": {
+              "Ambient": [ 1, 1, 1, 1 ],
+              "Diffuse": [ 1, 1, 1, 1 ],
+              "Specular": [ 1, 1, 1, 64 ]
+            },
+            "Texture": {
+              "DiffuseType": "None",
+              "Diffuse0": "",
+              "Diffuse1": "",
+              "Diffuse2": "",
+              "Specular": 0,
+              "NormalMap": 0
+
+            },
+            "Shader Type": "TextureInstancing"
+
+          }
+        },
+        {
+          "Type": "class CS460::LightComponent",
+          "Value": {
+            "Type": 2,
+            "Ambient Color": [ 0, 0, 0, 1.0 ],
+            "Ambient Range": [ 0.35, 0.35, 0.95, 1.0 ],
+            "Diffuse Color": [ 0.55, 0.55, 0.55, 1.0 ],
+            "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+            "Intensity": 1.0,
+            "Direction": [ 1.0, 0.0, 0.0 ],
+            "Position": [ 0.0, 0.0, 0.0 ],
+            "Attenuation": [ 1.0, 0.045, 0.0075 ],
+            "Length": 1.0,
+            "Range": 15.0,
+            "Spot": 15.0
+          }
+        },
+        {
+          "Type": "class Game::RotatingComponent"
+        }
+      ],
+      "Name": "Light"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 10, 0, 0 ],
+            "Scale": [ 0.1, 0.1, 0.1 ]
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
+            "Color": {
+              "Ambient": [ 1, 1, 1, 1 ],
+              "Diffuse": [ 1, 1, 1, 1 ],
+              "Specular": [ 1, 1, 1, 64 ]
+            },
+            "Texture": {
+              "DiffuseType": "None",
+              "Diffuse0": "",
+              "Diffuse1": "",
+              "Diffuse2": "",
+              "Specular": 0,
+              "NormalMap": 0
+
+            },
+            "Shader Type": "TextureInstancing"
+
+          }
+        },
+        {
+          "Type": "class CS460::LightComponent",
+          "Value": {
+            "Type": 3,
+            "Ambient Color": [ 0, 0, 0, 1.0 ],
+            "Ambient Range": [ 0.35, 0.35, 0.95, 1.0 ],
+            "Diffuse Color": [ 0.255, 0.255, 0.55, 1.0 ],
+            "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+            "Intensity": 1.0,
+            "Direction": [ 1.0, 0.0, 0.0 ],
+            "Position": [ 0.0, 0.0, 0.0 ],
+            "Attenuation": [ 1.0, 0.045, 0.0075 ],
+            "Length": 1.0,
+            "Range": 15.0,
+            "Spot": 15.0
+          }
+        },
+        {
+          "Type": "class Game::RotatingComponent"
+        }
+      ],
+      "Name": "Light"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 10, 0, 0 ],
+            "Scale": [ 0.1, 0.1, 0.1 ]
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
+            "Color": {
+              "Ambient": [ 1, 1, 1, 1 ],
+              "Diffuse": [ 1, 1, 1, 1 ],
+              "Specular": [ 1, 1, 1, 64 ]
+            },
+            "Texture": {
+              "DiffuseType": "None",
+              "Diffuse0": "",
+              "Diffuse1": "",
+              "Diffuse2": "",
+              "Specular": 0,
+              "NormalMap": 0
+
+            },
+            "Shader Type": "TextureInstancing"
+
+          }
+        },
+        {
+          "Type": "class CS460::LightComponent",
+          "Value": {
+            "Type": 1,
+            "Ambient Color": [ 0, 0, 0, 1.0 ],
+            "Ambient Range": [ 0.35, 0.35, 0.95, 1.0 ],
+            "Diffuse Color": [ 0.55, 0.55, 0.255, 1.0 ],
+            "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+            "Intensity": 1.0,
+            "Direction": [ 1.0, 0.0, 0.0 ],
+            "Position": [ 0.0, 0.0, 0.0 ],
+            "Attenuation": [ 1.0, 0.045, 0.0075 ],
+            "Length": 1.0,
+            "Range": 15.0,
+            "Spot": 15.0
+          }
+        },
+        {
+          "Type": "class Game::RotatingComponent"
+        }
+      ],
+      "Name": "Light"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 10, 0, 0 ],
+            "Scale": [ 0.1, 0.1, 0.1 ]
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
+            "Color": {
+              "Ambient": [ 1, 1, 1, 1 ],
+              "Diffuse": [ 1, 1, 1, 1 ],
+              "Specular": [ 1, 1, 1, 64 ]
+            },
+            "Texture": {
+              "DiffuseType": "None",
+              "Diffuse0": "",
+              "Diffuse1": "",
+              "Diffuse2": "",
+              "Specular": 0,
+              "NormalMap": 0
+
+            },
+            "Shader Type": "TextureInstancing"
+
+          }
+        },
+        {
+          "Type": "class CS460::LightComponent",
+          "Value": {
+            "Type": 2,
+            "Ambient Color": [ 0, 0, 0, 1.0 ],
+            "Ambient Range": [ 0.35, 0.35, 0.95, 1.0 ],
+            "Diffuse Color": [ 0.255, 0.55, 0.55, 1.0 ],
+            "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+            "Intensity": 1.0,
+            "Direction": [ 1.0, 0.0, 0.0 ],
+            "Position": [ 0.0, 0.0, 0.0 ],
+            "Attenuation": [ 1.0, 0.045, 0.0075 ],
+            "Length": 1.0,
+            "Range": 15.0,
+            "Spot": 15.0
+          }
+        },
+        {
+          "Type": "class Game::RotatingComponent"
+        }
+      ],
+      "Name": "Light"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 10, 0, 0 ],
+            "Scale": [ 0.1, 0.1, 0.1 ]
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
+            "Color": {
+              "Ambient": [ 1, 1, 1, 1 ],
+              "Diffuse": [ 1, 1, 1, 1 ],
+              "Specular": [ 1, 1, 1, 64 ]
+            },
+            "Texture": {
+              "DiffuseType": "None",
+              "Diffuse0": "",
+              "Diffuse1": "",
+              "Diffuse2": "",
+              "Specular": 0,
+              "NormalMap": 0
+
+            },
+            "Shader Type": "TextureInstancing"
+
+          }
+        },
+        {
+          "Type": "class CS460::LightComponent",
+          "Value": {
+            "Type": 3,
+            "Ambient Color": [ 0, 0, 0, 1.0 ],
+            "Ambient Range": [ 0.35, 0.35, 0.95, 1.0 ],
+            "Diffuse Color": [ 0.55, 0.255, 0.55, 1.0 ],
+            "Specular Color": [ 0.9, 0.9, 0.9, 1.0 ],
+            "Intensity": 1.0,
+            "Direction": [ 1.0, 0.0, 0.0 ],
+            "Position": [ 0.0, 0.0, 0.0 ],
+            "Attenuation": [ 1.0, 0.045, 0.0075 ],
+            "Length": 1.0,
+            "Range": 15.0,
+            "Spot": 15.0
+          }
+        },
+        {
+          "Type": "class Game::RotatingComponent"
+        }
+      ],
+      "Name": "Light"
     }
   ],
   "Settings": {

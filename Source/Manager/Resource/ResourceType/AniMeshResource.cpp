@@ -30,9 +30,13 @@ namespace CS460
             m_vertices.resize((size_t)size);
             for (U32 i = 0; i < size; ++i)
             {
-                m_vertices[i].position  = ToVector3(vertices[i].Position_);
-                m_vertices[i].tex       = ToVector2(vertices[i].UV_);
-                m_vertices[i].normal    = ToVector3(vertices[i].Normal_);
+                m_vertices[i].position   = ToVector3(vertices[i].Position_);
+                //m_vertices[i].position.z = -1.0f * m_vertices[i].position.z;
+                m_vertices[i].tex        = ToVector2(vertices[i].UV_);
+                //m_vertices[i].tex.y      = 1.0f - m_vertices[i].tex.y;
+                m_vertices[i].normal     = ToVector3(vertices[i].Normal_);
+                //m_vertices[i].normal.z   = -1.0f * m_vertices[i].normal.z;
+
                 m_vertices[i].indices.x = (I32)vertices[i].BoneIndexes_[0];
                 m_vertices[i].indices.y = (I32)vertices[i].BoneIndexes_[1];
                 m_vertices[i].indices.z = (I32)vertices[i].BoneIndexes_[2];
@@ -43,6 +47,27 @@ namespace CS460
                 m_vertices[i].weights.w = vertices[i].BoneWeights_[3];
                 m_vertices[i].CalculateTangentAndBinormal();
             }
+
+            //auto   indices      = mesh.GetIndexes();
+            //size_t indices_size = indices.size();
+
+            //m_indices = indices;
+
+            //if (indices_size % 3 != 0)
+            //{
+            //    //has problem
+            //    m_b_loaded = false;
+            //    return;
+            //}
+            //size_t triangle_count = indices_size / 3;
+            //m_indices.resize(indices_size);
+
+            //for (size_t i = 0; i < triangle_count; ++i)
+            //{
+            //    m_indices[i]     = indices[i + 2];
+            //    m_indices[i + 1] = indices[i + 1];
+            //    m_indices[i + 2] = indices[i];
+            //}
         }
     }
 
@@ -73,6 +98,8 @@ namespace CS460
             {
                 skeleton->SetUpSiblingRecursive(root);
             }
+
+            skeleton->SetUpBind();
 
             //copy animation clip
             auto bin_animations = m_binary_model.GetAnimations();

@@ -56,10 +56,7 @@ namespace CS460
     {
         if (m_main_camera == nullptr || m_cameras.empty())
             return;
-        MatrixData mvp_data;
-        mvp_data.projection = m_projection_matrix;
         m_main_camera->Update();
-        mvp_data.view = m_main_camera->GetViewMatrix();
 
         CameraBufferData camera_data;
         camera_data.camera_position = m_main_camera->GetPosition();
@@ -75,7 +72,7 @@ namespace CS460
         vp_data.proj = m_projection_matrix;
         m_matrix_instancing_buffer->Update(vp_data);
 
-        m_frustum.ConstructFrustum(m_matrix_manager->GetFarPlane(), mvp_data.projection, mvp_data.view);
+        m_frustum.ConstructFrustum(m_matrix_manager->GetFarPlane(), mvp_buffer.proj, mvp_buffer.view);
         m_primitive_renderer->UpdateFrustum(m_frustum);
         for (auto& particle : m_particle_emitters)
         {
@@ -101,6 +98,12 @@ namespace CS460
         {
             sky_box->SetCamera(m_main_camera);
             sky_box->Update(dt);
+        }
+
+        for (auto& skinned_mesh : m_skinned_meshes)
+        {
+            skinned_mesh->UpdateMatrixBuffer(mvp_buffer.view, mvp_buffer.proj);
+            skinned_mesh->Update(dt);
         }
     }
 
@@ -140,6 +143,24 @@ namespace CS460
             m_shader_manager->Bind(type);
             mesh->Draw();
         }
+
+       /* for (auto& skinned_mesh : m_skinned_meshes)
+        {
+            size_t count = skinned_mesh->SubMeshCount();
+
+            for (size_t i = 0; i < count; ++i)
+            {
+                skinned_mesh->Bind(i);
+                std::string type = skinned_mesh->GetShaderType();
+                if (type == "SkinnedPhong")
+                {
+                    m_camera_buffer->Bind();
+                    m_light_buffer->Bind();
+                }
+                m_shader_manager->Bind(type);
+                skinned_mesh->Draw(i);
+            }
+        }*/
 
         for (auto& particle : m_particle_emitters)
         {
@@ -252,13 +273,13 @@ namespace CS460
 
         //clear ani_meshes
         {
-            for (auto& ani_mesh : m_ani_meshes)
+            for (auto& ani_mesh : m_skinned_meshes)
             {
                 ani_mesh->Shutdown();
                 delete ani_mesh;
                 ani_mesh = nullptr;
             }
-            m_ani_meshes.clear();
+            m_skinned_meshes.clear();
         }
 
         //clear cube_map_skies
@@ -581,19 +602,19 @@ namespace CS460
     void Scene::AddAniMesh(SkinnedMesh* ani_mesh)
     {
         ani_mesh->SetRenderer(m_renderer);
-        auto found = std::find(m_ani_meshes.begin(), m_ani_meshes.end(), ani_mesh);
-        if (found == m_ani_meshes.end())
+        auto found = std::find(m_skinned_meshes.begin(), m_skinned_meshes.end(), ani_mesh);
+        if (found == m_skinned_meshes.end())
         {
-            m_ani_meshes.push_back(ani_mesh);
+            m_skinned_meshes.push_back(ani_mesh);
         }
     }
 
     void Scene::RemoveAniMesh(SkinnedMesh* ani_mesh)
     {
-        if (!m_ani_meshes.empty())
+        if (!m_skinned_meshes.empty())
         {
-            auto found = std::find(m_ani_meshes.begin(), m_ani_meshes.end(), ani_mesh);
-            m_ani_meshes.erase(found);
+            auto found = std::find(m_skinned_meshes.begin(), m_skinned_meshes.end(), ani_mesh);
+            m_skinned_meshes.erase(found);
         }
     }
 

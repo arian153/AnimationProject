@@ -1,4 +1,3 @@
-
 #include "Matrix44.hpp"
 #include "Vector4.hpp"
 #include "Vector3.hpp"
@@ -744,6 +743,11 @@ namespace CS460
         result.y = data[1] * vec.x + data[5] * vec.y + data[9] * vec.z;
         result.z = data[2] * vec.x + data[6] * vec.y + data[10] * vec.z;
         return result + origin;
+    }
+
+    Vector3 Matrix44::GetPosition() const
+    {
+        return Vector3(data[3], data[7], data[11]);
     }
 
     Matrix44 Inverse(const Matrix44& mat)

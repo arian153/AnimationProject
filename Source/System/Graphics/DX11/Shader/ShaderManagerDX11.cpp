@@ -76,7 +76,6 @@ namespace CS460
         {
             m_point_vertex_layout = new VertexLayoutCommon();
             m_point_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
-
         }
 
         //Color Vertex
@@ -166,6 +165,17 @@ namespace CS460
             m_instancing_vertex_layout->PushDX11(eAttributeType::R32, 4, "COLOR", 3, eInputSlotType::INSTANCE_DATA, 1, 1);
         }
 
+        {
+            m_skinned_vertex_layout = new VertexLayoutCommon();
+            m_skinned_vertex_layout->PushDX11(eAttributeType::R32, 3, "POSITION", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_skinned_vertex_layout->PushDX11(eAttributeType::R32, 2, "TEXCOORD", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_skinned_vertex_layout->PushDX11(eAttributeType::R32, 3, "NORMAL", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_skinned_vertex_layout->PushDX11(eAttributeType::R32, 3, "TANGENT", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_skinned_vertex_layout->PushDX11(eAttributeType::R32, 3, "BINORMAL", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_skinned_vertex_layout->PushDX11(eAttributeType::R32, 4, "WEIGHTS", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+            m_skinned_vertex_layout->PushDX11(eAttributeType::I32, 4, "BONEINDICES", 0, eInputSlotType::VERTEX_DATA, 0, 0);
+        }
+
         AddShader(L"Color.hlsl", m_color_vertex_layout);
         AddShader(L"ColorInstancing.hlsl", m_instancing_color_vertex_layout);
         AddShader(L"Texture.hlsl", m_texture_vertex_layout);
@@ -173,10 +183,18 @@ namespace CS460
 
         AddShader(L"PhongInstancing.hlsl", m_instancing_vertex_layout);
         AddShader(L"SkyBox.hlsl", m_point_vertex_layout);
+        AddShader(L"SkinnedPhong.hlsl", m_skinned_vertex_layout);
     }
 
     void ShaderManagerCommon::Shutdown()
     {
+        if (m_skinned_vertex_layout != nullptr)
+        {
+            m_skinned_vertex_layout->Clear();
+            delete m_skinned_vertex_layout;
+            m_skinned_vertex_layout = nullptr;
+        }
+
         if (m_point_vertex_layout != nullptr)
         {
             m_point_vertex_layout->Clear();

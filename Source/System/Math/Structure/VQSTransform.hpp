@@ -24,7 +24,7 @@ namespace CS460
 
         friend VQSTransform Concatenate(const VQSTransform& a, const VQSTransform& b);
         friend VQSTransform Interpolation(const VQSTransform& start, const VQSTransform& end, Real t);
-
+        friend Matrix44 Concatenate(const Matrix44& a, const Matrix44& b);
      
 
     public:

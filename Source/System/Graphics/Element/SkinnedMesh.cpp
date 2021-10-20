@@ -61,17 +61,14 @@ namespace CS460
         }
     }
 
-    void SkinnedMesh::BindSharedBuffer() const
-    {
-        m_vertex_buffer->Bind(0);
-        m_matrix_buffer->Bind();
-        m_skinned_buffer->Bind();
-    }
-
+   
     void SkinnedMesh::Bind(size_t idx) const
     {
+        m_vertex_buffer->Bind(0);
         m_sub_meshes[idx].index_buffer->Bind(0);
         m_sub_meshes[idx].texture_array.Bind();
+        m_matrix_buffer->Bind();
+        m_skinned_buffer->Bind();
         m_sub_meshes[idx].texture_buffer->Bind();
         m_sub_meshes[idx].material_buffer->Bind();
     }
@@ -97,7 +94,7 @@ namespace CS460
         if (m_skinned_buffer == nullptr)
         {
             m_skinned_buffer = new ConstantBufferCommon();
-            m_skinned_buffer->Init(m_renderer, eBindingStage::VertexShader, sizeof(SkinnedBufferData), 0);
+            m_skinned_buffer->Init(m_renderer, eBindingStage::VertexShader, sizeof(SkinnedBufferData), 1);
         }
     }
 
@@ -111,9 +108,9 @@ namespace CS460
         return m_shader_type;
     }
 
-    I64 SkinnedMesh::SubMeshCount() const
+    size_t SkinnedMesh::SubMeshCount() const
     {
-        return (I64)m_sub_meshes.size();
+        return m_sub_meshes.size();
     }
 
     void SkinnedMesh::CreateSubMesh(SubSkinnedMesh& sub_mesh) const

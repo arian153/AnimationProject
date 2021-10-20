@@ -74,6 +74,8 @@ namespace CS460
         Vector3 TransformVector(const Vector3& vector);
         Vector3 TransformVectorRotatingOrigin(const Vector3& vector, const Vector3& origin);
 
+        Vector3 GetPosition() const;
+
     public:
         friend Matrix44 Inverse(const Matrix44& mat);
         friend Matrix44 Transpose(const Matrix44& mat);

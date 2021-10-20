@@ -17,7 +17,6 @@ namespace CS460
 
     void Skeleton::Initialize()
     {
-        
     }
 
     void Skeleton::Update(Real dt)
@@ -70,19 +69,56 @@ namespace CS460
                 world = m_transform->LocalToWorldMatrix();
             }
 
-            for (size_t i = 0; i < size; ++i)
+            if (m_render_mode == 0)
             {
-                Bone*   bone       = m_bones[i];
-                size_t  child_size = bone->m_children.size();
-                Vector3 parent_pos = world.TransformPoint(m_final_vqs[i].position);
-                renderer->DrawPrimitive(Sphere(parent_pos, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
-                for (size_t j = 0; j < child_size; ++j)
+                for (size_t i = 0; i < size; ++i)
                 {
-                    //has a child draw line segment.
-                    Vector3 child_pos = world.TransformPoint(m_final_vqs[bone->m_children[j]->m_own_idx].position);
-                    renderer->DrawSegment(parent_pos, child_pos, m_color);
+                    Bone* bone = m_bones[i];
+                    size_t  child_size = bone->m_children.size();
+                    Vector3 parent_pos = world.TransformPoint(m_final_vqs[i].position);
+                    renderer->DrawPrimitive(Sphere(parent_pos, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
+                    for (size_t j = 0; j < child_size; ++j)
+                    {
+                        //has a child draw line segment.
+                        Vector3 child_pos = world.TransformPoint(m_final_vqs[bone->m_children[j]->m_own_idx].position);
+                        renderer->DrawSegment(parent_pos, child_pos, m_color);
+                    }
                 }
             }
+            else if (m_render_mode == 1)
+            {
+                //render matrix version of animation bone
+                for (size_t i = 0; i < size; ++i)
+                {
+                    Bone* bone = m_bones[i];
+                    size_t  child_size = bone->m_children.size();
+                    Vector3 parent_pos = world.TransformPoint(m_final_mats[i].GetPosition());
+                    for (size_t j = 0; j < child_size; ++j)
+                    {
+                        //has a child draw line segment.
+                        Vector3 child_pos = world.TransformPoint(m_final_mats[bone->m_children[j]->m_own_idx].GetPosition());
+                        renderer->DrawSegment(parent_pos, child_pos, Color(1));
+                    }
+                }
+            }
+            else if (m_render_mode == 2)
+            {
+                //render matrix version of bind bone
+                for (size_t i = 0; i < size; ++i)
+                {
+                    Bone* bone = m_bones[i];
+                    size_t  child_size = bone->m_children.size();
+                    Vector3 parent_pos = world.TransformPoint(m_bind_mats[i].GetPosition());
+                    for (size_t j = 0; j < child_size; ++j)
+                    {
+                        //has a child draw line segment.
+                        Vector3 child_pos = world.TransformPoint(m_bind_mats[bone->m_children[j]->m_own_idx].GetPosition());
+                        renderer->DrawSegment(parent_pos, child_pos, Color(0, 0, 1));
+                    }
+                }
+            }
+
+           
         }
     }
 
@@ -95,22 +131,30 @@ namespace CS460
             return;
         }
 
-        std::vector<VQSTransform> to_roots;
-        to_roots.resize(size);
+        m_to_roots.resize(size);
         m_final_vqs.resize(size);
+
+        m_final_mats.resize(size);
+        m_to_root_mats.resize(size);
+        //m_bind_mats;
 
         for (I32 i = 0; i < size; ++i)
         {
             I32          parent_idx     = m_bones[i]->m_parent_idx;
-            VQSTransform parent_to_root = parent_idx >= 0 ? to_roots[parent_idx] : VQSTransform();
-            to_roots[i]                 = Concatenate(key_frames[i].to_parent, parent_to_root);
-            to_roots[i].rotation.SetNormalize();
+            VQSTransform parent_to_root = parent_idx >= 0 ? m_to_roots[parent_idx] : VQSTransform();
+            m_to_roots[i]               = Concatenate(key_frames[i].to_parent, parent_to_root);
+            m_to_roots[i].rotation.SetNormalize();
+
+            Matrix44 parent_tf = parent_idx >= 0 ? m_to_root_mats[parent_idx] : Matrix44::Identity();
+            Matrix44 local_tf  = key_frames[i].to_parent.ToMatrix();
+            m_to_root_mats[i]  = local_tf * parent_tf;
         }
 
         for (I32 i = 0; i < size; ++i)
         {
-            m_final_vqs[i] = Concatenate(m_bones[i]->m_to_root, to_roots[i]);
+            m_final_vqs[i] = Concatenate(m_bones[i]->m_to_root, m_to_roots[i]);
             m_final_vqs[i].rotation.SetNormalize();
+            m_final_mats[i] = m_bones[i]->m_to_root.ToMatrix() * m_to_root_mats[i];
         }
     }
 
@@ -224,7 +268,20 @@ namespace CS460
         }
     }
 
-   
+    void Skeleton::SetUpBind()
+    {
+        size_t size = m_bones.size();
+        m_bind_mats.resize(size);
+        for (size_t i = 0; i < size; ++i)
+        {
+            I32          parent_idx = m_bones[i]->m_parent_idx;
+            Matrix44 parent_tf = parent_idx >= 0 ? m_bind_mats[parent_idx] : Matrix44::Identity();
+            Matrix44 local_tf = m_bones[i]->m_to_root.ToMatrix();
+            m_bind_mats[i] = local_tf * parent_tf;
+
+        }
+    }
+
     AnimationClip* Skeleton::CreateAnimationClip()
     {
         //Create Animation clip data.

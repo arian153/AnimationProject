@@ -122,9 +122,9 @@ namespace CS460
         std::vector<Mesh*>            m_meshes;
         MeshTable                     m_mesh_table;
 
-        std::vector<Light*>      m_lights;
-        std::vector<CubeMapSky*> m_cube_map_skies;
-        std::vector<SkinnedMesh*>    m_ani_meshes;
+        std::vector<Light*>       m_lights;
+        std::vector<CubeMapSky*>  m_cube_map_skies;
+        std::vector<SkinnedMesh*> m_skinned_meshes;
 
         eProjectionType m_projection_type = eProjectionType::Perspective;
         Matrix44        m_view_matrix;

@@ -51,6 +51,7 @@ namespace CS460
         VertexLayoutCommon* m_vertex_layout                    = nullptr;
         VertexLayoutCommon* m_instancing_vertex_layout         = nullptr;
         VertexLayoutCommon* m_point_vertex_layout              = nullptr;
+        VertexLayoutCommon* m_skinned_vertex_layout            = nullptr;
 
         //others
         RendererCommon*  m_renderer         = nullptr;

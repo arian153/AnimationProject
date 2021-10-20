@@ -37,5 +37,6 @@ namespace CS460
         BinParser::Model m_binary_model;
 
         std::vector<SkinnedVertexCommon> m_vertices;
+        std::vector<U32>                 m_indices;
     };
 }
