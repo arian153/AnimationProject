@@ -73,7 +73,7 @@ namespace CS460
             {
                 for (size_t i = 0; i < size; ++i)
                 {
-                    Bone* bone = m_bones[i];
+                    Bone*   bone       = m_bones[i];
                     size_t  child_size = bone->m_children.size();
                     Vector3 parent_pos = world.TransformPoint(m_final_vqs[i].position);
                     renderer->DrawPrimitive(Sphere(parent_pos, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
@@ -90,7 +90,7 @@ namespace CS460
                 //render matrix version of animation bone
                 for (size_t i = 0; i < size; ++i)
                 {
-                    Bone* bone = m_bones[i];
+                    Bone*   bone       = m_bones[i];
                     size_t  child_size = bone->m_children.size();
                     Vector3 parent_pos = world.TransformPoint(m_final_mats[i].GetPosition());
                     for (size_t j = 0; j < child_size; ++j)
@@ -106,7 +106,7 @@ namespace CS460
                 //render matrix version of bind bone
                 for (size_t i = 0; i < size; ++i)
                 {
-                    Bone* bone = m_bones[i];
+                    Bone*   bone       = m_bones[i];
                     size_t  child_size = bone->m_children.size();
                     Vector3 parent_pos = world.TransformPoint(m_bind_mats[i].GetPosition());
                     for (size_t j = 0; j < child_size; ++j)
@@ -117,8 +117,6 @@ namespace CS460
                     }
                 }
             }
-
-           
         }
     }
 
@@ -274,11 +272,10 @@ namespace CS460
         m_bind_mats.resize(size);
         for (size_t i = 0; i < size; ++i)
         {
-            I32          parent_idx = m_bones[i]->m_parent_idx;
-            Matrix44 parent_tf = parent_idx >= 0 ? m_bind_mats[parent_idx] : Matrix44::Identity();
-            Matrix44 local_tf = m_bones[i]->m_to_root.ToMatrix();
-            m_bind_mats[i] = local_tf * parent_tf;
-
+            I32      parent_idx = m_bones[i]->m_parent_idx;
+            Matrix44 parent_tf  = parent_idx >= 0 ? m_bind_mats[parent_idx] : Matrix44::Identity();
+            Matrix44 local_tf   = m_bones[i]->m_to_root.ToMatrix();
+            m_bind_mats[i]      = local_tf * parent_tf;
         }
     }
 
