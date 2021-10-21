@@ -1,6 +1,7 @@
 #include "Ray.hpp"
 #include "../../Utility/Utility.hpp"
 #include "Line.hpp"
+#include "../../Structure/VQSTransform.hpp"
 
 namespace CS460
 {
@@ -157,6 +158,16 @@ namespace CS460
 
         // compute closest points
         return Vector3Pair(position + s_c * direction, ray.position + t_c * ray.direction);
+    }
+
+    Ray Ray::ToLocal(const VQSTransform& transform) const
+    {
+        return Ray(transform.WorldToLocalPoint(position), transform.WorldToLocalVector(direction));
+    }
+
+    Ray Ray::ToWorld(const VQSTransform& transform) const
+    {
+        return Ray(transform.LocalToWorldPoint(position), transform.LocalToWorldVector(direction));
     }
 
     Ray& Ray::operator=(const Ray& rhs)

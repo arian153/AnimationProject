@@ -205,20 +205,20 @@ namespace CS460
         else if (mode == eRenderingMode::Face)
         {
             //front
-            renderer->PushFaceIndices(index + 0, index + 2, index + 4);
-            renderer->PushFaceIndices(index + 2, index + 6, index + 4);
+            renderer->PushFaceIndices(index + 6, index + 2, index + 4);
+            renderer->PushFaceIndices(index + 2, index + 0, index + 4);
             //back
             renderer->PushFaceIndices(index + 1, index + 3, index + 5);
             renderer->PushFaceIndices(index + 3, index + 7, index + 5);
-            //right
-            renderer->PushFaceIndices(index + 0, index + 1, index + 3);
-            renderer->PushFaceIndices(index + 2, index + 3, index + 0);
             //left
-            renderer->PushFaceIndices(index + 6, index + 7, index + 5);
-            renderer->PushFaceIndices(index + 4, index + 5, index + 6);
+            renderer->PushFaceIndices(index + 6, index + 5, index + 7);
+            renderer->PushFaceIndices(index + 5, index + 6, index + 4);
+            //right
+            renderer->PushFaceIndices(index + 1, index + 0, index + 3);
+            renderer->PushFaceIndices(index + 0, index + 2, index + 3);
             //top
-            renderer->PushFaceIndices(index + 1, index + 0, index + 4);
-            renderer->PushFaceIndices(index + 1, index + 4, index + 5);
+            renderer->PushFaceIndices(index + 1, index + 4, index + 0);
+            renderer->PushFaceIndices(index + 1, index + 5, index + 4);
             //bottom
             renderer->PushFaceIndices(index + 3, index + 2, index + 6);
             renderer->PushFaceIndices(index + 3, index + 6, index + 7);

@@ -66,6 +66,28 @@ namespace CS460
         return inv_rot.Rotate(inv_scale * point) + inv_pos;
     }
 
+    Vector3 VQSTransform::LocalToWorldPoint(const Vector3& local_point) const
+    {
+        return rotation.Rotate(scale * local_point) + position;
+    }
+
+    Vector3 VQSTransform::WorldToLocalPoint(const Vector3& world_point) const
+    {
+        Real inv_scale = Math::IsZero(scale) ? 0.0f : 1.0f / scale;
+        return inv_scale * rotation.Inverse().Rotate(world_point - position);
+    }
+
+    Vector3 VQSTransform::LocalToWorldVector(const Vector3& local_vector) const
+    {
+        return rotation.Rotate(scale * local_vector);
+    }
+
+    Vector3 VQSTransform::WorldToLocalVector(const Vector3& world_vector) const
+    {
+        Real inv_scale = Math::IsZero(scale) ? 0.0f : 1.0f / scale;
+        return inv_scale * rotation.Inverse().Rotate(world_vector);
+    }
+
     VQSTransform& VQSTransform::operator=(const VQSTransform& vqs)
     {
         if (this != &vqs)

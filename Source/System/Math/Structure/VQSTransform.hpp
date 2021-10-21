@@ -22,6 +22,11 @@ namespace CS460
         Vector3 ApplyTransform(const Vector3& point) const;
         Vector3 ApplyInverse(const Vector3& point) const;
 
+        Vector3 LocalToWorldPoint(const Vector3& local_point) const;
+        Vector3 WorldToLocalPoint(const Vector3& world_point) const;
+        Vector3 LocalToWorldVector(const Vector3& local_vector) const;
+        Vector3 WorldToLocalVector(const Vector3& world_vector) const;
+
         friend VQSTransform Concatenate(const VQSTransform& a, const VQSTransform& b);
         friend VQSTransform Interpolation(const VQSTransform& start, const VQSTransform& end, Real t);
         friend Matrix44 Concatenate(const Matrix44& a, const Matrix44& b);

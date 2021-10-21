@@ -1,6 +1,7 @@
 #include "AnimationSubsystem.hpp"
 
 #include "Skeleton/Skeleton.hpp"
+#include "Space/AnimationSpace.hpp"
 
 namespace CS460
 {
@@ -14,10 +15,16 @@ namespace CS460
 
     void AnimationSubsystem::Initialize()
     {
+        if (m_animation_space == nullptr)
+        {
+            m_animation_space = new AnimationSpace();
+            m_animation_space->Initialize();
+        }
     }
 
     void AnimationSubsystem::Update(Real dt)
     {
+        m_animation_space->Update(dt);
         for (auto& skeleton : m_skeletons)
         {
             skeleton->Update(dt);
@@ -27,6 +34,7 @@ namespace CS460
     void AnimationSubsystem::Render() const
     {
         //rendering animation related info
+        m_animation_space->Draw(m_primitive_renderer);
         for (auto& skeleton : m_skeletons)
         {
             skeleton->Draw(m_primitive_renderer);
@@ -44,6 +52,13 @@ namespace CS460
                 skeleton = nullptr;
             }
             m_skeletons.clear();
+        }
+
+        if (m_animation_space != nullptr)
+        {
+            m_animation_space->Shutdown();
+            delete m_animation_space;
+            m_animation_space = nullptr;
         }
     }
 
@@ -74,5 +89,15 @@ namespace CS460
     void AnimationSubsystem::SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer)
     {
         m_primitive_renderer = primitive_renderer;
+    }
+
+    void AnimationSubsystem::SetPickingRay(const Ray& ray)
+    {
+        m_picking_ray = ray;
+    }
+
+    bool AnimationSubsystem::Pick(const Ray& ray, Real& min_t, Real& max_t) const
+    {
+        return m_animation_space->PickBox(ray, min_t, max_t);
     }
 }

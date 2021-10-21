@@ -20,6 +20,7 @@
 #include "../../../Manager/Object/Object.hpp"
 #include "../../../Manager/Component/Component.hpp"
 #include "../../../Manager/Component/EngineComponent/ColliderComponent.hpp"
+#include "../../Animation/AnimationSubsystem.hpp"
 #include "../../Core/Utility/FrameUtility.hpp"
 #include "../../Logic/LogicSubsystem.hpp"
 #include "../../Physics/Dynamics/ColliderSet.hpp"
@@ -439,6 +440,16 @@ namespace CS460
                     {
                         m_editing_object->GetComponent<ColliderComponent>()->RenderBoundingVolume(scene->GetPrimitiveRenderer(), Color(1.0f, 0.0f, 0.0f, 1.0f));
                     }
+                }
+            }
+
+            if (space->GetAnimationSubsystem() != nullptr)
+            {
+                if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && is_space_hovered)
+                {
+                    space->GetAnimationSubsystem()->SetPickingRay(m_picking_ray);
+                    Real t1, t2;
+                    space->GetAnimationSubsystem()->Pick(m_picking_ray, t1, t2);
                 }
             }
 

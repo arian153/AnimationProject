@@ -5,6 +5,7 @@
 
 namespace CS460
 {
+    class VQSTransform;
     class Line;
     class Ray
     {
@@ -20,6 +21,9 @@ namespace CS460
         Real    Distance(const Vector3& point, Real& t) const;
         Real    DistanceSquared(const Vector3& point, Real& t) const;
         Vector3Pair ClosestPoint(const Ray& ray) const;
+
+        Ray ToLocal(const VQSTransform& transform) const;
+        Ray ToWorld(const VQSTransform& transform) const;
 
         Ray&    operator=(const Ray& rhs);
         bool    operator==(const Ray& rhs) const;
