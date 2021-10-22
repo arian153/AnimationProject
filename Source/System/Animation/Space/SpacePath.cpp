@@ -81,12 +81,16 @@ namespace CS460
     void SpacePath::Update()
     {
         if (!b_update)
+        {
+            b_was_update = false;
             return;
+        }
 
         CreateCurve();
         GenerateCurve();
 
-        b_update = false;
+        b_update     = false;
+        b_was_update = true;
     }
 
     void SpacePath::BuildTable()
@@ -106,7 +110,9 @@ namespace CS460
     void SpacePath::Draw(PrimitiveRenderer* renderer) const
     {
         if (!interpolated_curve.points.empty())
-            renderer->DrawCurveLine(interpolated_curve, Color(1, 0, 0));
+        {
+            renderer->DrawSubMeshCurveLine(interpolated_curve, b_was_update, Color(1, 0, 0));
+        }
     }
 
     void SpacePath::AddControlPoint(const Vector3& control_point)

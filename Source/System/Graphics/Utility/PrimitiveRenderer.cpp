@@ -7,6 +7,7 @@
 #include "../Common/Buffer/MeshBufferCommon.hpp"
 #include "../Common/Buffer2/ConstantBufferCommon.hpp"
 #include "../Common/Buffer2/IndexBufferCommon.hpp"
+#include "../Common/Buffer2/InstanceBufferCommon.hpp"
 #include "../Common/Buffer2/VertexBufferCommon.hpp"
 #include "../Common/Shader/ShaderProgramCommon.hpp"
 
@@ -329,6 +330,35 @@ namespace CS460
             matrix_buffer->Bind();
             m_face_index_buffer->Draw();
         }
+
+        for (auto& code : m_drawing_sub_meshes)
+        {
+            auto found = m_sub_mesh_table.find(code);
+            if (found != m_sub_mesh_table.end())
+            {
+                found->second.vertex_buffer->Bind(0);
+                found->second.index_buffer->Bind(0);
+                m_shader->Bind();
+                matrix_buffer->Bind();
+                found->second.index_buffer->Draw();
+            }
+        }
+
+        for (const auto& [code, count] : m_drawing_sub_ins_meshes)
+        {
+            auto found = m_sub_ins_mesh_table.find(code);
+            if (found != m_sub_ins_mesh_table.end())
+            {
+                found->second.instance_buffer->Update(found->second.instances);
+                found->second.vertex_buffer->Bind(0, found->second.instance_buffer);
+                found->second.index_buffer->Bind(0);
+                //bind color instancing shader
+                //bind matrix buffer
+
+                if (count > 0)
+                    found->second.index_buffer->Draw(count);
+            }
+        }
     }
 
     void PrimitiveRenderer::Shutdown()
@@ -371,6 +401,51 @@ namespace CS460
             delete m_face_index_buffer;
             m_face_index_buffer = nullptr;
         }
+
+        for (auto& [code, sub_mesh] : m_sub_mesh_table)
+        {
+            if (sub_mesh.index_buffer != nullptr)
+            {
+                sub_mesh.index_buffer->Shutdown();
+                delete sub_mesh.index_buffer;
+                sub_mesh.index_buffer = nullptr;
+            }
+
+            if (sub_mesh.vertex_buffer != nullptr)
+            {
+                sub_mesh.vertex_buffer->Shutdown();
+                delete sub_mesh.vertex_buffer;
+                sub_mesh.vertex_buffer = nullptr;
+            }
+        }
+        m_sub_mesh_table.clear();
+
+        for (auto& [code, sub_mesh] : m_sub_ins_mesh_table)
+        {
+            if (sub_mesh.index_buffer != nullptr)
+            {
+                sub_mesh.index_buffer->Shutdown();
+                delete sub_mesh.index_buffer;
+                sub_mesh.index_buffer = nullptr;
+            }
+
+            if (sub_mesh.vertex_buffer != nullptr)
+            {
+                sub_mesh.vertex_buffer->Shutdown();
+                delete sub_mesh.vertex_buffer;
+                sub_mesh.vertex_buffer = nullptr;
+            }
+
+            if (sub_mesh.instance_buffer != nullptr)
+            {
+                sub_mesh.instance_buffer->Shutdown();
+                delete sub_mesh.instance_buffer;
+                sub_mesh.instance_buffer = nullptr;
+            }
+
+            sub_mesh.instances.clear();
+        }
+        m_sub_ins_mesh_table.clear();
     }
 
     void PrimitiveRenderer::Clear()
@@ -381,6 +456,8 @@ namespace CS460
         m_line_indices.clear();
         m_face_vertices.clear();
         m_face_indices.clear();
+        m_drawing_sub_meshes.clear();
+        m_drawing_sub_ins_meshes.clear();
     }
 
     void PrimitiveRenderer::UpdateViewMatrix(const Matrix44& view_matrix)
@@ -513,5 +590,58 @@ namespace CS460
             break;
         }
         return 0;
+    }
+
+    void PrimitiveRenderer::DrawSubMeshCurveLine(const Curve& curve, bool b_replace, Color color)
+    {
+        size_t code = *(size_t*)&curve;
+
+        bool b_create = false;
+        auto found    = m_sub_mesh_table.find(code);
+        if (found != m_sub_mesh_table.end())
+        {
+            if (b_replace)
+            {
+                found->second.index_buffer->Shutdown();
+                found->second.vertex_buffer->Shutdown();
+            }
+
+            m_drawing_sub_meshes.push_back(code);
+        }
+        else
+        {
+            b_create = true;
+            m_drawing_sub_meshes.push_back(code);
+            PrimitiveSubMesh sub_mesh;
+            sub_mesh.index_buffer  = new IndexBufferCommon();
+            sub_mesh.vertex_buffer = new VertexBufferCommon();
+
+            m_sub_mesh_table.emplace(code, sub_mesh);
+            found = m_sub_mesh_table.find(code);
+        }
+
+        if (b_create || b_replace)
+        {
+            std::vector<ColorVertexCommon> vertices;
+            std::vector<U32>               indices;
+
+            size_t curve_size = curve.points.size() - 1;
+            size_t index      = vertices.size();
+
+            vertices.reserve(index + 2 * curve_size);
+            indices.reserve(indices.size() + 2 * curve_size);
+
+            for (size_t i = 0; i < curve_size; i++)
+            {
+                vertices.emplace_back(curve.points[i], color);
+                indices.push_back((U32)(index + i));
+                indices.push_back((U32)(index + i + 1));
+            }
+            vertices.emplace_back(curve.points[curve_size], color);
+
+            found->second.index_buffer->Init(m_renderer, indices);
+            found->second.vertex_buffer->Init(m_renderer, vertices);
+            found->second.vertex_buffer->SetPrimitiveTopology(eTopologyType::LineList);
+        }
     }
 }

@@ -1,4 +1,6 @@
 #pragma once
+#include <map>
+
 #include "../../Math/Math.hpp"
 #include <vector>
 
@@ -10,6 +12,7 @@
 
 namespace CS460
 {
+    class InstanceBufferCommon;
     class ConstantBufferCommon;
     class VertexBufferCommon;
     class IndexBufferCommon;
@@ -26,6 +29,20 @@ namespace CS460
         Dot,
         Line,
         Face
+    };
+
+    struct PrimitiveSubMesh
+    {
+        VertexBufferCommon* vertex_buffer = nullptr;
+        IndexBufferCommon*  index_buffer  = nullptr;
+    };
+
+    struct InstancingSubMesh
+    {
+        VertexBufferCommon*             vertex_buffer   = nullptr;
+        IndexBufferCommon*              index_buffer    = nullptr;
+        InstanceBufferCommon*           instance_buffer = nullptr;
+        std::vector<InstanceBufferData> instances;
     };
 
     class PrimitiveRenderer
@@ -66,6 +83,9 @@ namespace CS460
         void   ReserveIndices(size_t adding_count, eRenderingMode mode);
         size_t VerticesSize(eRenderingMode mode) const;
         size_t IndicesSize(eRenderingMode mode) const;
+
+        void DrawSubMeshCurveLine(const Curve& curve, bool b_replace = false, Color color = Color());
+
     private:
         MatrixData           m_mvp_data;
         RendererCommon*      m_renderer = nullptr;
@@ -89,8 +109,13 @@ namespace CS460
         VertexBufferCommon*            m_face_vertex_buffer = nullptr;
         IndexBufferCommon*             m_face_index_buffer  = nullptr;
 
-        //Do instancing
+        //using multiple time
+        std::map<size_t, PrimitiveSubMesh> m_sub_mesh_table;
+        std::vector<size_t>                m_drawing_sub_meshes;
 
+        //instancing
+        std::map<size_t, U32>               m_drawing_sub_ins_meshes;
+        std::map<size_t, InstancingSubMesh> m_sub_ins_mesh_table;
     public:
         const int CIRCULAR_VERTICES_COUNT    = 100;
         const int SPHERICAL_SLICE_COUNT      = 14;

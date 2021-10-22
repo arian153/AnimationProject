@@ -47,6 +47,7 @@ namespace CS460
         size_t sample_count = 1000;
         Real   sample_step  = 1.0f / 1000.0f;
         bool   b_update = false;
+        bool   b_was_update = false;
 
         std::vector<Vector3>          control_points;
         std::vector<CubicBezierCurve> segments;
