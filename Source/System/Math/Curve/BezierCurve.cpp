@@ -24,11 +24,5 @@ namespace CS460
                 + u * (-3.0f * p0 + 3.0f * p1) + p0;
     }
 
-    BezierCurve::BezierCurve()
-    {
-    }
-
-    BezierCurve::~BezierCurve()
-    {
-    }
-}
+   
+   }

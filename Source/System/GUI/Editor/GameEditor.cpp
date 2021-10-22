@@ -234,7 +234,7 @@ namespace CS460
                 ImGui::Text("Usage");
                 ImGui::Text("1. Click File Tab, and Open Space.");
                 ImGui::Text("2. Camera Control");
-                ImGui::Text("    Hold Mouse LB & move - Change camera view direction on spherically");
+                ImGui::Text("    Hold Mouse RB & move - Change camera view direction on spherically");
                 ImGui::Text("    Roll Mouse Wheel     - Change spherical camera's radius on same view");
                 ImGui::Text("    Press W, S           - Change camera position Front & Back");
                 ImGui::Text("    Press A, D           - Change camera position Left & Right");

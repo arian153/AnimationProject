@@ -60,5 +60,7 @@ namespace CS460
         std::vector<Matrix44>   m_final_mats;
         std::vector<Matrix44>   m_to_root_mats;
         std::vector<Matrix44>   m_bind_mats;
+
+        
     };
 }

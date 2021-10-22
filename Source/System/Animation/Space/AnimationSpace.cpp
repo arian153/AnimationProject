@@ -23,6 +23,7 @@ namespace CS460
     {
         m_platform_box.position    = m_box_transform.position;
         m_platform_box.orientation = m_box_transform.rotation;
+        m_test_path.Update();
     }
 
     void AnimationSpace::Shutdown()
@@ -32,10 +33,10 @@ namespace CS460
     void AnimationSpace::Draw(PrimitiveRenderer* renderer) const
     {
         renderer->DrawPrimitive(m_platform_box, eRenderingMode::Line, Color(0.2f, 0.2f, 0.2f));
-
+        m_test_path.Draw(renderer);
         for (auto& points : control_points)
         {
-            renderer->DrawPrimitive(Sphere(points, Quaternion(), 0.1f), eRenderingMode::Face, Color(1, 0,0));
+            renderer->DrawPrimitive(Sphere(points, Quaternion(), 0.1f), eRenderingMode::Face, Color(1, 0, 0));
         }
     }
 
@@ -44,10 +45,8 @@ namespace CS460
         Ray local_ray = picking_ray.ToLocal(m_box_transform);
         if (m_platform_box.TestRayIntersection(local_ray, min_t, max_t))
         {
-            ;
-
             control_points.push_back(picking_ray.ParamToPoint(min_t));
-
+            m_test_path.AddControlPoint(picking_ray.ParamToPoint(min_t));
             return true;
         }
         return false;

@@ -1,4 +1,5 @@
 #pragma once
+#include "SpacePath.hpp"
 #include "../../Math/Primitive/ConvexHull3D/Box.hpp"
 #include "../../Math/Primitive/Others/Plane.hpp"
 #include "../../Math/Structure/Transform.hpp"
@@ -18,13 +19,15 @@ namespace CS460
 
         void Draw(PrimitiveRenderer* renderer) const;
 
-        bool PickBox(const Ray& picking_ray, Real& min_t, Real& max_t) ;
+        bool PickBox(const Ray& picking_ray, Real& min_t, Real& max_t);
 
         //E5_TODO - add broad phase for performance later.
     private:
         //this can be changed terrain structure.
         Box          m_platform_box;
         VQSTransform m_box_transform;
+
+        SpacePath m_test_path;
 
         std::vector<Vector3> control_points;
     };

@@ -56,7 +56,7 @@ namespace Game
                 Real  dx     = Math::DegreesToRadians(0.25f * static_cast<Real>(curr_x - prev_x));
                 Real  dy     = Math::DegreesToRadians(0.25f * static_cast<Real>(curr_y - prev_y));
                 Basis basis  = camera->GetBasis();
-                if (mouse->IsDown(eKeyCodeMouse::Left))
+                if (mouse->IsDown(eKeyCodeMouse::Right))
                 {
                     //camera->AddDistanceInUpDirection(-dt * dy);
                     //camera->AddDistanceInRightDirection(dt * dx);
