@@ -597,7 +597,7 @@ namespace CS460
 
     void PrimitiveRenderer::DrawSubMeshCurveLine(const Curve& curve, bool b_replace, Color color)
     {
-        size_t code = *(size_t*)&curve;
+        size_t code = (size_t)&curve;
 
         bool b_create = false;
         auto found    = m_sub_mesh_table.find(code);
@@ -650,7 +650,7 @@ namespace CS460
 
     void PrimitiveRenderer::DrawPrimitiveInstancing(const Primitive& primitive, const Matrix44& transform, eRenderingMode mode, Color color)
     {
-        size_t code = *(size_t*)&primitive;
+        size_t code = (size_t)&primitive;
 
         auto found = m_sub_ins_mesh_table.find(code);
         if (found != m_sub_ins_mesh_table.end())

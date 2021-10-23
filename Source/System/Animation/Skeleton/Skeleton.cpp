@@ -17,6 +17,9 @@ namespace CS460
 
     void Skeleton::Initialize()
     {
+        m_skeleton_sphere.position.SetZero();
+        m_skeleton_sphere.orientation.SetIdentity();
+        m_skeleton_sphere.radius = 0.05f;
     }
 
     void Skeleton::Update(Real dt)
@@ -76,7 +79,7 @@ namespace CS460
                     Bone*   bone       = m_bones[i];
                     size_t  child_size = bone->m_children.size();
                     Vector3 parent_pos = world.TransformPoint(m_final_vqs[i].position);
-                    renderer->DrawPrimitive(Sphere(parent_pos, m_final_vqs[i].rotation, 0.05f), eRenderingMode::Face, m_color);
+                    renderer->DrawPrimitiveInstancing(m_skeleton_sphere, m_skeleton_sphere.orientation, parent_pos, eRenderingMode::Face, m_color);
                     for (size_t j = 0; j < child_size; ++j)
                     {
                         //has a child draw line segment.
