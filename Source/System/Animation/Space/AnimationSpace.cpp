@@ -26,7 +26,7 @@ namespace CS460
     {
         m_platform_box.position    = m_box_transform.position;
         m_platform_box.orientation = m_box_transform.rotation;
-        m_test_path.Update();
+        m_test_path.UpdateCurve();
     }
 
     void AnimationSpace::Shutdown()

@@ -9,10 +9,22 @@ namespace CS460
 {
     class PrimitiveRenderer;
 
+    struct ArcSegment
+    {
+        ArcSegment() = default;
+        ArcSegment(Real a, Real b);
+
+        Real u_a = 0.0f;
+        Real u_b = 1.0f;
+    };
+
     struct ArcData
     {
-        Real u = 0.0f;
-        Real s = 0.0f;
+        ArcData() = default;
+        ArcData(Real u, Real s);
+
+        Real arc_param  = 0.0f;
+        Real arc_length = 0.0f;
     };
 
     class SpacePath
@@ -21,22 +33,20 @@ namespace CS460
         SpacePath();
         ~SpacePath();
 
-        void CreateCurve();
-        void Update();
-        void BuildTable();
-
-        Real InverseArcLength(Real s);
-        Real ArcLength(Real u);
-
-        //s = V(t)
-        //u = G(s)
-        //p = P(u);
+        void UpdateCurve();
 
         void Draw(PrimitiveRenderer* renderer) const;
         void AddControlPoint(const Vector3& control_point);
+        void SetRenderingCurveSampleCount(size_t count);
 
-        void SetSampleCount(size_t count);
-        void GenerateCurve(); //curve for rendering
+        Vector3 SpaceCurve(Real u) const;   //p = P(u);
+        Real    ArcLength(Real u) const;    //s = G(u)
+        Real    InvArcLength(Real s) const; //u = InvG(s)
+
+    private:
+        void SetUpSegments();
+        void GenerateRenderingCurve(); //curve for rendering
+        void AdaptiveApproach();
 
     private:
         friend class Skeleton;
@@ -45,9 +55,11 @@ namespace CS460
     private:
         Curve  interpolated_curve;
         size_t sample_count = 1000;
-        Real   sample_step  = 1.0f / 1000.0f;
-        bool   b_update = false;
+        bool   b_update     = false;
         bool   b_was_update = false;
+
+        Real length_threshold   = 0.005f;
+        Real interval_threshold = 0.25f;
 
         std::vector<Vector3>          control_points;
         std::vector<CubicBezierCurve> segments;
