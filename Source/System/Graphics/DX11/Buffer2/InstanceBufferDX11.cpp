@@ -70,7 +70,7 @@ namespace CS460
                 return;
             }
             // Get a pointer to the data in the instance buffer.
-            InstanceDataCommon* instances_ptr = (InstanceDataCommon*)mapped_resource.pData;
+            InstanceBufferData* instances_ptr = (InstanceBufferData*)mapped_resource.pData;
             // Copy the data into the vertex buffer.
             memcpy(instances_ptr, (void*)instances.data(), sizeof(InstanceBufferData) * static_cast<U32>(instances.size()));
             // Unlock the instance buffer.

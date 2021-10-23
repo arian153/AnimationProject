@@ -273,7 +273,7 @@ namespace CS460
 
     void PrimitiveRenderer::Initialize(ShaderProgramCommon* color_shader)
     {
-        m_shader = color_shader;
+        m_color_shader = color_shader;
 
         m_dot_vertex_buffer  = new VertexBufferCommon();
         m_line_vertex_buffer = new VertexBufferCommon();
@@ -297,7 +297,7 @@ namespace CS460
             //Bind Buffer
             m_dot_vertex_buffer->Bind(0);
             m_dot_index_buffer->Bind(0);
-            m_shader->Bind();
+            m_color_shader->Bind();
             matrix_buffer->Bind();
             m_dot_index_buffer->Draw();
         }
@@ -312,7 +312,7 @@ namespace CS460
             //Bind Buffer
             m_line_vertex_buffer->Bind(0);
             m_line_index_buffer->Bind(0);
-            m_shader->Bind();
+            m_color_shader->Bind();
             matrix_buffer->Bind();
             m_line_index_buffer->Draw();
         }
@@ -326,7 +326,7 @@ namespace CS460
             //Bind Buffer
             m_face_vertex_buffer->Bind(0);
             m_face_index_buffer->Bind(0);
-            m_shader->Bind();
+            m_color_shader->Bind();
             matrix_buffer->Bind();
             m_face_index_buffer->Draw();
         }
@@ -338,12 +338,15 @@ namespace CS460
             {
                 found->second.vertex_buffer->Bind(0);
                 found->second.index_buffer->Bind(0);
-                m_shader->Bind();
+                m_color_shader->Bind();
                 matrix_buffer->Bind();
                 found->second.index_buffer->Draw();
             }
         }
+    }
 
+    void PrimitiveRenderer::RenderInstancing(ShaderProgramCommon* color_shader, ConstantBufferCommon* matrix_buffer) const
+    {
         for (const auto& [code, count] : m_drawing_sub_ins_meshes)
         {
             auto found = m_sub_ins_mesh_table.find(code);
@@ -352,9 +355,9 @@ namespace CS460
                 found->second.instance_buffer->Update(found->second.instances);
                 found->second.vertex_buffer->Bind(0, found->second.instance_buffer);
                 found->second.index_buffer->Bind(0);
-                //bind color instancing shader
-                //bind matrix buffer
 
+                color_shader->Bind();
+                matrix_buffer->Bind();
                 if (count > 0)
                     found->second.index_buffer->Draw(count);
             }
@@ -643,5 +646,134 @@ namespace CS460
             found->second.vertex_buffer->Init(m_renderer, vertices);
             found->second.vertex_buffer->SetPrimitiveTopology(eTopologyType::LineList);
         }
+    }
+
+    void PrimitiveRenderer::DrawPrimitiveInstancing(const Primitive& primitive, const Matrix44& transform, eRenderingMode mode, Color color)
+    {
+        size_t code = *(size_t*)&primitive;
+
+        auto found = m_sub_ins_mesh_table.find(code);
+        if (found != m_sub_ins_mesh_table.end())
+        {
+            U32  instance_count;
+            auto found_in_drawing = m_drawing_sub_ins_meshes.find(code);
+            if (found_in_drawing != m_drawing_sub_ins_meshes.end())
+            {
+                instance_count = found_in_drawing->second;
+                found_in_drawing->second++;
+            }
+            else
+            {
+                instance_count = 0;
+                m_drawing_sub_ins_meshes.emplace(code, 1);
+            }
+
+            if (instance_count == found->second.max_count)
+            {
+                //grow instance count
+                found->second.max_count = (found->second.max_count + 1) * 2;
+                found->second.instances.resize(found->second.max_count);
+                found->second.instance_buffer->Init(m_renderer, found->second.instances);
+            }
+
+            found->second.instances[instance_count].model    = transform;
+            found->second.instances[instance_count].ambient  = color;
+            found->second.instances[instance_count].diffuse  = color;
+            found->second.instances[instance_count].specular = color;
+            found->second.instances[instance_count].reflect  = color;
+        }
+        else
+        {
+            m_drawing_sub_ins_meshes.emplace(code, 1);
+            InstancingSubMesh sub_mesh;
+            sub_mesh.index_buffer    = new IndexBufferCommon();
+            sub_mesh.vertex_buffer   = new VertexBufferCommon();
+            sub_mesh.instance_buffer = new InstanceBufferCommon();
+
+            m_sub_ins_mesh_table.emplace(code, sub_mesh);
+            found = m_sub_ins_mesh_table.find(code);
+
+            found->second.max_count = 2;
+            found->second.instances.resize(found->second.max_count);
+            found->second.instance_buffer->Init(m_renderer, found->second.instances);
+
+            found->second.instances[0].model    = transform;
+            found->second.instances[0].ambient  = color;
+            found->second.instances[0].diffuse  = color;
+            found->second.instances[0].specular = color;
+            found->second.instances[0].reflect  = color;
+
+            size_t vertex_count, new_vertex_count;
+            size_t index_count,  new_index_count;
+
+            std::vector<ColorVertexCommon> vertices;
+            std::vector<U32>               indices;
+
+            if (mode == eRenderingMode::Face)
+            {
+                vertex_count = m_face_vertices.size();
+                index_count  = m_face_indices.size();
+                DrawPrimitive(primitive, mode);
+                new_vertex_count = m_face_vertices.size();
+                new_index_count  = m_face_indices.size();
+                vertices.assign(m_face_vertices.begin() + vertex_count, m_face_vertices.begin() + new_vertex_count);
+                indices.assign(m_face_indices.begin() + index_count, m_face_indices.begin() + new_index_count);
+                m_face_vertices.erase(m_face_vertices.begin() + vertex_count, m_face_vertices.begin() + new_vertex_count);
+                m_face_indices.erase(m_face_indices.begin() + index_count, m_face_indices.begin() + new_index_count);
+
+                found->second.index_buffer->Init(m_renderer, indices);
+                found->second.vertex_buffer->Init(m_renderer, vertices);
+                found->second.vertex_buffer->SetPrimitiveTopology(eTopologyType::TriangleList);
+            }
+            else if (mode == eRenderingMode::Line)
+            {
+                vertex_count = m_line_vertices.size();
+                index_count  = m_line_indices.size();
+                DrawPrimitive(primitive, mode);
+                new_vertex_count = m_line_vertices.size();
+                new_index_count  = m_line_indices.size();
+                vertices.assign(m_line_vertices.begin() + vertex_count, m_line_vertices.begin() + new_vertex_count);
+                indices.assign(m_line_indices.begin() + index_count, m_line_indices.begin() + new_index_count);
+                m_line_vertices.erase(m_line_vertices.begin() + vertex_count, m_line_vertices.begin() + new_vertex_count);
+                m_line_indices.erase(m_line_indices.begin() + index_count, m_line_indices.begin() + new_index_count);
+
+                found->second.index_buffer->Init(m_renderer, indices);
+                found->second.vertex_buffer->Init(m_renderer, vertices);
+                found->second.vertex_buffer->SetPrimitiveTopology(eTopologyType::LineList);
+            }
+            else
+            {
+                vertex_count = m_dot_vertices.size();
+                index_count  = m_dot_indices.size();
+                DrawPrimitive(primitive, mode);
+                new_vertex_count = m_dot_vertices.size();
+                new_index_count  = m_dot_indices.size();
+                vertices.assign(m_dot_vertices.begin() + vertex_count, m_dot_vertices.begin() + new_vertex_count);
+                indices.assign(m_dot_indices.begin() + index_count, m_dot_indices.begin() + new_index_count);
+                m_dot_vertices.erase(m_dot_vertices.begin() + vertex_count, m_dot_vertices.begin() + new_vertex_count);
+                m_dot_indices.erase(m_dot_indices.begin() + index_count, m_dot_indices.begin() + new_index_count);
+
+                found->second.index_buffer->Init(m_renderer, indices);
+                found->second.vertex_buffer->Init(m_renderer, vertices);
+                found->second.vertex_buffer->SetPrimitiveTopology(eTopologyType::PointList);
+            }
+        }
+    }
+
+    void PrimitiveRenderer::DrawPrimitiveInstancing(const Primitive& primitive, const VQSTransform& transform, eRenderingMode mode, Color color)
+    {
+        DrawPrimitiveInstancing(primitive, transform.ToMatrix(), mode, color);
+    }
+
+    void PrimitiveRenderer::DrawPrimitiveInstancing(const Primitive& primitive, const Transform& transform, eRenderingMode mode, Color color)
+    {
+        DrawPrimitiveInstancing(primitive, transform.LocalToWorldMatrix().Transpose(), mode, color);
+    }
+
+    void PrimitiveRenderer::DrawPrimitiveInstancing(const Primitive& primitive, const Quaternion& orientation, const Vector3& position, eRenderingMode mode, Color color)
+    {
+        Matrix44 transform_matrix = Math::Matrix44::Rotation(orientation);
+        transform_matrix.AddVectorColumn(3, position);
+        DrawPrimitiveInstancing(primitive, transform_matrix, mode, color);
     }
 }

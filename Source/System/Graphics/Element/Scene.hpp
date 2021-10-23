@@ -114,6 +114,7 @@ namespace CS460
         PrimitiveRenderer*   m_primitive_renderer = nullptr;
         TextRenderer*        m_text_renderer      = nullptr;
         MaterialManager*     m_material_manager   = nullptr;
+        ShaderProgramCommon* m_color_ins_shader   = nullptr;
 
         std::vector<Camera*>          m_cameras;
         std::vector<TextSprite*>      m_text_sprites;

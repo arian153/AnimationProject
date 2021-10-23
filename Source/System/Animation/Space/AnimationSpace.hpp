@@ -1,6 +1,7 @@
 #pragma once
 #include "SpacePath.hpp"
 #include "../../Math/Primitive/ConvexHull3D/Box.hpp"
+#include "../../Math/Primitive/ConvexHull3D/Sphere.hpp"
 #include "../../Math/Primitive/Others/Plane.hpp"
 #include "../../Math/Structure/Transform.hpp"
 #include "../../Math/Structure/VQSTransform.hpp"
@@ -28,6 +29,7 @@ namespace CS460
         VQSTransform m_box_transform;
 
         SpacePath m_test_path;
+        Sphere m_drawing_sphere;
 
         std::vector<Vector3> control_points;
     };

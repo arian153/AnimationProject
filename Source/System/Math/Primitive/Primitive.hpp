@@ -45,6 +45,8 @@ namespace CS460
 
         void AddPosition(const Vector3& delta_pos);
 
+        virtual Matrix44 LocalToWorldMatrix() const final;
+
     public:
         virtual void Initialize() = 0;
         virtual void Shutdown() = 0;
@@ -61,7 +63,6 @@ namespace CS460
 
         //Draw
         virtual void DrawPrimitive(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const = 0;
-
 
     public:
         Vector3    position;

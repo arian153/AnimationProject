@@ -1,4 +1,7 @@
 #include "Primitive.hpp"
+
+#include "../Algebra/Matrix44.hpp"
+#include "../Utility/MatrixUtility.hpp"
 #include "../Utility/Utility.inl"
 
 namespace CS460
@@ -111,5 +114,12 @@ namespace CS460
     void Primitive::AddPosition(const Vector3& delta_pos)
     {
         position += delta_pos;
+    }
+
+    Matrix44 Primitive::LocalToWorldMatrix() const
+    {
+        Matrix44 result = Math::Matrix44::Rotation(orientation);
+        result.AddVectorColumn(3, position);
+        return result;
     }
 }

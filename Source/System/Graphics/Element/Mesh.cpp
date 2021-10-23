@@ -159,7 +159,7 @@ namespace CS460
             ResizeInstanceBuffer(m_max_count);
         }
 
-        m_instances[m_instance_count].model    = transform->LocalToWorldMatrix();
+        m_instances[m_instance_count].model    = transform->LocalToWorldMatrix().Transpose();
         m_instances[m_instance_count].ambient  = Color();
         m_instances[m_instance_count].diffuse  = Color();
         m_instances[m_instance_count].specular = Color();

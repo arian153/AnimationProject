@@ -43,6 +43,7 @@ namespace CS460
         IndexBufferCommon*              index_buffer    = nullptr;
         InstanceBufferCommon*           instance_buffer = nullptr;
         std::vector<InstanceBufferData> instances;
+        U32                             max_count = 0;
     };
 
     class PrimitiveRenderer
@@ -68,6 +69,7 @@ namespace CS460
 
         void Initialize(ShaderProgramCommon* color_shader);
         void Render(ConstantBufferCommon* matrix_buffer) const;
+        void RenderInstancing(ShaderProgramCommon* color_shader, ConstantBufferCommon* matrix_buffer) const;
         void Shutdown();
         void Clear();
 
@@ -85,12 +87,15 @@ namespace CS460
         size_t IndicesSize(eRenderingMode mode) const;
 
         void DrawSubMeshCurveLine(const Curve& curve, bool b_replace = false, Color color = Color());
-
+        void DrawPrimitiveInstancing(const Primitive& primitive, const Matrix44& transform, eRenderingMode mode, Color color = Color());
+        void DrawPrimitiveInstancing(const Primitive& primitive, const VQSTransform& transform, eRenderingMode mode, Color color = Color());
+        void DrawPrimitiveInstancing(const Primitive& primitive, const Transform& transform, eRenderingMode mode, Color color = Color());
+        void DrawPrimitiveInstancing(const Primitive& primitive, const Quaternion& orientation, const Vector3& position, eRenderingMode mode, Color color = Color());
     private:
         MatrixData           m_mvp_data;
         RendererCommon*      m_renderer = nullptr;
         Frustum              m_frustum;
-        ShaderProgramCommon* m_shader = nullptr;
+        ShaderProgramCommon* m_color_shader = nullptr;
 
         U32 m_stride = 0;
 
@@ -125,4 +130,6 @@ namespace CS460
         const int CYLINDRICAL_STACK_COUNT    = 1;
         const int CYLINDRICAL_VERTICES_COUNT = 42; //(stack_count + 1) * (slice_count + 1)
     };
+
+    
 }

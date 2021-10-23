@@ -17,6 +17,9 @@ namespace CS460
     {
         m_box_transform.position = Vector3(0.0f, -1.55f);
         m_platform_box.SetBox(100.0f, 1.0f, 100.0f);
+        m_drawing_sphere.position.SetZero();
+        m_drawing_sphere.orientation.SetIdentity();
+        m_drawing_sphere.radius = 0.1f;
     }
 
     void AnimationSpace::Update([[maybe_unused]] Real dt)
@@ -36,7 +39,7 @@ namespace CS460
         m_test_path.Draw(renderer);
         for (auto& points : control_points)
         {
-            renderer->DrawPrimitive(Sphere(points, Quaternion(), 0.1f), eRenderingMode::Face, Color(1, 0, 0));
+            renderer->DrawPrimitiveInstancing(m_drawing_sphere, m_drawing_sphere.orientation, points, eRenderingMode::Face, Color(1, 0, 0));
         }
     }
 
