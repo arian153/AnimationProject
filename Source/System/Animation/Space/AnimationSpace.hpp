@@ -29,7 +29,10 @@ namespace CS460
         VQSTransform m_box_transform;
 
         SpacePath m_test_path;
-        Sphere m_drawing_sphere;
+        Sphere    m_drawing_sphere;
+        Sphere    m_moving_sphere; //temp
+        Real      m_test_s = 0.0f;
+        Real      m_test_speed = 10.0f;
 
         std::vector<Vector3> control_points;
     };

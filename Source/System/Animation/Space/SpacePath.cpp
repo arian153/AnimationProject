@@ -25,17 +25,13 @@ namespace CS460
     {
     }
 
-    void SpacePath::UpdateCurve()
+    void SpacePath::UpdateStatus()
     {
         if (!b_update)
         {
             b_was_update = false;
             return;
         }
-
-        SetUpSegments();
-        GenerateRenderingCurve();
-        AdaptiveApproach();
 
         b_update     = false;
         b_was_update = true;
@@ -45,6 +41,7 @@ namespace CS460
     {
         if (!interpolated_curve.points.empty())
         {
+            //replace curve line
             renderer->DrawSubMeshCurveLine(interpolated_curve, b_was_update, Color(1, 0, 0));
         }
     }
@@ -52,6 +49,9 @@ namespace CS460
     void SpacePath::AddControlPoint(const Vector3& control_point)
     {
         control_points.push_back(control_point);
+        SetUpSegments();
+        GenerateRenderingCurve();
+        AdaptiveApproach();
         b_update = true;
     }
 
@@ -168,9 +168,10 @@ namespace CS460
                 Real s_min = arc_length_table[m - 1].arc_length;
                 Real s_max = arc_length_table[m].arc_length;
                 Real u_min = arc_length_table[m - 1].arc_param;
+                Real u_max = arc_length_table[m].arc_param;
 
                 //Get delta u from rendering curve
-                Real d_u = static_cast<Real>(1.0 / (double)sample_count);
+                Real d_u = u_max - u_min;
                 return u_min + d_u * ((s - s_min) / (s_max - s_min));
             }
         }
@@ -181,9 +182,10 @@ namespace CS460
                 Real s_min = arc_length_table[m].arc_length;
                 Real s_max = arc_length_table[m + 1].arc_length;
                 Real u_min = arc_length_table[m].arc_param;
+                Real u_max = arc_length_table[m + 1].arc_param;
 
                 //Get delta u from rendering curve
-                Real d_u = static_cast<Real>(1.0 / (double)sample_count);
+                Real d_u = u_max - u_min;
                 return u_min + d_u * ((s - s_min) / (s_max - s_min));
             }
         }
@@ -288,6 +290,9 @@ namespace CS460
 
     void SpacePath::AdaptiveApproach()
     {
+        if (segments.empty())
+            return;
+
         //reset table
         arc_length_table.clear();
         arc_length_table.push_back(ArcData(0.0f, 0.0f));
@@ -329,10 +334,10 @@ namespace CS460
         }
 
         //normalize s
-        Real length = arc_length_table.back().arc_length;
+        max_length = arc_length_table.back().arc_length;
         for (auto& arc_data : arc_length_table)
         {
-            arc_data.arc_length = arc_data.arc_length / length;
+            arc_data.arc_length = arc_data.arc_length / max_length;
         }
     }
 }

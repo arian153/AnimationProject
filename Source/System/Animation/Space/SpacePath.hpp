@@ -33,7 +33,7 @@ namespace CS460
         SpacePath();
         ~SpacePath();
 
-        void UpdateCurve();
+        void UpdateStatus();
 
         void Draw(PrimitiveRenderer* renderer) const;
         void AddControlPoint(const Vector3& control_point);
@@ -60,6 +60,7 @@ namespace CS460
 
         Real length_threshold   = 0.005f;
         Real interval_threshold = 0.25f;
+        Real max_length         = 0.0f;
 
         std::vector<Vector3>          control_points;
         std::vector<CubicBezierCurve> segments;
