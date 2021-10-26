@@ -39,7 +39,7 @@ namespace CS460
 
     void SpacePath::Draw(PrimitiveRenderer* renderer) const
     {
-        if (!interpolated_curve.points.empty())
+        if (!interpolated_curve.points.empty() && b_draw)
         {
             //replace curve line
             renderer->DrawSubMeshCurveLine(interpolated_curve, b_was_update, Color(1, 0, 0));

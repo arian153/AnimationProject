@@ -91,6 +91,7 @@ namespace CS460
         void DrawPrimitiveInstancing(const Primitive& primitive, const VQSTransform& transform, eRenderingMode mode, Color color = Color());
         void DrawPrimitiveInstancing(const Primitive& primitive, const Transform& transform, eRenderingMode mode, Color color = Color());
         void DrawPrimitiveInstancing(const Primitive& primitive, const Quaternion& orientation, const Vector3& position, eRenderingMode mode, Color color = Color());
+
     private:
         MatrixData           m_mvp_data;
         RendererCommon*      m_renderer = nullptr;
@@ -130,6 +131,4 @@ namespace CS460
         const int CYLINDRICAL_STACK_COUNT    = 1;
         const int CYLINDRICAL_VERTICES_COUNT = 42; //(stack_count + 1) * (slice_count + 1)
     };
-
-    
 }

@@ -159,6 +159,12 @@ namespace CS460
         }
     }
 
+    void Skeleton::AddPath(size_t idx_of_path)
+    {
+        m_paths.push_back(idx_of_path);
+        m_current_path = idx_of_path;
+    }
+
     Bone* Skeleton::CreateBone(const VQSTransform& to_bone, const VQSTransform& to_root, const std::string& name, Bone* parent)
     {
         //create bone data

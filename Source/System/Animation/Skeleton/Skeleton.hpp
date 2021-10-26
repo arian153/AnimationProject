@@ -25,6 +25,8 @@ namespace CS460
         void Shutdown();
         void Draw(PrimitiveRenderer* renderer) const;
         void UpdateKeyFrame(std::vector<KeyFrame>& key_frames);
+        void AddPath(size_t idx_of_path);
+        
 
     private:
         Bone* CreateBone(const VQSTransform& to_bone, const VQSTransform& to_root, const std::string& name, Bone* parent);
@@ -51,7 +53,8 @@ namespace CS460
         bool  m_b_draw  = true;
         bool  m_b_pause = false;
 
-        int m_render_mode = 0;
+        int m_render_mode  = 0;
+        int m_current_path = -1;
 
         std::vector<Bone*>          m_root_bones;
         std::vector<Bone*>          m_bones;
@@ -63,5 +66,6 @@ namespace CS460
         std::vector<Matrix44> m_final_mats;
         std::vector<Matrix44> m_to_root_mats;
         std::vector<Matrix44> m_bind_mats;
+        std::vector<size_t>   m_paths;
     };
 }

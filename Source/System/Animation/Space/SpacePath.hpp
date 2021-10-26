@@ -57,6 +57,7 @@ namespace CS460
         size_t sample_count = 1000;
         bool   b_update     = false;
         bool   b_was_update = false;
+        bool   b_draw       = true;
 
         Real length_threshold   = 0.005f;
         Real interval_threshold = 0.25f;

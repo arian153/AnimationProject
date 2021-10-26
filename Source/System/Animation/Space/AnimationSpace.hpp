@@ -35,5 +35,9 @@ namespace CS460
         Real      m_test_speed = 10.0f;
 
         std::vector<Vector3> control_points;
+
+
+        std::vector<SpacePath> m_space_paths;
+
     };
 }
