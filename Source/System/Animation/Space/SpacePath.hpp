@@ -43,6 +43,8 @@ namespace CS460
         Real    ArcLength(Real u) const;    //s = G(u)
         Real    InvArcLength(Real s) const; //u = InvG(s)
 
+        void LoadData(const std::vector<Vector3>& points);
+
     private:
         void SetUpSegments();
         void GenerateRenderingCurve(); //curve for rendering
@@ -58,11 +60,13 @@ namespace CS460
         bool   b_update     = false;
         bool   b_was_update = false;
         bool   b_draw       = true;
+        bool   b_editable   = true;
 
         Real length_threshold   = 0.005f;
         Real interval_threshold = 0.25f;
         Real max_length         = 0.0f;
 
+        std::string                   name;
         std::vector<Vector3>          control_points;
         std::vector<CubicBezierCurve> segments;
         std::vector<ArcData>          arc_length_table;

@@ -21,23 +21,32 @@ namespace CS460
         void Draw(PrimitiveRenderer* renderer) const;
 
         bool PickBox(const Ray& picking_ray, Real& min_t, Real& max_t);
+        void AddControlPoint(const Vector3& point);
 
+        int CreateNewPath(const std::string& name);
         //E5_TODO - add broad phase for performance later.
+
+        void SetIDX(int idx);
+        void SetSkeleton(Skeleton* skeleton);
+        void AddPath(int idx);
+
+        Vector3     GetPathPoint(Real s);
+        std::string GetPathName(int idx);
+        int         GetPathIDX(const std::string& name);
+        void        SetEditable(bool b_edit);
+
+    public:
+        std::vector<std::string> path_names;
+
     private:
         //this can be changed terrain structure.
         Box          m_platform_box;
         VQSTransform m_box_transform;
-
-        SpacePath m_test_path;
-        Sphere    m_drawing_sphere;
-        Sphere    m_moving_sphere; //temp
-        Real      m_test_s = 0.0f;
-        Real      m_test_speed = 10.0f;
-
-        std::vector<Vector3> control_points;
-
+        Sphere       m_drawing_sphere;
+        int          m_path_idx     = 0;
+        Skeleton*    m_skeleton     = nullptr;
+        Real         m_elapsed_time = 0.0f;
 
         std::vector<SpacePath> m_space_paths;
-
     };
 }

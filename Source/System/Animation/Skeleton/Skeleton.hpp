@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 
+#include "SpeedController.hpp"
 #include "../../Graphics/DataType/Color.hpp"
 #include "../../Math/Primitive/ConvexHull3D/Sphere.hpp"
 #include "../../Math/Utility/MathDef.hpp"
@@ -8,6 +9,7 @@
 
 namespace CS460
 {
+    class AnimationSpace;
     class Transform;
     class VQSTransform;
     class AniMeshResource;
@@ -25,8 +27,11 @@ namespace CS460
         void Shutdown();
         void Draw(PrimitiveRenderer* renderer) const;
         void UpdateKeyFrame(std::vector<KeyFrame>& key_frames);
-        void AddPath(size_t idx_of_path);
-        
+        void AddPath(int idx_of_path);
+        void SetSpace(AnimationSpace* space);
+        Real GetSParam() const;
+        void SetSParam(Real s);
+        void ResetStatus();
 
     private:
         Bone* CreateBone(const VQSTransform& to_bone, const VQSTransform& to_root, const std::string& name, Bone* parent);
@@ -45,6 +50,9 @@ namespace CS460
     private:
         AniMeshComponent* m_component = nullptr;
         Transform*        m_transform = nullptr;
+        AnimationSpace*   m_ani_space = nullptr;
+
+        Quaternion m_default_orientation;
 
         Sphere m_skeleton_sphere;
 
@@ -53,8 +61,11 @@ namespace CS460
         bool  m_b_draw  = true;
         bool  m_b_pause = false;
 
-        int m_render_mode  = 0;
-        int m_current_path = -1;
+        int  m_render_mode   = 0;
+        int  m_current_path  = -1;
+        Real m_path_duration = 1.0f;
+        Real m_path_length   = 1.0f;
+        Real m_speed_factor  = 1.0f;
 
         std::vector<Bone*>          m_root_bones;
         std::vector<Bone*>          m_bones;
@@ -66,6 +77,9 @@ namespace CS460
         std::vector<Matrix44> m_final_mats;
         std::vector<Matrix44> m_to_root_mats;
         std::vector<Matrix44> m_bind_mats;
-        std::vector<size_t>   m_paths;
+
+        std::vector<int>         m_path_ids;
+        std::vector<std::string> m_path_names;
+        SpeedController          m_speed_control;
     };
 }

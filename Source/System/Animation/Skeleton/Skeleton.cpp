@@ -4,6 +4,7 @@
 #include "../../../Manager/Component/EngineComponent/AniMeshComponent.hpp"
 #include "../../../Manager/Resource/ResourceType/AniMeshResource.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
+#include "../Space/AnimationSpace.hpp"
 
 namespace CS460
 {
@@ -20,6 +21,7 @@ namespace CS460
         m_skeleton_sphere.position.SetZero();
         m_skeleton_sphere.orientation.SetIdentity();
         m_skeleton_sphere.radius = 0.05f;
+        m_speed_control.SetT1T2(0.001f, 0.999f);
     }
 
     void Skeleton::Update(Real dt)
@@ -29,6 +31,26 @@ namespace CS460
         {
             auto& clip = m_animation_clips[m_clip_id];
             clip->Update(dt);
+        }
+
+        m_speed_control.elapsed_t += dt;
+        Real normalize_t          = m_speed_control.elapsed_t / m_path_duration;
+        m_speed_control.elapsed_s = m_speed_control.DistanceTime(normalize_t);
+
+        if (m_speed_control.elapsed_t >= m_path_duration)
+        {
+            m_speed_control.elapsed_t = 0.0f;
+        }
+
+        if (m_current_path > -1)
+        {
+            Vector3 pos = m_ani_space->GetPathPoint(m_speed_control.elapsed_s);
+            //Get rotation using orientation control
+
+            if (m_transform != nullptr)
+            {
+                m_transform->position = pos;
+            }
         }
     }
 
@@ -159,10 +181,44 @@ namespace CS460
         }
     }
 
-    void Skeleton::AddPath(size_t idx_of_path)
+    void Skeleton::AddPath(int idx_of_path)
     {
-        m_paths.push_back(idx_of_path);
-        m_current_path = idx_of_path;
+        //idx in animation space.
+        auto found = std::find(m_path_ids.begin(), m_path_ids.end(), idx_of_path);
+        if (found == m_path_ids.end())
+        {
+            m_path_ids.push_back(idx_of_path);
+            m_current_path = idx_of_path;
+            m_path_names.push_back(m_ani_space->GetPathName(idx_of_path));
+        }
+        else
+        {
+            m_current_path = idx_of_path;
+        }
+    }
+
+    void Skeleton::SetSpace(AnimationSpace* space)
+    {
+        m_ani_space = space;
+    }
+
+    Real Skeleton::GetSParam() const
+    {
+        return m_speed_control.elapsed_s;
+    }
+
+    void Skeleton::SetSParam(Real s)
+    {
+        m_speed_control.elapsed_s = s;
+        m_speed_control.elapsed_t = m_path_duration * m_speed_control.InvDT(s);
+    }
+
+    void Skeleton::ResetStatus()
+    {
+        m_speed_control.elapsed_s = 0.0f;
+        m_speed_control.elapsed_t = 0.0f;
+
+        m_transform->orientation = m_default_orientation;
     }
 
     Bone* Skeleton::CreateBone(const VQSTransform& to_bone, const VQSTransform& to_root, const std::string& name, Bone* parent)

@@ -4,6 +4,7 @@
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../../System/Animation/AnimationSubsystem.hpp"
 #include "../../../System/Animation/Skeleton/Skeleton.hpp"
+#include "../../../System/Animation/Space/AnimationSpace.hpp"
 #include "../../../System/Core/Utility/CoreUtility.hpp"
 #include "../../../System/Graphics/Element/SkinnedMesh.hpp"
 #include "../../../System/Graphics/Element/Scene.hpp"
@@ -105,6 +106,54 @@ namespace CS460
                 {
                     m_mesh_resource->CopyData(m_ani_mesh);
                     m_mesh_resource->CopyData(m_skeleton);
+                    m_skeleton->m_default_orientation = m_skeleton->m_transform->orientation;
+                }
+            }
+        }
+
+        if (JsonResource::HasMember(data, "Space Path"))
+        {
+            if (data["Space Path"].isArray())
+            {
+                Json::ArrayIndex size = data["Space Path"].size();
+
+                for (Json::ArrayIndex i = 0; i < size; ++i)
+                {
+                    auto path_data = data["Space Path"][i];
+
+                    if (JsonResource::HasMember(path_data, "Name"))
+                    {
+                        std::string path_name = path_data["Name"].asString();
+                        int         path_idx  = m_skeleton->m_ani_space->GetPathIDX(path_name);
+                        if (path_idx == -1)
+                        {
+                            //not found add
+                            path_idx = m_skeleton->m_ani_space->CreateNewPath(path_name);
+                            m_skeleton->AddPath(path_idx);
+                            m_skeleton->m_ani_space->SetSkeleton(m_skeleton);
+
+                            if (JsonResource::HasMember(path_data, "Data"))
+                            {
+                                if (path_data["Data"].isArray())
+                                {
+                                    Json::ArrayIndex control_points_count = path_data["Data"].size();
+
+                                    for (Json::ArrayIndex j = 0; j < control_points_count; ++j)
+                                    {
+                                        if (JsonResource::IsVector3(path_data["Data"][j]))
+                                        {
+                                            m_skeleton->m_ani_space->AddControlPoint(JsonResource::AsVector3(path_data["Data"][j]));
+                                        }
+                                    }
+                                }
+                            }
+                            m_skeleton->m_ani_space->SetEditable(false);
+                        }
+                        else
+                        {
+                            m_skeleton->AddPath(path_idx);
+                        }
+                    }
                 }
             }
         }
@@ -231,8 +280,6 @@ namespace CS460
                         }
                         m_ani_mesh->SetMaterialIdentifier((int)i, m_sub_materials[i].material_info);
 
-                       
-
                         if (JsonResource::HasMember(data["Material"][i], "Color"))
                         {
                             auto color_data = data["Material"][i]["Color"];
@@ -263,74 +310,71 @@ namespace CS460
                         if (m_sub_materials[i].material_info.diffuse0 != "")
                         {
                             m_ani_mesh->SetSubMeshTexture(
-                                m_space->GetResourceManager()->GetTextureResource(
-                                    ToWString(m_sub_materials[i].material_info.diffuse0))->GetTexture(), i, 0);
+                                                          m_space->GetResourceManager()->GetTextureResource(
+                                                                                                            ToWString(m_sub_materials[i].material_info.diffuse0))->GetTexture(), i, 0);
                         }
                         else
                         {
                             m_ani_mesh->SetSubMeshTexture(
-                                m_space->GetResourceManager()->GetTextureResource(
-                                    L"DefaultTexture")->GetTexture(), i, 0);
+                                                          m_space->GetResourceManager()->GetTextureResource(
+                                                                                                            L"DefaultTexture")->GetTexture(), i, 0);
                         }
                         //diffuse texture1
                         if (m_sub_materials[i].material_info.diffuse1 != "")
                         {
                             m_ani_mesh->SetSubMeshTexture(
-                                m_space->GetResourceManager()->GetTextureResource(
-                                    ToWString(m_sub_materials[i].material_info.diffuse1))->GetTexture(), i, 1);
+                                                          m_space->GetResourceManager()->GetTextureResource(
+                                                                                                            ToWString(m_sub_materials[i].material_info.diffuse1))->GetTexture(), i, 1);
                         }
                         else
                         {
                             m_ani_mesh->SetSubMeshTexture(
-                                m_space->GetResourceManager()->GetTextureResource(
-                                    L"DefaultTexture")->GetTexture(), i, 1);
+                                                          m_space->GetResourceManager()->GetTextureResource(
+                                                                                                            L"DefaultTexture")->GetTexture(), i, 1);
                         }
                         //diffuse texture2
                         if (m_sub_materials[i].material_info.diffuse2 != "")
                         {
                             m_ani_mesh->SetSubMeshTexture(
-                                m_space->GetResourceManager()->GetTextureResource(
-                                    ToWString(m_sub_materials[i].material_info.diffuse2))->GetTexture(), i, 2);
+                                                          m_space->GetResourceManager()->GetTextureResource(
+                                                                                                            ToWString(m_sub_materials[i].material_info.diffuse2))->GetTexture(), i, 2);
                         }
                         else
                         {
                             m_ani_mesh->SetSubMeshTexture(
-                                m_space->GetResourceManager()->GetTextureResource(
-                                    L"DefaultTexture")->GetTexture(), i, 2);
-                                                   }
+                                                          m_space->GetResourceManager()->GetTextureResource(
+                                                                                                            L"DefaultTexture")->GetTexture(), i, 2);
+                        }
                         //specular texture
                         if (m_sub_materials[i].material_info.specular0 != "")
                         {
                             m_ani_mesh->SetSubMeshTexture(
-                                m_space->GetResourceManager()->GetTextureResource(
-                                    ToWString(m_sub_materials[i].material_info.specular0))->GetTexture(), i, 3);
+                                                          m_space->GetResourceManager()->GetTextureResource(
+                                                                                                            ToWString(m_sub_materials[i].material_info.specular0))->GetTexture(), i, 3);
                         }
                         else
                         {
                             m_ani_mesh->SetSubMeshTexture(
-                                m_space->GetResourceManager()->GetTextureResource(
-                                    L"DefaultTexture")->GetTexture(), i, 3);
+                                                          m_space->GetResourceManager()->GetTextureResource(
+                                                                                                            L"DefaultTexture")->GetTexture(), i, 3);
                         }
                         //normal texture
                         if (m_sub_materials[i].material_info.normal0 != "")
                         {
                             m_ani_mesh->SetSubMeshTexture(
-                                m_space->GetResourceManager()->GetTextureResource(
-                                    ToWString(m_sub_materials[i].material_info.normal0))->GetTexture(), i, 4);
-
+                                                          m_space->GetResourceManager()->GetTextureResource(
+                                                                                                            ToWString(m_sub_materials[i].material_info.normal0))->GetTexture(), i, 4);
                         }
                         else
                         {
                             m_ani_mesh->SetSubMeshTexture(
-                                m_space->GetResourceManager()->GetTextureResource(
-                                    L"DefaultTexture")->GetTexture(), i, 4);
+                                                          m_space->GetResourceManager()->GetTextureResource(
+                                                                                                            L"DefaultTexture")->GetTexture(), i, 4);
                         }
                     }
                 }
             }
         }
-
-       
 
         return true;
     }
@@ -349,15 +393,6 @@ namespace CS460
             ImGui::Checkbox("##Draw Bone", &m_skeleton->m_b_draw);
             ImGui::Text("Bone Color");
             ImGui::ColorEdit4("##Bone Color", &m_skeleton->m_color.r);
-
-            ImGui::Text("Bone Mode");
-
-            const char* bone_mode[] = { "VQS", "MAT", "BIND" };
-
-            if (ImGui::Combo("##Bone Type", &m_skeleton->m_render_mode, bone_mode, 3))
-            {
-            }
-
 
             ImGui::Text("Animation : ");
             const char* pause_label = m_skeleton->m_b_pause ? "Play" : "Pause";
@@ -389,6 +424,65 @@ namespace CS460
             {
                 m_skeleton->m_animation_clips[clip_id]->UpdateTracks();
             }
+
+            
+
+            ImGui::Text("Select Current Path");
+            int path_count = (int)m_skeleton->m_path_ids.size();
+            int path_id    = m_skeleton->m_current_path;
+            if (ImGui::Combo("##Animation Paths", &m_skeleton->m_current_path, VectorStringGetter, (void*)&m_skeleton->m_path_names, path_count))
+            {
+                path_id = m_skeleton->m_current_path;
+                m_skeleton->m_ani_space->SetIDX(path_id);
+                m_skeleton->m_ani_space->SetSkeleton(m_skeleton);
+                m_skeleton->ResetStatus();
+            }
+
+            if (ImGui::Button("Create New Path"))
+            {
+                int id = m_skeleton->m_ani_space->CreateNewPath("");
+                m_skeleton->AddPath(id);
+                m_skeleton->m_ani_space->SetSkeleton(m_skeleton);
+            }
+
+
+            ImGui::Text("Add Other Path");
+            int other_path_count = (int)m_skeleton->m_ani_space->path_names.size();
+            int new_path_id = 0;
+            if (ImGui::Combo("##Animation Other Paths", &new_path_id, VectorStringGetter, (void*)&m_skeleton->m_ani_space->path_names, other_path_count))
+            {
+                m_skeleton->AddPath(new_path_id);
+                m_skeleton->m_ani_space->SetIDX(new_path_id);
+                m_skeleton->m_ani_space->SetSkeleton(m_skeleton);
+                m_skeleton->ResetStatus();
+            }
+
+           
+
+            ImGui::Text("Path Duration %f/%f", m_skeleton->m_speed_control.elapsed_t, m_skeleton->m_path_duration);
+            if (ImGui::SliderFloat("Path Duration", &m_skeleton->m_path_duration, 0.1f, 30.0f))
+            {
+                m_skeleton->ResetStatus();
+            }
+
+            Real v0 = m_skeleton->m_speed_control.V0();
+            Real t1 = m_skeleton->m_speed_control.T1();
+            Real t2 = m_skeleton->m_speed_control.T2();
+
+            ImGui::Text("T1 : %f", t1);
+            if (ImGui::SliderFloat("##Speed Control T1", &t1, 0.001f, t2))
+            {
+                m_skeleton->m_speed_control.SetT1T2(t1, t2);
+                m_skeleton->ResetStatus();
+            }
+            ImGui::Text("T2 : %f", t2);
+            if (ImGui::SliderFloat("##Speed Control T2", &t2, t1, 0.999f))
+            {
+                m_skeleton->m_speed_control.SetT1T2(t1, t2);
+                m_skeleton->ResetStatus();
+            }
+
+            ImGui::Text("V0 : %f", v0);
         }
     }
 

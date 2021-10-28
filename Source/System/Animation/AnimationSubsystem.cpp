@@ -67,6 +67,7 @@ namespace CS460
         auto found = std::find(m_skeletons.begin(), m_skeletons.end(), skeleton);
         if (found == m_skeletons.end())
         {
+            skeleton->SetSpace(m_animation_space);
             m_skeletons.push_back(skeleton);
         }
     }

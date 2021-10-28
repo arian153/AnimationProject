@@ -192,6 +192,15 @@ namespace CS460
         return -1.0f;
     }
 
+    void SpacePath::LoadData(const std::vector<Vector3>& points)
+    {
+        control_points = points;
+        SetUpSegments();
+        GenerateRenderingCurve();
+        AdaptiveApproach();
+        b_update = true;
+    }
+
     void SpacePath::SetUpSegments()
     {
         if (control_points.empty())
