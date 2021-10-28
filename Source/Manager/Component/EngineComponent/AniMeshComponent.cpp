@@ -154,6 +154,11 @@ namespace CS460
                             m_skeleton->AddPath(path_idx);
                         }
                     }
+
+                    if (JsonResource::HasMember(path_data, "Duration") && path_data["Duration"].isNumeric())
+                    {
+                        m_skeleton->m_path_duration = path_data["Duration"].asFloat();
+                    }
                 }
             }
         }
@@ -425,8 +430,6 @@ namespace CS460
                 m_skeleton->m_animation_clips[clip_id]->UpdateTracks();
             }
 
-            
-
             ImGui::Text("Select Current Path");
             int path_count = (int)m_skeleton->m_path_ids.size();
             int path_id    = m_skeleton->m_current_path;
@@ -445,10 +448,9 @@ namespace CS460
                 m_skeleton->m_ani_space->SetSkeleton(m_skeleton);
             }
 
-
             ImGui::Text("Add Other Path");
             int other_path_count = (int)m_skeleton->m_ani_space->path_names.size();
-            int new_path_id = 0;
+            int new_path_id      = 0;
             if (ImGui::Combo("##Animation Other Paths", &new_path_id, VectorStringGetter, (void*)&m_skeleton->m_ani_space->path_names, other_path_count))
             {
                 m_skeleton->AddPath(new_path_id);
@@ -456,8 +458,6 @@ namespace CS460
                 m_skeleton->m_ani_space->SetSkeleton(m_skeleton);
                 m_skeleton->ResetStatus();
             }
-
-           
 
             ImGui::Text("Path Duration %f/%f", m_skeleton->m_speed_control.elapsed_t, m_skeleton->m_path_duration);
             if (ImGui::SliderFloat("Path Duration", &m_skeleton->m_path_duration, 0.1f, 30.0f))

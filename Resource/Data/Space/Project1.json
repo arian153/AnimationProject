@@ -19,16 +19,16 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [ 1, 0, 0, 0 ],
-            "Position": [ 0, 0, -60 ],
-            "Scale": [ 1, 1, 1 ]
+            "Orientation": [1, 0, 0, 0],
+            "Position": [0, 0, -60],
+            "Scale": [1, 1, 1]
           }
         },
         {
           "Type": "class CS460::CameraComponent",
           "Value": {
-            "Orientation": [ 1, 0, 0, 0 ],
-            "Position": [ 0, 0, -60 ],
+            "Orientation": [1, 0, 0, 0],
+            "Position": [0, 0, -60],
             "Zoom": 1.0
           }
         },
@@ -43,9 +43,9 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [ 0.5, -0.5, -0.5, -0.5 ],
-            "Position": [ 0, 0, 0 ],
-            "Scale": [ 1, 1, 1 ]
+            "Orientation": [0.5, -0.5, -0.5, -0.5],
+            "Position": [0, 0, 0],
+            "Scale": [1, 1, 1]
           }
         },
         {
@@ -55,12 +55,13 @@
               "Path": "../../Resource/AniMesh/Salamander.bin"
             },
 
+
             "Material": [
               {
                 "Color": {
-                  "Ambient": [ 1, 1, 1, 1 ],
-                  "Diffuse": [ 1, 1, 1, 1 ],
-                  "Specular": [ 1, 1, 1, 64 ]
+                  "Ambient": [1, 1, 1, 1],
+                  "Diffuse": [1, 1, 1, 1],
+                  "Specular": [1, 1, 1, 64]
                 },
                 "Texture": {
                   "DiffuseType": "None",
@@ -74,13 +75,33 @@
             ],
 
 
-            "Shader Type": "SkinnedPhong"
+            "Shader Type": "SkinnedPhong",
+
+            "Space Path": [
+              {
+                "Name": "Spiral Pattern",
+                "Data": [
+                  [38.774, -1.049, 31.610],
+                  [-38.060, -1.050, 15.637],
+                  [-0.913, -1.050, -39.284],
+                  [33.446, -1.0500, 16.747],
+                  [-28.609, -1.050, 0.7037],
+                  [-9.049, -1.050, -26.682],
+                  [18.0251, -1.050, -2.7351],
+                  [-14.551, -1.050, -4.4572],
+                  [8.2166, -1.050, -14.00],
+                  [-36.661, -1.050, 38.0940]
+                ],
+                "Duration": 11.47
+              }
+            ]
+
           }
         }
       ],
       "Name": "AniMesh"
     }
-    ],
+  ],
   "Settings": {
     "ProjectionMatrix": "Perspective"
   },
