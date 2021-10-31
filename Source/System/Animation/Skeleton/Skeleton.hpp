@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 
+#include "OrientationController.hpp"
 #include "SpeedController.hpp"
 #include "../../Graphics/DataType/Color.hpp"
 #include "../../Math/Primitive/ConvexHull3D/Sphere.hpp"
@@ -81,5 +82,6 @@ namespace CS460
         std::vector<int>         m_path_ids;
         std::vector<std::string> m_path_names;
         SpeedController          m_speed_control;
+        OrientationController    m_orientation_control;
     };
 }

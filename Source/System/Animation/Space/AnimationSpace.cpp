@@ -22,7 +22,7 @@ namespace CS460
         m_platform_box.SetBox(100.0f, 1.0f, 100.0f);
         m_drawing_sphere.position.SetZero();
         m_drawing_sphere.orientation.SetIdentity();
-        m_drawing_sphere.radius = 0.1f;
+        m_drawing_sphere.radius = 0.25f;
     }
 
     void AnimationSpace::Update(Real dt)
@@ -170,5 +170,21 @@ namespace CS460
         {
             m_space_paths[m_path_idx].b_editable = b_edit;
         }
+    }
+
+    SpacePath* AnimationSpace::GetCurrentPath()
+    {
+        if (!m_space_paths.empty() && m_space_paths.size() > (size_t)m_path_idx)
+            return &m_space_paths[m_path_idx];
+
+        return nullptr;
+    }
+
+    SpacePath* AnimationSpace::GetPath(int idx)
+    {
+        if (!m_space_paths.empty() && m_space_paths.size() > (size_t)idx)
+            return &m_space_paths[idx];
+
+        return nullptr;
     }
 }

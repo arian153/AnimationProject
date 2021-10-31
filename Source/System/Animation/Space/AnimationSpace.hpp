@@ -35,6 +35,9 @@ namespace CS460
         int         GetPathIDX(const std::string& name);
         void        SetEditable(bool b_edit);
 
+        SpacePath* GetCurrentPath();
+        SpacePath* GetPath(int idx);
+
     public:
         std::vector<std::string> path_names;
 

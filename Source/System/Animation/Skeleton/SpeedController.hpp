@@ -12,6 +12,7 @@ namespace CS460
 
         Real DistanceTime(Real t) const;
         Real InvDT(Real s) const;
+        Real VT(Real t) const;
 
         void SetT1T2(Real _t1, Real _t2);
 
@@ -27,7 +28,6 @@ namespace CS460
         Real InvS1(Real s) const;
         Real InvS2(Real s) const;
         Real InvS3(Real s) const;
-
 
     private:
         Real t1 = 0.0f;

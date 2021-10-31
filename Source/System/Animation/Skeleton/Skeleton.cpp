@@ -26,15 +26,16 @@ namespace CS460
 
     void Skeleton::Update(Real dt)
     {
+        m_speed_control.elapsed_t += dt;
+        Real normalize_t = m_speed_control.elapsed_t / m_path_duration;
         //update by keyframe
         if (m_clip_id != -1 && !m_b_pause)
         {
-            auto& clip = m_animation_clips[m_clip_id];
+            auto& clip  = m_animation_clips[m_clip_id];
+            clip->speed = m_speed_control.VT(normalize_t);
             clip->Update(dt);
         }
 
-        m_speed_control.elapsed_t += dt;
-        Real normalize_t          = m_speed_control.elapsed_t / m_path_duration;
         m_speed_control.elapsed_s = m_speed_control.DistanceTime(normalize_t);
 
         if (m_speed_control.elapsed_t >= m_path_duration)
@@ -47,9 +48,14 @@ namespace CS460
             Vector3 pos = m_ani_space->GetPathPoint(m_speed_control.elapsed_s);
             //Get rotation using orientation control
 
+            m_orientation_control.SetPath(m_ani_space->GetCurrentPath());
+            Quaternion rotation = m_orientation_control.GetOrientation(m_speed_control.elapsed_s);
+
             if (m_transform != nullptr)
             {
-                m_transform->position = pos;
+                //set position of object
+                m_transform->position    = pos;
+                m_transform->orientation = rotation * m_default_orientation;
             }
         }
     }

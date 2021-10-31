@@ -159,6 +159,15 @@ namespace CS460
                     {
                         m_skeleton->m_path_duration = path_data["Duration"].asFloat();
                     }
+
+                    if (JsonResource::HasMember(path_data, "T1") && path_data["T1"].isNumeric() 
+                        && JsonResource::HasMember(path_data, "T2") && path_data["T2"].isNumeric())
+                    {
+                        Real t1 = path_data["T1"].asFloat();
+                        Real t2 = path_data["T2"].asFloat();
+
+                        m_skeleton->m_speed_control.SetT1T2(t1, t2);
+                    }
                 }
             }
         }
@@ -460,7 +469,7 @@ namespace CS460
             }
 
             ImGui::Text("Path Duration %f/%f", m_skeleton->m_speed_control.elapsed_t, m_skeleton->m_path_duration);
-            if (ImGui::SliderFloat("Path Duration", &m_skeleton->m_path_duration, 0.1f, 30.0f))
+            if (ImGui::SliderFloat("Path Duration", &m_skeleton->m_path_duration, 0.1f, 60.0f))
             {
                 m_skeleton->ResetStatus();
             }

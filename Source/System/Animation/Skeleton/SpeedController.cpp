@@ -42,6 +42,21 @@ namespace CS460
         return InvS3(clamped_s);
     }
 
+    Real SpeedController::VT(Real t) const
+    {
+        Real time = Math::Clamp(t, 0.0f, 1.0f);
+
+        if (time < t1)
+        {
+            return v0 * time / t1;
+        }
+        if (t1 < time && time < t2)
+        {
+            return v0;
+        }
+        return v0 * (1.0f - time) / (1.0f - t2);
+    }
+
     void SpeedController::SetT1T2(Real _t1, Real _t2)
     {
         if (0.0f < _t1 && _t1 < _t2 && _t2 < 1.0f)
