@@ -26,6 +26,7 @@ namespace CS460
 
     void Skeleton::Update(Real dt)
     {
+        //calculate elapsed t for update.
         m_speed_control.elapsed_t += dt;
         Real normalize_t = m_speed_control.elapsed_t / m_path_duration;
         //update by keyframe
@@ -36,32 +37,36 @@ namespace CS460
             clip->Update(dt);
         }
 
+        //get a elapsed s from distance-time function. it mapped [0:1]
         m_speed_control.elapsed_s = m_speed_control.DistanceTime(normalize_t);
-
         if (m_speed_control.elapsed_t >= m_path_duration)
         {
             m_speed_control.elapsed_t = 0.0f;
         }
 
+        //check is there a path
         if (m_current_path > -1)
         {
+            //Get position using space curve.
             Vector3 pos = m_ani_space->GetPathPoint(m_speed_control.elapsed_s);
             //Get rotation using orientation control
-
             m_orientation_control.SetPath(m_ani_space->GetCurrentPath());
             Quaternion rotation = m_orientation_control.GetOrientation(m_speed_control.elapsed_s);
 
             if (m_transform != nullptr)
             {
-                //set position of object
+                //set transform of object
                 m_transform->position    = pos;
                 m_transform->orientation = rotation * m_default_orientation;
+                //default orientation is a orientation from transform component.
+                //some meshes are oriented different way, so default value from user.
             }
         }
     }
 
     void Skeleton::Shutdown()
     {
+        //release data.
         if (m_component != nullptr)
         {
             m_component->m_skeleton = nullptr;
@@ -129,22 +134,6 @@ namespace CS460
                         //has a child draw line segment.
                         Vector3 child_pos = world.TransformPoint(m_final_mats[bone->m_children[j]->m_own_idx].GetPosition());
                         renderer->DrawSegment(parent_pos, child_pos, Color(1));
-                    }
-                }
-            }
-            else if (m_render_mode == 2)
-            {
-                //render matrix version of bind bone
-                for (size_t i = 0; i < size; ++i)
-                {
-                    Bone*   bone       = m_bones[i];
-                    size_t  child_size = bone->m_children.size();
-                    Vector3 parent_pos = world.TransformPoint(m_bind_mats[i].GetPosition());
-                    for (size_t j = 0; j < child_size; ++j)
-                    {
-                        //has a child draw line segment.
-                        Vector3 child_pos = world.TransformPoint(m_bind_mats[bone->m_children[j]->m_own_idx].GetPosition());
-                        renderer->DrawSegment(parent_pos, child_pos, Color(0, 0, 1));
                     }
                 }
             }

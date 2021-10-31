@@ -14,23 +14,26 @@ namespace CS460
 
     Real SpeedController::DistanceTime(Real t) const
     {
+        //distance-time function form ease-in/out. 
         Real time = Math::Clamp(t, 0.0f, 1.0f);
 
         if (time < t1)
         {
+            //s1 for ease in
             return S1(time);
         }
         if (t1 < time && time < t2)
         {
             return S2(time);
         }
+        //s3 for ease out
         return S3(time);
     }
 
     Real SpeedController::InvDT(Real s) const
     {
+        //inverse version of distance time function
         Real clamped_s = Math::Clamp(s, 0.0f, 1.0f);
-
         if (clamped_s < S1(t1))
         {
             return InvS1(clamped_s);
@@ -44,8 +47,8 @@ namespace CS460
 
     Real SpeedController::VT(Real t) const
     {
+        //velocity function
         Real time = Math::Clamp(t, 0.0f, 1.0f);
-
         if (time < t1)
         {
             return v0 * time / t1;

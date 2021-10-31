@@ -28,7 +28,6 @@ namespace CS460
 
         void SetIDX(int idx);
         void SetSkeleton(Skeleton* skeleton);
-        void AddPath(int idx);
 
         Vector3     GetPathPoint(Real s);
         std::string GetPathName(int idx);

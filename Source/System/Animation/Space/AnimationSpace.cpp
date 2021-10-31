@@ -18,6 +18,7 @@ namespace CS460
 
     void AnimationSpace::Initialize()
     {
+        //initialize platform and drawing data.
         m_box_transform.position = Vector3(0.0f, -1.55f);
         m_platform_box.SetBox(100.0f, 1.0f, 100.0f);
         m_drawing_sphere.position.SetZero();
@@ -27,6 +28,7 @@ namespace CS460
 
     void AnimationSpace::Update(Real dt)
     {
+        //update data.
         m_platform_box.position    = m_box_transform.position;
         m_platform_box.orientation = m_box_transform.rotation;
         m_elapsed_time += dt;
@@ -57,6 +59,7 @@ namespace CS460
 
     bool AnimationSpace::PickBox(const Ray& picking_ray, Real& min_t, Real& max_t)
     {
+        //picking object
         if (m_space_paths.empty())
         {
             return false;
@@ -126,11 +129,6 @@ namespace CS460
     void AnimationSpace::SetSkeleton(Skeleton* skeleton)
     {
         m_skeleton = skeleton;
-    }
-
-    void AnimationSpace::AddPath(int idx)
-    {
-        //m_skeleton->AddPath();
     }
 
     Vector3 AnimationSpace::GetPathPoint(Real s)

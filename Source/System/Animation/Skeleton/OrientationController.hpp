@@ -9,8 +9,7 @@ namespace CS460
     enum class eCOIMode : int
     {
         OrbitMode,
-        ForwardMode,
-        TetherMode
+        ForwardMode
     };
 
     class OrientationController
@@ -19,21 +18,16 @@ namespace CS460
         OrientationController();
         ~OrientationController();
 
-        void     SetMode(eCOIMode coi_mode);
-        eCOIMode GetMode() const;
-
         void SetCOI(const Vector3& coi);
         void SetDelta(Real du);
-
-        Quaternion GetOrientation(Real s);
-        Quaternion GetOrientation(Real s1, Real s2) const;
-
         void SetPath(SpacePath* path);
-        void SetTetherPath(SpacePath* path);
+        void SetMode(eCOIMode coi_mode);
+
+        eCOIMode   GetMode() const;
+        Quaternion GetOrientation(Real s);
 
     public:
-        SpacePath* m_space_path  = nullptr;
-        SpacePath* m_tether_path = nullptr;
+        SpacePath* m_space_path = nullptr;
         Vector3    m_coi;
         Vector3    m_saved_direction;
         int        m_mode = 1;

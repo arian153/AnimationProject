@@ -77,6 +77,7 @@ namespace CS460
             return segments.back().p3;
         }
 
+        //determine which segment is correct one.
         size_t segment_count = segments.size();
         for (size_t i = 0; i < segment_count; ++i)
         {
@@ -86,6 +87,7 @@ namespace CS460
             //check u is on correct segment
             if (u_min <= u && u <= u_max)
             {
+                //normalization for segment.
                 Real normalized_u = (u - u_min) / (u_max - u_min);
                 return segments[i].Interpolate(normalized_u);
             }
@@ -97,6 +99,7 @@ namespace CS460
 
     Real SpacePath::ArcLength(Real u) const
     {
+        //binary search with arc length table.
         if (arc_length_table.empty())
             return -1.0f;
 
@@ -131,6 +134,7 @@ namespace CS460
 
     Real SpacePath::InvArcLength(Real s) const
     {
+        //binary search with arc length table.
         if (arc_length_table.empty())
             return -1.0f;
 
@@ -245,6 +249,8 @@ namespace CS460
             a_i = p_c + 0.5f * (p_n - p_p);
             b_n = p_n - 0.5f * (p_nn - p_c);
 
+            //this makes segments are first order continuity.
+            //also it makes interpolation of all control points too.
             segments[i].p0 = control_points[i];
             segments[i].p1 = a_i;
             segments[i].p2 = b_n;
@@ -271,6 +277,8 @@ namespace CS460
         if (segments.empty())
             return;
 
+        //generate curve line mesh for rendering it.
+        //this is iterative approach.
         size_t segment_count = segments.size();
         size_t count         = sample_count / segment_count;
         Real   sample_step   = static_cast<Real>(1.0 / (double)count);
@@ -314,15 +322,18 @@ namespace CS460
             segment_list.pop_front();
 
             Real    u_m = 0.5f * (segment.u_a + segment.u_b);
+            //get point of space curve.
             Vector3 p_a = SpaceCurve(segment.u_a);
             Vector3 p_b = SpaceCurve(segment.u_b);
             Vector3 p_m = SpaceCurve(u_m);
 
+            //calculate length
             Real dist_a = p_a.DistanceTo(p_m); //A = |P(u_a) - P(u_m)|;
             Real dist_b = p_m.DistanceTo(p_b); //B = |P(u_m) - P(u_b)|;
             Real dist_c = p_a.DistanceTo(p_b); //C = |P(u_a) - P(u_b)|;
             Real dist_d = dist_a + dist_b - dist_c;
 
+            //check threshold
             Real diff_u = fabsf(segment.u_a - segment.u_b);
             if ((dist_d > length_threshold) || (diff_u > interval_threshold))
             {
@@ -342,7 +353,7 @@ namespace CS460
             }
         }
 
-        //normalize s
+        //normalize arc length table
         max_length = arc_length_table.back().arc_length;
         for (auto& arc_data : arc_length_table)
         {
