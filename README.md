@@ -22,13 +22,15 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
 4. Now you can edit.
 
 ## Camera Control
-    Hold Mouse LB & move - Change camera view direction on spherically");
+    Hold Mouse RB & move - Change camera view direction on spherically");
     Roll Mouse Wheel     - Change spherical camera's radius on same view");
     Press W, S           - Change camera position Front & Back");
     Press A, D           - Change camera position Left & Right");
     Press R, F           - Change camera position Up & Down");
+    Press Mouse LB       - Make point on platform (it will be control point of path)
 
-## Project 1 - Hierarchical Modeling and Animation
+## Project 2 - Motion along a Path
+
 ### Info
 - Model : Resource/AniMesh/Salamander.bin
 - Bone : 17 bones are in model
@@ -37,11 +39,25 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
 - clip 1 : 41 keyframes
 - clip 2 : 21 keyframes
 
-### Interpolation Algorithm 
+## Component Control
+    Create New Path     - Button to make new Path for skeleton.
+    Create New COI      - Button to make new COI point for skeleton.
+    COI Mode            - Combo Box for select Orbit mode or Forward mode
+    Select Current Path - Combo Box for select path.
+    Path Duration       - Duration time it takes to proceed with the path. This value is normalized [0:1]. 
+    T1                  - Slider for change t1 parameter of ease in velocity.
+    T2                  - Slider for change t2 parameter of ease out velocity. 
 
-- SLerp : quaternion interpolation
-- ELerp : scale interpolation
-- Lerp : vector interpolation
+    You can edit these GUI feature to adjust sliding and skidding control.
+    Path duration, T1, T2.
+    It generate v(t), and this is a animation speed of clip following.
+
+### Algorithm Description
+ - Space Curve Algorithm  : Multi-Segment of Cubic Bezier Curve
+ - Arc Length Function    : Adaptive Method approach, using std::vector for table, but apply binary search to increase query speed.  
+ - Distance-Time Function : Ease in/out velocity function
+ - Orientation Control    : COI apporach, using Orbit mode & Forward mode.
+
 
 ### Relevant Source Codes
 - GUI support
@@ -51,24 +67,17 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
 - Skeleton structure
     Source/System/Animation/Skeleton/Skeleton.cpp
     Source/System/Animation/Skeleton/Skeleton.hpp
-    Source/System/Animation/Skeleton/Bone.cpp
-    Source/System/Animation/Skeleton/Bone.hpp
 
-- Animation Clip & Tracks
-    Source/System/Animation/AnimationClip/AnimationClip.cpp
-    Source/System/Animation/AnimationClip/AnimationClip.hpp
-    Source/System/Animation/AnimationClip/KeyFrame.hpp
-    Source/System/Animation/AnimationClip/Track.cpp
-    Source/System/Animation/AnimationClip/Track.hpp
+- Path Interpolation & Arc Length Calculation:
+    Source/System/Animation/Space/AnimationSpace.cpp
+    Source/System/Animation/Space/AnimationSpace.hpp
+    Source/System/Animation/Space/SpacePath.cpp
+    Source/System/Animation/Space/SpacePath.hpp
+    Source/System/Math/Curve/BezierCurve.cpp
+    Source/System/Math/Curve/BezierCurve.hpp
 
-- VQS Structure
-    Source/System/Math/Structure/VQSTransform.cpp
-    Source/System/Math/Structure/VQSTransform.hpp
-
-- Quaternion, SLerp
-    Source/System/Math/Algebra/Quaternion.cpp
-    Source/System/Math/Algebra/Quaternion.hpp
-
-- Lerp, ELerp
-    Source/System/Math/Utility/Interpolation.cpp
-    Source/System/Math/Utility/Interpolation.hpp
+- Speed & Orientation Control:
+    Source/System/Animation/Skeleton/OrientationController.cpp
+    Source/System/Animation/Skeleton/OrientationController.hpp    
+    Source/System/Animation/Skeleton/SpeedController.hpp   
+    Source/System/Animation/Skeleton/SpeedController.hpp   

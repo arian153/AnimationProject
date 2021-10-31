@@ -160,7 +160,7 @@ namespace CS460
                         m_skeleton->m_path_duration = path_data["Duration"].asFloat();
                     }
 
-                    if (JsonResource::HasMember(path_data, "T1") && path_data["T1"].isNumeric() 
+                    if (JsonResource::HasMember(path_data, "T1") && path_data["T1"].isNumeric()
                         && JsonResource::HasMember(path_data, "T2") && path_data["T2"].isNumeric())
                     {
                         Real t1 = path_data["T1"].asFloat();
@@ -439,6 +439,40 @@ namespace CS460
                 m_skeleton->m_animation_clips[clip_id]->UpdateTracks();
             }
 
+            if (ImGui::Button("Create New Path"))
+            {
+                int id = m_skeleton->m_ani_space->CreateNewPath("");
+                m_skeleton->AddPath(id);
+                m_skeleton->m_ani_space->SetSkeleton(m_skeleton);
+                m_skeleton->m_ani_space->b_edit_path = true;
+            }
+
+            ImGui::SameLine();
+            if (ImGui::Button("End##Path"))
+            {
+                m_skeleton->m_ani_space->b_edit_path = false;
+                m_skeleton->m_ani_space->SetEditable(false);
+            }
+
+            if (ImGui::Button("Create New COI "))
+            {
+                m_skeleton->m_ani_space->b_edit_coi = true;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("End##COI"))
+            {
+                m_skeleton->m_ani_space->b_edit_coi = false;
+            }
+           
+
+            ImGui::Text("COI Mode");
+            const char* coi_type[] = { "Orbit Mode", "Forward Mode" };
+
+            if (ImGui::Combo("##COI Type",&m_skeleton->m_orientation_control.m_mode, coi_type, 2))
+            {
+            }
+           
+
             ImGui::Text("Select Current Path");
             int path_count = (int)m_skeleton->m_path_ids.size();
             int path_id    = m_skeleton->m_current_path;
@@ -446,24 +480,6 @@ namespace CS460
             {
                 path_id = m_skeleton->m_current_path;
                 m_skeleton->m_ani_space->SetIDX(path_id);
-                m_skeleton->m_ani_space->SetSkeleton(m_skeleton);
-                m_skeleton->ResetStatus();
-            }
-
-            if (ImGui::Button("Create New Path"))
-            {
-                int id = m_skeleton->m_ani_space->CreateNewPath("");
-                m_skeleton->AddPath(id);
-                m_skeleton->m_ani_space->SetSkeleton(m_skeleton);
-            }
-
-            ImGui::Text("Add Other Path");
-            int other_path_count = (int)m_skeleton->m_ani_space->path_names.size();
-            int new_path_id      = 0;
-            if (ImGui::Combo("##Animation Other Paths", &new_path_id, VectorStringGetter, (void*)&m_skeleton->m_ani_space->path_names, other_path_count))
-            {
-                m_skeleton->AddPath(new_path_id);
-                m_skeleton->m_ani_space->SetIDX(new_path_id);
                 m_skeleton->m_ani_space->SetSkeleton(m_skeleton);
                 m_skeleton->ResetStatus();
             }

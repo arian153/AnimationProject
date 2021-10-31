@@ -239,9 +239,14 @@ namespace CS460
                 ImGui::Text("    Press W, S           - Change camera position Front & Back");
                 ImGui::Text("    Press A, D           - Change camera position Left & Right");
                 ImGui::Text("    Press R, F           - Change camera position Up & Down");
+                ImGui::Text("    Press Mouse LB       - Make point on platform (It will be control point of path)");
                 ImGui::Text("3. Select Object in Hierarchy Window");
                 ImGui::Text("4. Open Component detail in Inspector Window");
-
+                ImGui::Text("5. Edit Path duration, T1, T2 to adjust sliding and skidding control");
+                ImGui::Text("6. [Create New Path] button to make new path, if finished, press [End] button");
+                ImGui::Text("7. [Create New COI ] button to make new COI,  if finished, press [End] button");
+               
+                ImGui::NewLine();
                 ImGui::NewLine();
                 if (ImGui::Button("  Close  "))
                 {

@@ -70,24 +70,33 @@ namespace CS460
             return false;
         }
 
-        if (m_space_paths[m_path_idx].b_editable == false)
-        {
-            return false;
-        }
-
         Ray local_ray = picking_ray.ToLocal(m_box_transform);
         if (m_platform_box.TestRayIntersection(local_ray, min_t, max_t))
         {
-            if (m_skeleton)
+            Vector3 point = picking_ray.ParamToPoint(min_t);
+            if (b_edit_path)
             {
-                Real curr_s = m_skeleton->GetSParam() * m_space_paths[m_path_idx].max_length;
-                m_space_paths[m_path_idx].AddControlPoint(picking_ray.ParamToPoint(min_t));
-                curr_s = Math::IsZero(m_space_paths[m_path_idx].max_length) ? 0.0f : curr_s / m_space_paths[m_path_idx].max_length;
-                m_skeleton->SetSParam(curr_s);
+                if (m_space_paths[m_path_idx].b_editable == false)
+                {
+                    return false;
+                }
+
+                if (m_skeleton)
+                {
+                    Real curr_s = m_skeleton->GetSParam() * m_space_paths[m_path_idx].max_length;
+                    m_space_paths[m_path_idx].AddControlPoint(point);
+                    curr_s = Math::IsZero(m_space_paths[m_path_idx].max_length) ? 0.0f : curr_s / m_space_paths[m_path_idx].max_length;
+                    m_skeleton->SetSParam(curr_s);
+                }
+                else
+                {
+                    m_space_paths[m_path_idx].AddControlPoint(point);
+                }
             }
-            else
+
+            if (b_edit_coi)
             {
-                m_space_paths[m_path_idx].AddControlPoint(picking_ray.ParamToPoint(min_t));
+                m_skeleton->SetCOI(point);
             }
 
             return true;

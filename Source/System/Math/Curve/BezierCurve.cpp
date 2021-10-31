@@ -14,6 +14,7 @@ namespace CS460
 
     Vector3 CubicBezierCurve::Interpolate(Real u) const
     {
+        //interpolate cubic bezier curve.
         u = Math::Clamp(u, 0.0f, 1.0f);
 
         Real u3 = u * u * u;

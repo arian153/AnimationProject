@@ -216,6 +216,11 @@ namespace CS460
         m_transform->orientation = m_default_orientation;
     }
 
+    void Skeleton::SetCOI(const Vector3& coi)
+    {
+        m_orientation_control.SetCOI(coi);
+    }
+
     Bone* Skeleton::CreateBone(const VQSTransform& to_bone, const VQSTransform& to_root, const std::string& name, Bone* parent)
     {
         //create bone data

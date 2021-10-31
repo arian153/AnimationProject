@@ -39,6 +39,8 @@ namespace CS460
 
     public:
         std::vector<std::string> path_names;
+        bool b_edit_path = false;
+        bool b_edit_coi = false;
 
     private:
         //this can be changed terrain structure.
@@ -48,6 +50,8 @@ namespace CS460
         int          m_path_idx     = 0;
         Skeleton*    m_skeleton     = nullptr;
         Real         m_elapsed_time = 0.0f;
+
+     
 
         std::vector<SpacePath> m_space_paths;
     };

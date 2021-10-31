@@ -33,6 +33,7 @@ namespace CS460
         Real GetSParam() const;
         void SetSParam(Real s);
         void ResetStatus();
+        void SetCOI(const Vector3& coi);
 
     private:
         Bone* CreateBone(const VQSTransform& to_bone, const VQSTransform& to_root, const std::string& name, Bone* parent);
@@ -59,8 +60,8 @@ namespace CS460
 
         I32   m_clip_id = 0;
         Color m_color;
-        bool  m_b_draw  = true;
-        bool  m_b_pause = false;
+        bool  m_b_draw      = true;
+        bool  m_b_pause     = false;
 
         int  m_render_mode   = 0;
         int  m_current_path  = -1;
