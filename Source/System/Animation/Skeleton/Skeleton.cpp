@@ -344,6 +344,30 @@ namespace CS460
         }
     }
 
+    void Skeleton::SetUpEndEffectors()
+    {
+        m_end_effectors.clear();
+        for (auto& bone : m_bones)
+        {
+            if (bone->IsEndEffector())
+            {
+                m_end_effectors.push_back(bone);
+            }
+        }
+    }
+
+    void Skeleton::SetUpManipulators()
+    {
+        size_t size = m_end_effectors.size();
+        m_manipulators.clear();
+        m_manipulators.resize(size);
+
+        for (size_t i = 0; i < size; ++i)
+        {
+            m_manipulators[i].SetUpLinks(m_end_effectors[i]);
+        }
+    }
+
     AnimationClip* Skeleton::CreateAnimationClip()
     {
         //Create Animation clip data.

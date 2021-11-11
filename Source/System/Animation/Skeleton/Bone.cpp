@@ -33,4 +33,14 @@ namespace CS460
         m_children.push_back(child);
         m_chi_idx.push_back(child->m_own_idx);
     }
+
+    bool Bone::IsEndEffector() const
+    {
+        return m_children.empty();
+    }
+
+    Bone* Bone::GetParent() const
+    {
+        return m_parent;
+    }
 }

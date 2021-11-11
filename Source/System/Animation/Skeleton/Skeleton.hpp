@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 
+#include "Manipulator.hpp"
 #include "OrientationController.hpp"
 #include "SpeedController.hpp"
 #include "../../Graphics/DataType/Color.hpp"
@@ -42,6 +43,8 @@ namespace CS460
         Bone* CreateBone(const VQSTransform& to_bone, const std::string& name, I32 p_idx);
         void  SetUpSiblingRecursive(Bone* bone);
         void  SetUpBind();
+        void  SetUpEndEffectors();
+        void  SetUpManipulators();
 
         AnimationClip* CreateAnimationClip();
 
@@ -60,8 +63,8 @@ namespace CS460
 
         I32   m_clip_id = 0;
         Color m_color;
-        bool  m_b_draw      = true;
-        bool  m_b_pause     = false;
+        bool  m_b_draw  = true;
+        bool  m_b_pause = false;
 
         int  m_render_mode   = 0;
         int  m_current_path  = -1;
@@ -71,6 +74,8 @@ namespace CS460
 
         std::vector<Bone*>          m_root_bones;
         std::vector<Bone*>          m_bones;
+        std::vector<Bone*>          m_end_effectors;
+        std::vector<Manipulator>    m_manipulators;
         std::vector<AnimationClip*> m_animation_clips;
         std::vector<VQSTransform>   m_final_vqs;
         std::vector<VQSTransform>   m_to_roots;

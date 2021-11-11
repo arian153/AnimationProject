@@ -19,6 +19,9 @@ namespace CS460
         void Shutdown();
         void Push(Bone* child);
 
+        bool  IsEndEffector() const;
+        Bone* GetParent() const;
+
     private:
         friend class Skeleton;
 
