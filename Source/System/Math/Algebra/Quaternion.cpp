@@ -757,7 +757,7 @@ namespace CS460
             Vector3 swing_axis         = twist_axis.CrossProduct(rotated_twist_axis);
             if (swing_axis.LengthSquared() > Math::EPSILON)
             {
-                Real swing_radian = Radian(twist_axis, rotated_twist_axis);
+                Real swing_radian = BetweenAngle(twist_axis, rotated_twist_axis);
                 swing_full        = Quaternion(swing_axis, swing_radian);
             }
             else

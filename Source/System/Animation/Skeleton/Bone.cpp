@@ -43,4 +43,9 @@ namespace CS460
     {
         return m_parent;
     }
+
+    Vector3 Bone::GetPosition() const
+    {
+        return m_to_bone.position;
+    }
 }

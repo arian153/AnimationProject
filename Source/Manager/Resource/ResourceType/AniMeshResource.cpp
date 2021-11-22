@@ -100,6 +100,8 @@ namespace CS460
             }
 
             skeleton->SetUpBind();
+            skeleton->SetUpEndEffectors();
+            skeleton->SetUpManipulators();
 
             //copy animation clip
             auto bin_animations = m_binary_model.GetAnimations();

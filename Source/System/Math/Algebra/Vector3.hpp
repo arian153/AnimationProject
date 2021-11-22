@@ -72,7 +72,7 @@ namespace CS460
         friend Vector3  CrossProductTwice(const Vector3& vec1, const Vector3& vec2);
         friend Vector3  Projection(const Vector3& vec1, const Vector3& vec2);
         friend Vector3  LinearInterpolation(const Vector3& start, const Vector3& end, Real t);
-        friend Real     Radian(const Vector3& a, const Vector3& b);
+        friend Real     BetweenAngle(const Vector3& a, const Vector3& b);
 
     public:
         bool                       operator ==(const Vector3& rhs) const;

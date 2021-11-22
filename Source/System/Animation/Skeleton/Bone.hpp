@@ -22,6 +22,7 @@ namespace CS460
         bool  IsEndEffector() const;
         Bone* GetParent() const;
 
+        Vector3 GetPosition() const;
     private:
         friend class Skeleton;
 

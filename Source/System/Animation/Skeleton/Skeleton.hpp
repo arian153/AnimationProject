@@ -1,13 +1,13 @@
 #pragma once
 #include <vector>
 
-#include "Manipulator.hpp"
 #include "OrientationController.hpp"
 #include "SpeedController.hpp"
 #include "../../Graphics/DataType/Color.hpp"
 #include "../../Math/Primitive/ConvexHull3D/Sphere.hpp"
 #include "../../Math/Utility/MathDef.hpp"
 #include "../AnimationClip/AnimationClip.hpp"
+#include "../InverseKinematics/Manipulator.hpp"
 
 namespace CS460
 {

@@ -535,9 +535,9 @@ namespace CS460
         return result;
     }
 
-    Real Radian(const Vector3& a, const Vector3& b)
+    Real BetweenAngle(const Vector3& a, const Vector3& b)
     {
-        Real cos_theta = a.Normalize().DotProduct(b.Normalize());
+        Real cos_theta = DotProduct(a.Normalize(), b.Normalize());
         if (fabsf(cos_theta) > 1.0f)
         {
             return 0.0f;

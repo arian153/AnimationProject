@@ -7,9 +7,9 @@ namespace CS460
 {
     enum class eRayTestOption
     {
-        Cast
-      , Intersect
-      , Trace
+        Cast,
+        Intersect,
+        Trace
     };
 
     class RayTest
