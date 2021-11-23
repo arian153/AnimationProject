@@ -85,6 +85,12 @@ namespace CS460
             delete clip;
         }
         m_animation_clips.clear();
+
+        for (auto& manipulator : m_manipulators)
+        {
+            manipulator.Shutdown();
+        }
+        m_manipulators.clear();
     }
 
     void Skeleton::Draw(PrimitiveRenderer* renderer) const

@@ -5,6 +5,7 @@
 #include "EngineFactory/AniMeshFactory.hpp"
 #include "EngineFactory/CameraFactory.hpp"
 #include "EngineFactory/ColliderFactory.hpp"
+#include "EngineFactory/IKFactory.hpp"
 #include "EngineFactory/RigidBodyFactory.hpp"
 #include "EngineFactory/TransformFactory.hpp"
 #include "EngineFactory/MeshFactory.hpp"
@@ -37,6 +38,7 @@ namespace CS460
         AddFactory(new PointConstraintFactory());
         AddFactory(new SkyFactory());
         AddFactory(new AniMeshFactory());
+        AddFactory(new IKFactory());
 
         return true;
     }
