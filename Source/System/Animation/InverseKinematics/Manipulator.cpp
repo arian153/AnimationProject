@@ -239,7 +239,7 @@ namespace CS460
         {
             //angle_steps[i] = inverse jacobian[i] * velocity;
             //link_angles[i] = link_angles[i] + angle_steps[i] * dt;
-            forward_links[i]->m_angle += (inverse[i].x * velocity.x + inverse[i].y + velocity.y) * dt;
+            forward_links[i]->m_angle += (inverse[i].x * velocity.x + inverse[i].y + velocity.y) / dt;
             forward_links[i]->UpdateAngle(false);
         }
 

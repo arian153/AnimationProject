@@ -20,7 +20,7 @@ namespace CS460
     {
         //initialize platform and drawing data.
         m_box_transform.position = Vector3(0.0f, -1.55f);
-        m_platform_box.SetBox(100.0f, 1.0f, 100.0f);
+        m_platform_box.SetBox(200.0f, 1.0f, 200.0f);
         m_drawing_sphere.position.SetZero();
         m_drawing_sphere.orientation.SetIdentity();
         m_drawing_sphere.radius = 0.25f;
@@ -45,7 +45,7 @@ namespace CS460
 
     void AnimationSpace::Draw(PrimitiveRenderer* renderer) const
     {
-        renderer->DrawPrimitive(m_platform_box, eRenderingMode::Line, Color(0.2f, 0.2f, 0.2f));
+        renderer->DrawPrimitiveInstancing(m_platform_box, Quaternion(), Vector3(0.0f, -1.55f, 0.0f), eRenderingMode::Face, Color(0.2f, 0.2f, 0.2f));
 
         if (!m_space_paths.empty() && m_space_paths.size() > (size_t)m_path_idx)
         {

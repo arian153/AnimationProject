@@ -9,8 +9,8 @@ Project/Resource/..
 Project/Source/..
 
 ## Build and Recompile
-This framework build using visual studio 2019 and c++17,  also it depends on win32 and DirectX11.
-Use solution file to recompile, rebuild it.
+This framework build using visual studio 2019 and c++17, also it depends on win32 and DirectX11.
+Use vs solution file to recompile, rebuild it.
 
 ## Execution
 Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
@@ -29,15 +29,12 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
     Press R, F           - Change camera position Up & Down");
     Press Mouse LB       - Make point on platform (it will be control point of path)
 
-## Project 2 - Motion along a Path
+## Project 3 - Inverse Kinematics
 
-### Info
-- Model : Resource/AniMesh/Salamander.bin
-- Bone : 17 bones are in model
-- Animation Clip : 3 aniamtion clips
-- clip 0 : 21 keyframes
-- clip 1 : 41 keyframes
-- clip 2 : 21 keyframes
+
+
+
+
 
 ## Component Control
     Create New Path     - Button to make new Path for skeleton.
@@ -53,10 +50,28 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
     It generate v(t), and this is a animation speed of clip following.
 
 ### Algorithm Description
- - Space Curve Algorithm  : Multi-Segment of Cubic Bezier Curve
- - Arc Length Function    : Adaptive Method approach, using std::vector for table, but apply binary search to increase query speed.  
- - Distance-Time Function : Ease in/out velocity function
- - Orientation Control    : COI apporach, using Orbit mode & Forward mode.
+    Jacobian Matrix Solution per frame
+    while (dist(p_dest, p_curr) > threshold && CF > 0) 
+    1. obtain first derivatives from links to construct jacobian matrix
+        => J(q), but matrix J(q) has problems : Invertibility, Complexity, Redundancy, Singularity
+    2. use pseudo inverse jacobian
+        => J(q)^+ = J(q)^t * [J(q) * J(q)^t]^-1
+    3. calculate velocity of position 
+        => p_dot = (p_dest - p_curr)/CF;
+    4. calculate velocity of angle params 
+        => q_dot = J(q)^+ x p_dot;
+    5. integrate and apply q_dot to q
+        => q = q + q_dot / dt;
+    6. do forward kinematics to obtain new p_curr
+        => p_curr = forward(q);
+    7. decrease converge frames
+        => CF--;
+    8. update links and ready for render
+        => Update(links); Draw(links);
+
+
+
+
 
 
 ### Relevant Source Codes
