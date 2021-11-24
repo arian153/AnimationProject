@@ -20,32 +20,42 @@ namespace CS460
 
     void Link::SetUpData()
     {
-        if (m_child != nullptr)
+        if (IsEndEffector())
+        {
+            //end effector
+            m_to_child.SetZero();
+            m_angle  = 0.0f;
+            m_length = 0.0f;
+        }
+        else
         {
             m_to_child       = m_child->m_origin - m_origin;
             m_angle          = BetweenAngle(m_basis, m_to_child);
+            m_length         = m_to_child.Length();
             m_child->m_basis = m_to_child.Unit();
             m_child->SetUpData();
         }
     }
 
-    void Link::Forward(Real angle)
+    void Link::SetAngle(Real angle, bool b_recursive)
     {
         m_angle = angle;
-        if (m_child != nullptr)
-        {
-            UpdateChild(Quaternion(AxisRadian(m_polar_axis, m_angle)));
-        }
+        UpdateAngle(b_recursive);
     }
 
-    void Link::UpdateChild(const Quaternion& rotation)
+    void Link::UpdateAngle(bool b_recursive)
     {
         if (m_child != nullptr)
         {
-            m_to_child        = rotation.Rotate(m_to_child);
+            Quaternion rotation(AxisRadian(m_rotation_axis, m_angle));
+            m_to_child        = rotation.Rotate(m_basis) * m_length;
             m_child->m_origin = m_to_child + m_origin;
             m_child->m_basis  = m_to_child.Unit();
-            m_child->UpdateChild(rotation);
+
+            if (b_recursive)
+            {
+                m_child->UpdateAngle(b_recursive);
+            }
         }
     }
 
@@ -59,7 +69,6 @@ namespace CS460
         if (m_child)
         {
             renderer->DrawSegment(m_origin, m_child->m_origin, color);
-            m_child->Draw(renderer, color);
         }
     }
 }

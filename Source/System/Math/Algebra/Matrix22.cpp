@@ -138,10 +138,8 @@ namespace CS460
 
     void Matrix22::GetColumns(Vector2& col1, Vector2& col2) const
     {
-        col1.x = data[0];
-        col2.x = data[1];
-        col1.y = data[2];
-        col2.y = data[3];
+        col1.x = data[0]; col2.x = data[1];
+        col1.y = data[2]; col2.y = data[3];
     }
 
     Vector2 Matrix22::GetColumn(size_t i) const

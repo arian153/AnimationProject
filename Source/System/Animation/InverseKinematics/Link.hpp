@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 #include "../../Math/Algebra/Vector3.hpp"
 
 namespace CS460
@@ -17,11 +19,11 @@ namespace CS460
         explicit Link(const Vector3& origin);
 
         void SetUpData();
-        void Forward(Real angle);
-        void UpdateChild(const Quaternion& rotation);
+        void SetAngle(Real angle, bool b_recursive = false);
+        void UpdateAngle(bool b_recursive);
         bool IsEndEffector() const;
 
-        void Draw(PrimitiveRenderer* renderer,  const Color& color) const;
+        void Draw(PrimitiveRenderer* renderer, const Color& color) const;
 
     private:
         friend class Manipulator;
@@ -30,11 +32,13 @@ namespace CS460
         Link* m_parent = nullptr;
         Link* m_child  = nullptr;
 
-        Vector3 m_origin;
-        Real    m_angle = 0.0f; //angle to child origin
+        Real m_angle  = 0.0f; //angle to child origin
+        Real m_length = 0.0f;
+
+        Vector3 m_origin; //origin for rendering
         Vector3 m_to_child;
 
-        Vector3 m_basis      = Vector3(1, 0, 0);
-        Vector3 m_polar_axis = Vector3(0, 0, 1); //
+        Vector3 m_basis         = Vector3(1, 0, 0); //basis for rotation initially x-axis 
+        Vector3 m_rotation_axis = Vector3(0, 0, 1); //axis of rotation initially z-axis
     };
 }
