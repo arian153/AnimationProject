@@ -37,6 +37,12 @@ namespace CS460
         Vector2 ApplyAngleStep(const std::vector<Vector2>& inverse, const Vector2& velocity, Real dt);
         Vector2 ForwardKinematics();
 
+        Vector3 RootOrigin() const;
+        Vector3 RootLink() const;
+        Vector3 EndEffectorOrigin() const;
+
+        bool IsReachable(const Vector3& position) const;
+
     public:
         std::vector<Link*> inverse_links;
         std::vector<Link*> forward_links;
@@ -46,6 +52,8 @@ namespace CS460
 
         Real error_threshold = 0.1f;
         int  converge_frame  = 100;
+
+        Real max_length = 1.0f;
 
         Sphere m_drawing_sphere;
         Color  m_color = Color(1, 1, 0.5f);

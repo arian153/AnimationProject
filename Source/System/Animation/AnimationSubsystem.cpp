@@ -29,6 +29,11 @@ namespace CS460
         {
             skeleton->Update(dt);
         }
+
+        for (auto& ik : m_ik_components)
+        {
+            ik->Update(dt);
+        }
     }
 
     void AnimationSubsystem::Render() const
@@ -38,6 +43,11 @@ namespace CS460
         for (auto& skeleton : m_skeletons)
         {
             skeleton->Draw(m_primitive_renderer);
+        }
+
+        for (auto& ik_compo : m_ik_components)
+        {
+            ik_compo->m_manipulator.Draw(m_primitive_renderer);
         }
     }
 
@@ -78,6 +88,25 @@ namespace CS460
         {
             auto found = std::find(m_skeletons.begin(), m_skeletons.end(), skeleton);
             m_skeletons.erase(found);
+        }
+    }
+
+    void AnimationSubsystem::AddIKComponent(IKComponent* ik_compo)
+    {
+        auto found = std::find(m_ik_components.begin(), m_ik_components.end(), ik_compo);
+        if (found == m_ik_components.end())
+        {
+            ik_compo->SetAnimationSpace(m_animation_space);
+            m_ik_components.push_back(ik_compo);
+        }
+    }
+
+    void AnimationSubsystem::RemoveIKComponent(IKComponent* ik_compo)
+    {
+        if (!m_ik_components.empty())
+        {
+            auto found = std::find(m_ik_components.begin(), m_ik_components.end(), ik_compo);
+            m_ik_components.erase(found);
         }
     }
 

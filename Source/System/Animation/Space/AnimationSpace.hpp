@@ -8,6 +8,8 @@
 
 namespace CS460
 {
+    class IKComponent;
+
     class AnimationSpace
     {
     public:
@@ -28,6 +30,7 @@ namespace CS460
 
         void SetIDX(int idx);
         void SetSkeleton(Skeleton* skeleton);
+        void SetIKCompo(IKComponent* compo);
 
         Vector3     GetPathPoint(Real s);
         std::string GetPathName(int idx);
@@ -39,8 +42,8 @@ namespace CS460
 
     public:
         std::vector<std::string> path_names;
-        bool b_edit_path = false;
-        bool b_edit_coi = false;
+        bool                     b_edit_path = false;
+        bool                     b_edit_coi  = false;
 
     private:
         //this can be changed terrain structure.
@@ -49,9 +52,8 @@ namespace CS460
         Sphere       m_drawing_sphere;
         int          m_path_idx     = 0;
         Skeleton*    m_skeleton     = nullptr;
+        IKComponent* m_ik_compo     = nullptr;
         Real         m_elapsed_time = 0.0f;
-
-     
 
         std::vector<SpacePath> m_space_paths;
     };

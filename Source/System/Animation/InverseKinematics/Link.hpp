@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "../../Math/Algebra/Vector3.hpp"
+#include "../../Math/Primitive/ConvexHull3D/Cone.hpp"
 
 namespace CS460
 {
@@ -29,8 +30,8 @@ namespace CS460
         friend class Manipulator;
 
     private:
-        Link* m_parent = nullptr;
-        Link* m_child  = nullptr;
+        Link* m_parent       = nullptr;
+        Link* m_child        = nullptr;
 
         Real m_angle  = 0.0f; //angle to child origin
         Real m_length = 0.0f;
@@ -40,5 +41,7 @@ namespace CS460
 
         Vector3 m_basis         = Vector3(1, 0, 0); //basis for rotation initially x-axis 
         Vector3 m_rotation_axis = Vector3(0, 0, 1); //axis of rotation initially z-axis
+
+        Cone m_drawing_cone;
     };
 }

@@ -2,6 +2,8 @@
 
 #include <string>
 
+
+#include "../../../Manager/Component/EngineComponent/IKComponent.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../../Math/Primitive/Others/Ray.hpp"
 #include "../Skeleton/Skeleton.hpp"
@@ -74,6 +76,12 @@ namespace CS460
         if (m_platform_box.TestRayIntersection(local_ray, min_t, max_t))
         {
             Vector3 point = picking_ray.ParamToPoint(min_t);
+
+            if (m_ik_compo)
+            {
+                m_ik_compo->UpdatePath(point);
+            }
+
             if (b_edit_path)
             {
                 if (m_space_paths[m_path_idx].b_editable == false)
@@ -138,6 +146,11 @@ namespace CS460
     void AnimationSpace::SetSkeleton(Skeleton* skeleton)
     {
         m_skeleton = skeleton;
+    }
+
+    void AnimationSpace::SetIKCompo(IKComponent* compo)
+    {
+        m_ik_compo = compo;
     }
 
     Vector3 AnimationSpace::GetPathPoint(Real s)

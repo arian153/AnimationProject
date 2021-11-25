@@ -8,7 +8,7 @@ namespace CS460
 {
     Manipulator::Manipulator()
     {
-        m_drawing_sphere.radius = 0.5f;
+        m_drawing_sphere.radius = 0.2f;
     }
 
     Manipulator::~Manipulator()
@@ -138,6 +138,11 @@ namespace CS460
     void Manipulator::SetUpData()
     {
         forward_links.front()->SetUpData();
+        max_length = 0.0f;
+        for (auto& link : forward_links)
+        {
+            max_length += link->m_length;
+        }
     }
 
     void Manipulator::Shutdown()
@@ -162,9 +167,8 @@ namespace CS460
             {
                 Link* link = forward_links[i];
                 renderer->DrawPrimitiveInstancing(m_drawing_sphere, m_drawing_sphere.orientation, link->m_origin, eRenderingMode::Face, m_color);
+                link->Draw(renderer, m_color);
             }
-
-            forward_links.front()->Draw(renderer, m_color);
         }
     }
 
@@ -262,5 +266,26 @@ namespace CS460
             result.y += forward_links[i]->m_length * sinf(accumulated_angle);
         }
         return result;
+    }
+
+    Vector3 Manipulator::RootOrigin() const
+    {
+        return forward_links.front()->m_origin;
+    }
+
+    Vector3 Manipulator::RootLink() const
+    {
+        return forward_links.front()->m_to_child;
+    }
+
+    Vector3 Manipulator::EndEffectorOrigin() const
+    {
+        return inverse_links.front()->m_origin;
+    }
+
+    bool Manipulator::IsReachable(const Vector3& position) const
+    {
+        Vector3 origin = forward_links.front()->m_origin;
+        return origin.DistanceSquaredTo(position) < max_length * max_length;
     }
 }

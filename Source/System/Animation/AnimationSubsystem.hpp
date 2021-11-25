@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-
+#include "../../Manager/Component/EngineComponent/IKComponent.hpp"
 #include "../Math/Primitive/Others/Ray.hpp"
 #include "../Math/Utility/MathDef.hpp"
 
@@ -28,6 +28,9 @@ namespace CS460
         void AddSkeleton(Skeleton* skeleton);
         void RemoveSkeleton(Skeleton* skeleton);
 
+        void AddIKComponent(IKComponent* ik_compo);
+        void RemoveIKComponent(IKComponent* ik_compo);
+
         void SetAppUtility(TimeUtility* time_util, FrameUtility* frame_util);
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
         void SetPickingRay(const Ray& ray);
@@ -41,6 +44,7 @@ namespace CS460
         AnimationSpace*    m_animation_space    = nullptr;
         Ray                m_picking_ray;
 
-        std::vector<Skeleton*> m_skeletons;
+        std::vector<Skeleton*>    m_skeletons;
+        std::vector<IKComponent*> m_ik_components;
     };
 }

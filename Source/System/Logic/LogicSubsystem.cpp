@@ -88,4 +88,9 @@ namespace CS460
             }
         }
     }
+
+    InputCommon* LogicSubsystem::GetInput() const
+    {
+        return m_input;
+    }
 }
