@@ -205,6 +205,11 @@ namespace CS460
         b_update = true;
     }
 
+    Real SpacePath::MaxLength() const
+    {
+        return max_length;
+    }
+
     void SpacePath::SetUpSegments()
     {
         if (control_points.empty())

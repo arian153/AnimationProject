@@ -288,4 +288,9 @@ namespace CS460
         Vector3 origin = forward_links.front()->m_origin;
         return origin.DistanceSquaredTo(position) < max_length * max_length;
     }
+
+    void Manipulator::SetRootPosition(const Vector3& new_pos)
+    {
+        forward_links.front()->AddTranslation(new_pos - forward_links.front()->m_origin);
+    }
 }

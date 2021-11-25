@@ -45,6 +45,7 @@ namespace CS460
 
         void LoadData(const std::vector<Vector3>& points);
 
+        Real MaxLength() const;
     private:
         void SetUpSegments();
         void GenerateRenderingCurve(); //curve for rendering

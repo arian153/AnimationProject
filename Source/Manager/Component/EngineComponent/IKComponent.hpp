@@ -2,6 +2,8 @@
 
 #include "..//Component.hpp"
 #include "../../../System/Animation/InverseKinematics/Manipulator.hpp"
+#include "../../../System/Animation/Skeleton/OrientationController.hpp"
+#include "../../../System/Animation/Skeleton/SpeedController.hpp"
 #include "../../../System/Math/Utility/VectorDef.hpp"
 
 namespace CS460
@@ -48,5 +50,11 @@ namespace CS460
         Manipulator     m_manipulator;
         int             m_path_id = -1;
         KeyboardInput*  m_input   = nullptr;
+
+        Vector3 m_target_pos;
+        Real m_path_duration = 1.0f;
+
+        SpeedController       m_speed_control;
+        OrientationController m_orientation_control;
     };
 }

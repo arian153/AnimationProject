@@ -26,6 +26,8 @@ namespace CS460
 
         void Draw(PrimitiveRenderer* renderer, const Color& color) const;
 
+        void AddTranslation(const Vector3& translation);
+
     private:
         friend class Manipulator;
 

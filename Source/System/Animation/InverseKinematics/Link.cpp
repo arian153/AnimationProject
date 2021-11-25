@@ -73,11 +73,20 @@ namespace CS460
         if (m_child)
         {
             Quaternion rotation(Vector3(0, 1, 0), m_child->m_basis);
-            Vector3 position = m_origin + m_child->m_basis * m_length * 0.5f;
+            Vector3    position = m_origin + m_child->m_basis * m_length * 0.5f;
 
             renderer->DrawPrimitiveInstancing(m_drawing_cone, rotation, position, eRenderingMode::Face, color);
 
             renderer->DrawSegment(m_origin, m_child->m_origin, color);
+        }
+    }
+
+    void Link::AddTranslation(const Vector3& translation)
+    {
+        m_origin += translation;
+        if (m_child)
+        {
+            m_child->AddTranslation(translation);
         }
     }
 }

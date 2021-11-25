@@ -43,6 +43,8 @@ namespace CS460
 
         bool IsReachable(const Vector3& position) const;
 
+        void SetRootPosition(const Vector3& new_pos);
+
     public:
         std::vector<Link*> inverse_links;
         std::vector<Link*> forward_links;
