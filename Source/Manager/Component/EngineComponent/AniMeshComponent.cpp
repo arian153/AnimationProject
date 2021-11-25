@@ -408,6 +408,12 @@ namespace CS460
             ImGui::Text("Bone Color");
             ImGui::ColorEdit4("##Bone Color", &m_skeleton->m_color.r);
 
+            ImGui::Text("Bone Mode");
+            const char* bone_mode[] = { "VQS", "MAT", "BIND" };
+            if (ImGui::Combo("##Bone Type", &m_skeleton->m_render_mode, bone_mode, 3))
+            {
+            }
+
             ImGui::Text("Animation : ");
             const char* pause_label = m_skeleton->m_b_pause ? "Play" : "Pause";
             ImGui::SameLine();

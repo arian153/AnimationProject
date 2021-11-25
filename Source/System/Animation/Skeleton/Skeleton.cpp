@@ -143,6 +143,22 @@ namespace CS460
                     }
                 }
             }
+            else if (m_render_mode == 2)
+            {
+                //render matrix version of bind bone
+                for (size_t i = 0; i < size; ++i)
+                {
+                    Bone* bone = m_bones[i];
+                    size_t  child_size = bone->m_children.size();
+                    Vector3 parent_pos = world.TransformPoint(m_bind_mats[i].GetPosition());
+                    for (size_t j = 0; j < child_size; ++j)
+                    {
+                        //has a child draw line segment.
+                        Vector3 child_pos = world.TransformPoint(m_bind_mats[bone->m_children[j]->m_own_idx].GetPosition());
+                        renderer->DrawSegment(parent_pos, child_pos, Color(0, 0, 1));
+                    }
+                }
+            }
         }
     }
 
@@ -346,7 +362,7 @@ namespace CS460
             I32      parent_idx = m_bones[i]->m_parent_idx;
             Matrix44 parent_tf  = parent_idx >= 0 ? m_bind_mats[parent_idx] : Matrix44::Identity();
             Matrix44 local_tf   = m_bones[i]->m_to_root.ToMatrix();
-            m_bind_mats[i]      = local_tf * parent_tf;
+            m_bind_mats[i]      = m_bones[i]->m_to_root.ToMatrix();//local_tf * parent_tf;
         }
     }
 
