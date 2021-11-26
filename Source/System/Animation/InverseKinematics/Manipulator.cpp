@@ -1,6 +1,7 @@
 #include "Manipulator.hpp"
 
 #include "Link.hpp"
+#include "../../../External/imgui/imgui.h"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../Skeleton/Bone.hpp"
 
@@ -64,8 +65,14 @@ namespace CS460
 
     void Manipulator::InverseKinematics(Real dt)
     {
+        Vector3 pos = RootOrigin();
+        Vector2 curr_position; //= //ForwardKinematics();
+        curr_position.x = forward_links.back()->m_origin.x;
+        curr_position.y = forward_links.back()->m_origin.z;
+        Vector2 for_pos = Vector2(pos.x, pos.z) + ForwardKinematics();
+
         //do jacobian
-        if (dest_position.DistanceSquaredTo(curr_position) > error_threshold && converge_frame > 0)
+        if (dest_position.DistanceTo(curr_position) > error_threshold && converge_frame > 0)
         {
             //evaluate Jacobian matrix
             std::vector<Vector2> jacobian;
@@ -74,8 +81,10 @@ namespace CS460
             std::vector<Vector2> inverse;
             CalculatePseudoInverse(jacobian, inverse);
 
-            Vector2 curr_velocity = (dest_position - curr_position) / (Real)converge_frame;
-            curr_position         = ApplyAngleStep(inverse, curr_velocity, dt);
+            Vector2 curr_velocity = (dest_position - curr_position) * 0.75f;
+            last_velocity.x       = curr_velocity.x;
+            last_velocity.z       = last_velocity.y;
+            ApplyAngleStep(inverse, curr_velocity, dt);
             converge_frame--;
         }
     }
@@ -85,7 +94,7 @@ namespace CS460
         size_t size = forward_links.size();
         for (size_t i = 0; i < size; ++i)
         {
-            forward_links[i]->SetAngle(angles[i]);
+            forward_links[i]->SetAngle(angles[i], false);
         }
     }
 
@@ -118,6 +127,30 @@ namespace CS460
         }
     }
 
+    void Manipulator::PushChild(Real length, Real angle)
+    {
+        Link* link         = new Link(Vector3());
+        link->m_angle      = angle;
+        link->m_length     = length;
+        link->m_to_child.x = length * cosf(angle);
+        link->m_to_child.z = length * sinf(angle);
+
+        if (forward_links.empty())
+        {
+            forward_links.push_back(link);
+            inverse_links.push_back(link);
+        }
+        else
+        {
+            link->m_parent          = forward_links.back();
+            link->m_parent->m_child = link;
+            link->m_origin          = link->m_parent->m_origin + link->m_parent->m_to_child;
+
+            forward_links.push_back(link);
+            inverse_links.insert(inverse_links.begin(), link);
+        }
+    }
+
     void Manipulator::PushParent(const Vector3& origin)
     {
         Link* link = new Link(origin);
@@ -143,6 +176,7 @@ namespace CS460
         {
             max_length += link->m_length;
         }
+        //max_length *= 0.8f;
     }
 
     void Manipulator::Shutdown()
@@ -166,7 +200,15 @@ namespace CS460
             for (size_t i = 0; i < size; ++i)
             {
                 Link* link = forward_links[i];
-                renderer->DrawPrimitiveInstancing(m_drawing_sphere, m_drawing_sphere.orientation, link->m_origin, eRenderingMode::Face, m_color);
+                if (link->IsEndEffector())
+                {
+                    renderer->DrawPrimitiveInstancing(m_drawing_sphere, m_drawing_sphere.orientation, link->m_origin, eRenderingMode::Face, Color(0.9f, 0.69f, 0.17f));
+                }
+                else
+                {
+                    renderer->DrawPrimitiveInstancing(m_drawing_sphere, m_drawing_sphere.orientation, link->m_origin, eRenderingMode::Face, m_color);
+                }
+
                 link->Draw(renderer, m_color);
             }
         }
@@ -234,21 +276,24 @@ namespace CS460
         }
     }
 
-    Vector2 Manipulator::ApplyAngleStep(const std::vector<Vector2>& inverse, const Vector2& velocity, Real dt)
+    void Manipulator::ApplyAngleStep(const std::vector<Vector2>& inverse, const Vector2& velocity, Real dt)
     {
         size_t size = inverse.size();
         //angle_steps = inverse jacobian * velocity;
         //link_angles = link_angles + angle_steps * dt;
+        Real accumulated_angle = 0.0f;
         for (size_t i = 0; i < size; ++i)
         {
             //angle_steps[i] = inverse jacobian[i] * velocity;
             //link_angles[i] = link_angles[i] + angle_steps[i] * dt;
-            forward_links[i]->m_angle += (inverse[i].x * velocity.x + inverse[i].y + velocity.y) / dt;
-            forward_links[i]->UpdateAngle(false);
+            forward_links[i]->m_angle += (inverse[i].x * velocity.x + inverse[i].y + velocity.y) * dt;
+            //ImGui::Text("%f", forward_links[i]->m_angle);
+            forward_links[i]->UpdateAngle(accumulated_angle);
+            accumulated_angle += forward_links[i]->m_angle;
         }
 
         //curr_position = ForwardKinematics();
-        return ForwardKinematics();
+        //return ForwardKinematics();
     }
 
     Vector2 Manipulator::ForwardKinematics()

@@ -25,6 +25,7 @@ namespace CS460
         void Initialize() override;
         void Update(Real dt) override;
         void Shutdown() override;
+        void Draw(PrimitiveRenderer* renderer);
 
         void SetAnimationSpace(AnimationSpace* ani_space);
         void UpdatePath(const Vector3& target_point);
@@ -52,9 +53,13 @@ namespace CS460
         KeyboardInput*  m_input   = nullptr;
 
         Vector3 m_target_pos;
-        Real m_path_duration = 1.0f;
+        Real    m_path_duration = 1.0f;
 
         SpeedController       m_speed_control;
         OrientationController m_orientation_control;
+        Sphere                m_target_drawing_sphere;
+
+        bool m_target_created = false;
+        bool m_b_target_hit   = false;
     };
 }

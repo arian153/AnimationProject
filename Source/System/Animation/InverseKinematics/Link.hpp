@@ -22,6 +22,7 @@ namespace CS460
         void SetUpData();
         void SetAngle(Real angle, bool b_recursive = false);
         void UpdateAngle(bool b_recursive);
+        void UpdateAngle(Real accumulated_angle);
         bool IsEndEffector() const;
 
         void Draw(PrimitiveRenderer* renderer, const Color& color) const;
@@ -42,7 +43,7 @@ namespace CS460
         Vector3 m_to_child;
 
         Vector3 m_basis         = Vector3(1, 0, 0); //basis for rotation initially x-axis 
-        Vector3 m_rotation_axis = Vector3(0, 0, 1); //axis of rotation initially z-axis
+        Vector3 m_rotation_axis = Vector3(0, -1, 0); //axis of rotation initially z-axis
 
         Cone m_drawing_cone;
     };

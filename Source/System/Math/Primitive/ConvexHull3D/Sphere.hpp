@@ -26,7 +26,9 @@ namespace CS460
 
         //Draw
         void DrawPrimitive(PrimitiveRenderer* renderer, eRenderingMode mode, const Color& color) const override;
-       
+
+        bool HasIntersection(const Sphere& sphere) const;
+
     public:
         Real radius = 1.0f;
     };

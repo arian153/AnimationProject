@@ -25,6 +25,7 @@ namespace CS460
         void GetAngleVector(std::vector<Real>& angles);
 
         void PushChild(const Vector3& origin);
+        void PushChild(Real length, Real angle);
         void PushParent(const Vector3& origin);
         void SetUpData();
         void Shutdown();
@@ -33,8 +34,8 @@ namespace CS460
 
         void EvaluateJacobian(std::vector<Vector2>& jacobian);
         void CalculatePseudoInverse(const std::vector<Vector2>& jacobian, std::vector<Vector2>& inverse);
+        void ApplyAngleStep(const std::vector<Vector2>& inverse, const Vector2& velocity, Real dt);
 
-        Vector2 ApplyAngleStep(const std::vector<Vector2>& inverse, const Vector2& velocity, Real dt);
         Vector2 ForwardKinematics();
 
         Vector3 RootOrigin() const;
@@ -50,14 +51,14 @@ namespace CS460
         std::vector<Link*> forward_links;
 
         Vector2 dest_position;
-        Vector2 curr_position;
+        Vector3 last_velocity;
 
         Real error_threshold = 0.1f;
-        int  converge_frame  = 100;
+        int  converge_frame  = 0;
 
         Real max_length = 1.0f;
 
         Sphere m_drawing_sphere;
-        Color  m_color = Color(1, 1, 0.5f);
+        Color  m_color = Color(0.9f, 0.9f, 0.25f);
     };
 }

@@ -198,4 +198,10 @@ namespace CS460
             }
         }
     }
+
+    bool Sphere::HasIntersection(const Sphere& sphere) const
+    {
+        Real sq_d = position.DistanceSquaredTo(sphere.position);
+        return sq_d <= (radius + sphere.radius) * (radius + sphere.radius);
+    }
 }

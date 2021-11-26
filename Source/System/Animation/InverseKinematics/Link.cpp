@@ -52,6 +52,7 @@ namespace CS460
         if (m_child != nullptr)
         {
             Quaternion rotation(AxisRadian(m_rotation_axis, m_angle));
+
             m_to_child        = rotation.Rotate(m_basis) * m_length;
             m_child->m_origin = m_to_child + m_origin;
             m_child->m_basis  = m_to_child.Unit();
@@ -60,6 +61,19 @@ namespace CS460
             {
                 m_child->UpdateAngle(b_recursive);
             }
+        }
+    }
+
+    void Link::UpdateAngle(Real accumulated_angle)
+    {
+        if (m_child != nullptr)
+        {
+            Real global_angle = accumulated_angle + m_angle;
+            m_to_child.x = m_length * cosf(global_angle);
+            m_to_child.y = 0.0f;
+            m_to_child.z = m_length * sinf(global_angle);
+            m_child->m_origin = m_to_child + m_origin;
+            m_child->m_basis = m_to_child.Unit();
         }
     }
 

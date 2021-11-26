@@ -174,7 +174,7 @@ namespace CS460
         Real     det = data[0] * data[3] - data[1] * data[2];
         if (Math::IsZero(det))
         {
-            E5_ASSERT(false, "Inverse singular matrix");
+            //E5_ASSERT(false, "Inverse singular matrix");
             return result;
         }
         Real inv_det   = 1.0f / det;

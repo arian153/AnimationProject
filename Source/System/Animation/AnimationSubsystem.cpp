@@ -47,7 +47,7 @@ namespace CS460
 
         for (auto& ik_compo : m_ik_components)
         {
-            ik_compo->m_manipulator.Draw(m_primitive_renderer);
+            ik_compo->Draw(m_primitive_renderer);
         }
     }
 

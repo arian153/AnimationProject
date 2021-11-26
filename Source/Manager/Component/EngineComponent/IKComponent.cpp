@@ -5,6 +5,7 @@
 #include "../../../System/Animation/Space/AnimationSpace.hpp"
 #include "../../../System/Core/Input/InputCommon.hpp"
 #include "../../../System/Core/Input/KeyboardInput.hpp"
+#include "../../../System/Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../../../System/Logic/LogicSubsystem.hpp"
 #include "../../Object/Object.hpp"
 #include "../../Space/Space.hpp"
@@ -28,24 +29,44 @@ namespace CS460
 
         m_input = m_space->GetLogicSubsystem()->GetInput()->GetKeyboardInput();
 
-        m_manipulator.PushChild(Vector3(0, 0, 0));
-        m_manipulator.PushChild(Vector3(2, 0, 0));
-        m_manipulator.PushChild(Vector3(4, 0, 0));
-        m_manipulator.PushChild(Vector3(6, 0, 0));
-        m_manipulator.PushChild(Vector3(8, 0, 0));
-        m_manipulator.PushChild(Vector3(10, 0, 0));
-        m_manipulator.PushChild(Vector3(12, 0, 0));
+        m_target_drawing_sphere.radius = 1.5f;
+
+        m_manipulator.PushChild(1.0f, Math::PI_DIV_6 * 1.0f);
+        m_manipulator.PushChild(1.0f, Math::PI_DIV_6 * 2.0f);
+        m_manipulator.PushChild(1.0f, Math::PI_DIV_6 * 3.0f);
+        m_manipulator.PushChild(1.0f, Math::PI_DIV_6 * 4.0f);
+        m_manipulator.PushChild(1.0f, Math::PI_DIV_6 * 5.0f);
+        m_manipulator.PushChild(1.0f, Math::PI_DIV_6 * 6.0f);
         m_manipulator.SetUpData();
+
         m_speed_control.SetT1T2(0.001f, 0.999f);
     }
 
     void IKComponent::Update(Real dt)
     {
-        if (m_manipulator.IsReachable(m_target_pos))
+        Sphere end_effector_sphere;
+        Sphere target_sphere;
+
+        end_effector_sphere.position = m_manipulator.EndEffectorOrigin();
+        end_effector_sphere.radius   = m_manipulator.m_drawing_sphere.radius;
+
+        target_sphere.position = m_target_pos;
+        target_sphere.radius   = m_target_drawing_sphere.radius;
+
+        if (m_b_target_hit)
+        {
+            m_target_pos += 30.0f * m_manipulator.last_velocity * dt;
+        }
+        else if (end_effector_sphere.HasIntersection(target_sphere))
+        {
+            m_manipulator.converge_frame = 0;
+            m_b_target_hit               = true;
+        }
+        else if (m_manipulator.IsReachable(m_target_pos) && m_target_created)
         {
             m_manipulator.InverseKinematics(dt);
         }
-        else
+        else if (m_target_created)
         {
             //calculate elapsed t for update.
             m_speed_control.elapsed_t += dt;
@@ -60,6 +81,7 @@ namespace CS460
 
             //Get position using space curve.
             Vector3 pos = m_ani_space->GetPathPoint(m_speed_control.elapsed_s);
+            pos.y       = 0.0f;
             m_manipulator.SetRootPosition(pos);
         }
     }
@@ -68,6 +90,16 @@ namespace CS460
     {
         m_manipulator.Shutdown();
         Unsubscribe();
+    }
+
+    void IKComponent::Draw(PrimitiveRenderer* renderer)
+    {
+        m_manipulator.Draw(renderer);
+
+        if (m_target_created)
+        {
+            renderer->DrawPrimitiveInstancing(m_target_drawing_sphere, m_target_drawing_sphere.orientation, m_target_pos, eRenderingMode::Face, Color(0.2f, 0.85f, 0.45f));
+        }
     }
 
     void IKComponent::SetAnimationSpace(AnimationSpace* ani_space)
@@ -110,6 +142,11 @@ namespace CS460
             m_speed_control.elapsed_t = 0.0f;
             m_speed_control.elapsed_s = 0.0f;
         }
+
+        m_manipulator.dest_position  = Vector2(m_target_pos.x, m_target_pos.z);
+        m_manipulator.converge_frame = 10000;
+        m_target_created             = true;
+        m_b_target_hit               = false;
     }
 
     bool IKComponent::Load(const Json::Value& data)
