@@ -35,6 +35,7 @@ namespace CS460
         void EvaluateJacobian(std::vector<Vector2>& jacobian);
         void CalculatePseudoInverse(const std::vector<Vector2>& jacobian, std::vector<Vector2>& inverse);
         void ApplyAngleStep(const std::vector<Vector2>& inverse, const Vector2& velocity, Real dt);
+        void ApplyConstraintsAngleStep(const std::vector<Vector2>& inverse, const std::vector<Vector2>& jacobian, const Vector2& velocity, Real dt);
 
         Vector2 ForwardKinematics();
 
@@ -49,12 +50,14 @@ namespace CS460
     public:
         std::vector<Link*> inverse_links;
         std::vector<Link*> forward_links;
+        std::vector<Real>  constraints;
 
         Vector2 dest_position;
         Vector3 last_velocity;
 
-        Real error_threshold = 0.1f;
-        int  converge_frame  = 0;
+        Real error_threshold   = 0.1f;
+        int  converge_frame    = 0;
+        bool apply_constraints = true;
 
         Real max_length = 1.0f;
 

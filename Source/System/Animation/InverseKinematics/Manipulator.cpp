@@ -81,10 +81,19 @@ namespace CS460
             std::vector<Vector2> inverse;
             CalculatePseudoInverse(jacobian, inverse);
 
-            Vector2 curr_velocity = (dest_position - curr_position) * 0.75f;
+            Vector2 curr_velocity = (dest_position - curr_position) * 0.9f;
             last_velocity.x       = curr_velocity.x;
-            last_velocity.z       = last_velocity.y;
-            ApplyAngleStep(inverse, curr_velocity, dt);
+            last_velocity.z       = curr_velocity.y;
+
+            if (apply_constraints)
+            {
+                ApplyConstraintsAngleStep(inverse, jacobian, curr_velocity, dt);
+            }
+            else
+            {
+                ApplyAngleStep(inverse, curr_velocity, dt);
+            }
+
             converge_frame--;
         }
     }
@@ -176,7 +185,11 @@ namespace CS460
         {
             max_length += link->m_length;
         }
-        //max_length *= 0.8f;
+        max_length *= 0.9f;
+
+        size_t size = forward_links.size();
+        size = size > 0 ? size - 1 : 0;
+        constraints = std::vector<Real>(size, 0.0f);
     }
 
     void Manipulator::Shutdown()
@@ -291,9 +304,29 @@ namespace CS460
             forward_links[i]->UpdateAngle(accumulated_angle);
             accumulated_angle += forward_links[i]->m_angle;
         }
+    }
 
-        //curr_position = ForwardKinematics();
-        //return ForwardKinematics();
+    void Manipulator::ApplyConstraintsAngleStep(const std::vector<Vector2>& inverse, const std::vector<Vector2>& jacobian, const Vector2& velocity, Real dt)
+    {
+        size_t size = inverse.size();
+
+        Real    accumulated_angle = 0.0f;
+        Vector2 jq_w;
+        for (size_t i = 0; i < size; ++i)
+        {
+            //angle_steps = J(q)^+ * [p_dot + J(q)*w] - J(q)^+ * J(q) * w;
+            //link_angles = link_angles + angle_steps * dt;
+            jq_w.x = jacobian[i].x * constraints[i];
+            jq_w.y = jacobian[i].y * constraints[i];
+
+            Real a_term = inverse[i].x * (velocity.x + jq_w.x) + inverse[i].y * (velocity.y + jq_w.y);
+            Real b_term = inverse[i].x * jq_w.x + inverse[i].y * jq_w.y;
+
+            forward_links[i]->m_angle += (a_term - b_term) * dt;
+            //ImGui::Text("%f", forward_links[i]->m_angle);
+            forward_links[i]->UpdateAngle(accumulated_angle);
+            accumulated_angle += forward_links[i]->m_angle;
+        }
     }
 
     Vector2 Manipulator::ForwardKinematics()

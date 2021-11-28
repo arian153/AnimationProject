@@ -37,6 +37,8 @@ namespace CS460
         m_manipulator.PushChild(1.0f, Math::PI_DIV_6 * 4.0f);
         m_manipulator.PushChild(1.0f, Math::PI_DIV_6 * 5.0f);
         m_manipulator.PushChild(1.0f, Math::PI_DIV_6 * 6.0f);
+        m_manipulator.PushChild(1.0f, Math::PI_DIV_6 * 7.0f);
+        m_manipulator.PushChild(1.0f, Math::PI_DIV_6 * 8.0f);
         m_manipulator.SetUpData();
 
         m_speed_control.SetT1T2(0.001f, 0.999f);
