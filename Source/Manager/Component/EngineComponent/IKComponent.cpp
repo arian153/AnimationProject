@@ -164,6 +164,12 @@ namespace CS460
     {
         if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
         {
+            /*size_t constraints_size = m_manipulator.constraints.size();
+
+            for (size_t i = 0; i < constraints_size; ++i)
+            {
+                ImGui::SliderAngle(("##Angle" + std::to_string(i)).c_str(), &m_manipulator.constraints[i], 0.0f, 180.0f);
+            }*/
         }
     }
 

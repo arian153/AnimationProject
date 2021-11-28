@@ -242,10 +242,15 @@ namespace CS460
                 ImGui::Text("    Press Mouse LB       - Make point on platform (It will be control point of path)");
                 ImGui::Text("3. Select Object in Hierarchy Window");
                 ImGui::Text("4. Open Component detail in Inspector Window");
-                ImGui::Text("5. Edit Path duration, T1, T2 to adjust sliding and skidding control");
-                ImGui::Text("6. [Create New Path] button to make new path, if finished, press [End] button");
-                ImGui::Text("7. [Create New COI ] button to make new COI,  if finished, press [End] button");
-               
+                ImGui::NewLine();
+                ImGui::Text("Project - 1 & 2");
+                ImGui::Text("1. Edit Path duration, T1, T2 to adjust sliding and skidding control");
+                ImGui::Text("2. [Create New Path] button to make new path, if finished, press [End] button");
+                ImGui::Text("3. [Create New COI ] button to make new COI,  if finished, press [End] button");
+                ImGui::NewLine();
+                ImGui::Text("Project - 3");
+                ImGui::Text("1. Press Mouse LB button to create path on current root to target object");
+                ImGui::Text("2. Press Mouse LB with Left Shift to extend path on platform");
                 ImGui::NewLine();
                 ImGui::NewLine();
                 if (ImGui::Button("  Close  "))

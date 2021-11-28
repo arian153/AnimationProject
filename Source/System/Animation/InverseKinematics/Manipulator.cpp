@@ -185,7 +185,6 @@ namespace CS460
         {
             max_length += link->m_length;
         }
-        max_length *= 0.9f;
 
         size_t size = forward_links.size();
         size = size > 0 ? size - 1 : 0;
@@ -316,8 +315,9 @@ namespace CS460
         {
             //angle_steps = J(q)^+ * [p_dot + J(q)*w] - J(q)^+ * J(q) * w;
             //link_angles = link_angles + angle_steps * dt;
-            jq_w.x = jacobian[i].x * constraints[i];
-            jq_w.y = jacobian[i].y * constraints[i];
+            Real angle = forward_links[i]->m_angle;
+            jq_w.x = jacobian[i].x * (constraints[i] - angle);
+            jq_w.y = jacobian[i].y * (constraints[i] - angle);
 
             Real a_term = inverse[i].x * (velocity.x + jq_w.x) + inverse[i].y * (velocity.y + jq_w.y);
             Real b_term = inverse[i].x * jq_w.x + inverse[i].y * jq_w.y;

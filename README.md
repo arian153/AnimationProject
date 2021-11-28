@@ -31,9 +31,10 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
 
 ## Project 3 - Inverse Kinematics
 
-
-
-
+### Info
+- Model : There was no suitable model using data loader. 
+          (previous salamander model contain max 4 links manipulator)
+- Link : 7 link
 
 
 ## Component Control
@@ -45,9 +46,8 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
     T1                  - Slider for change t1 parameter of ease in velocity.
     T2                  - Slider for change t2 parameter of ease out velocity. 
 
-    You can edit these GUI feature to adjust sliding and skidding control.
-    Path duration, T1, T2.
-    It generate v(t), and this is a animation speed of clip following.
+    Press Mouse LB button to create path on current root to target object
+    Press Mouse LB & Hold Left Shift to extend path on platform
 
 ### Algorithm Description
     Jacobian Matrix Solution per frame
@@ -70,18 +70,16 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
         => Update(links); Draw(links);
 
 
-
-
-
-
 ### Relevant Source Codes
-- GUI support
-    Source/Manager/Component/EngineComponent/AniMeshComponent.cpp
-    Source/Manager/Component/EngineComponent/AniMeshComponent.hpp
+- GUI support & Data holder
+    Source/Manager/Component/EngineComponent/IKComponent.cpp
+    Source/Manager/Component/EngineComponent/IKComponent.hpp
 
-- Skeleton structure
-    Source/System/Animation/Skeleton/Skeleton.cpp
-    Source/System/Animation/Skeleton/Skeleton.hpp
+- Inverse Kinematics structure
+    Source/System/Animation/InverseKinematics/Link.cpp
+    Source/System/Animation/InverseKinematics/Link.hpp
+    Source/System/Animation/InverseKinematics/Manipulator.cpp
+    Source/System/Animation/InverseKinematics/Manipulator.hpp
 
 - Path Interpolation & Arc Length Calculation:
     Source/System/Animation/Space/AnimationSpace.cpp
