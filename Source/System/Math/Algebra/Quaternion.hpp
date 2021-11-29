@@ -55,6 +55,7 @@ namespace CS460
 
         Quaternion Conjugate() const;
         Quaternion Inverse() const;
+        Quaternion Unit() const;
         Real       DotProduct(const Quaternion& quaternion) const;
         Vector3    Rotate(const Vector3& vector) const;
         Vector3    RotateVector(const Vector3& vector) const;

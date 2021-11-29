@@ -380,6 +380,25 @@ namespace CS460
         return Quaternion(inverse_norm * r, -inverse_norm * i, -inverse_norm * j, -inverse_norm * k);
     }
 
+    Quaternion Quaternion::Unit() const
+    {
+        Real d = r * r + i * i + j * j + k * k;
+        // Check for zero length quaternion, 
+        //and use the no-rotation quaternion in that case.
+        if (Math::IsZero(d) == true)
+        {
+            return Quaternion();
+        }
+
+        Quaternion result;
+        Real multiplier = Math::InvSqrt(d);//1.f / sqrtf(d); 
+        result.r        = multiplier * r;
+        result.i        = multiplier * i;
+        result.j        = multiplier * j;
+        result.k        = multiplier * k;
+        return result;
+    }
+
     Real Quaternion::DotProduct(const Quaternion& quaternion) const
     {
         return (r * quaternion.r + i * quaternion.i + j * quaternion.j + k * quaternion.k);

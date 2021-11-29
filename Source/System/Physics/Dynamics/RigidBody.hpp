@@ -5,6 +5,8 @@
 
 namespace CS460
 {
+    class StepData;
+
     class RigidBody
     {
     public:
@@ -13,7 +15,12 @@ namespace CS460
 
         void Shutdown() const;
 
-        void Integrate(Real dt);
+        void IntegrateEuler(Real dt);
+        void IntegrateRK2(Real dt);
+        void IntegrateRK4(Real dt);
+        void IntegrateVerlet(Real dt);
+        void IntegrateMidpoint(Real dt);
+
         void UpdateCentroid();
         void UpdatePosition();
         void UpdateInertia();
@@ -78,6 +85,12 @@ namespace CS460
         void SetTransform(Transform* transform);
         void Clone(RigidBody* origin);
         bool IsSleep() const;
+
+    private:
+        Vector3 GetLinearAcceleration(const Vector3& v, const Vector3& p, Real dt) const;
+        Vector3 GetAngularAcceleration(const Vector3& w, const Quaternion& r, Real dt ) const;
+
+        void CalculateStepData(StepData& step_data);
 
     private:
         friend class Resolution;

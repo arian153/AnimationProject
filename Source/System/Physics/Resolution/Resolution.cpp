@@ -121,7 +121,7 @@ namespace CS460
         {
             for (auto& body : *rigid_bodies)
             {
-                body->Integrate(dt);
+                body->IntegrateEuler(dt);
                 body->UpdateSleepState();
             }
         }
@@ -129,7 +129,7 @@ namespace CS460
         {
             for (auto& body : *rigid_bodies)
             {
-                body->Integrate(dt);
+                body->IntegrateEuler(dt);
             }
         }
     }
