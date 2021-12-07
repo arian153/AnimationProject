@@ -183,6 +183,11 @@ namespace CS460
             }
         }
 
+        for (auto& constraint : m_constraints)
+        {
+            constraint->Render(m_primitive_renderer, Color());
+        }
+
         for (auto& force : m_forces)
         {
             if (force->draw_force.b_flag)

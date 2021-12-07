@@ -55,7 +55,7 @@ namespace CS460
 
         eColliderType Type() const;
 
-        bool Is2DPrimitive() const;
+        bool    Is2DPrimitive() const;
         Vector3 PlaneNormal2D() const;
 
     public: //virtual methods
@@ -110,7 +110,7 @@ namespace CS460
     protected:
         //collider local space data
         Transform m_local;
-        bool m_is_2D = false;
+        bool      m_is_2D    = false;
 
         //collider mass data
         Vector3  m_centroid; //center of mass

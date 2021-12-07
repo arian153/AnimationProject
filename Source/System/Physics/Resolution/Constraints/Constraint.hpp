@@ -18,6 +18,8 @@ namespace CS460
         virtual void GeneratePositionConstraints(Real dt) = 0;
         virtual void SolvePositionConstraints(Real dt) = 0;
         virtual void ApplyPositionConstraints() = 0;
+
+        virtual void Render(PrimitiveRenderer* primitive_renderer, const Color& color) const = 0;
     private:
     };
 }

@@ -21,6 +21,8 @@ namespace CS460
         void ApplyVelocityConstraints() override;
         void ApplyPositionConstraints() override;
 
+        void Render(PrimitiveRenderer* primitive_renderer, const Color& color) const override;
+
         void SetConstraintMode(eConstraintMode mode);
         void SetFrequency(Real frequency);
         void SetDampingRatio(Real damping_ratio);

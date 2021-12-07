@@ -36,6 +36,9 @@ namespace CS460
         void SetMass(Real density);
         void SetScale(const Vector3& scale);
         void SetRigidBody(RigidBody* rigid_body);
+        void SetGhost(bool is_ghost);
+
+        bool IsGhost() const;
 
         //getters
         MassData GetMassData() const;
@@ -59,6 +62,7 @@ namespace CS460
         Vector3            m_scale = Vector3(1.0f, 1.0f, 1.0f);
         BoundingAABB       m_bounding_volume;
         ColliderComponent* m_component = nullptr;
+        bool               m_is_ghost  = false;
 
         //primitives
         std::vector<ColliderPrimitive*>* m_colliders = nullptr;

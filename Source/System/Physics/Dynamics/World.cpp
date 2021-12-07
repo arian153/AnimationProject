@@ -264,6 +264,11 @@ namespace CS460
             m_solve_constraints = data["Solve Constraints"].asBool();
         }
 
+        if (JsonResource::HasMember(data, "Enable Sleep"))
+        {
+            m_resolution_phase->m_b_enable_sleep = data["Enable Sleep"].asBool();
+        }
+
         if (JsonResource::HasMember(data, "Forces") && data["Forces"].isArray())
         {
             for (auto it = data["Forces"].begin(); it != data["Forces"].end(); ++it)

@@ -12,6 +12,7 @@ namespace CS460
     ContactConstraint::ContactConstraint(ContactManifold* input, FrictionUtility* friction_utility, bool enable_baum, Real tangent_speed)
         : m_friction_utility(friction_utility), m_manifold(input), m_motion_a(), m_motion_b(), m_b_enable_baumgarte(enable_baum), m_tangent_speed(tangent_speed)
     {
+        m_b_ghost_constraints = input->m_set_a->IsGhost() || input->m_set_b->IsGhost();
     }
 
     ContactConstraint::~ContactConstraint()
@@ -24,6 +25,8 @@ namespace CS460
 
     void ContactConstraint::GenerateVelocityConstraints(Real dt)
     {
+        if (m_b_ghost_constraints)
+            return;
         m_body_a   = m_manifold->m_set_a->GetRigidBody();
         m_body_b   = m_manifold->m_set_b->GetRigidBody();
         m_motion_a = m_body_a->GetMotionMode();
@@ -71,6 +74,8 @@ namespace CS460
 
     void ContactConstraint::SolveVelocityConstraints(Real dt)
     {
+        if (m_b_ghost_constraints)
+            return;
         for (size_t i = 0; i < m_count; ++i)
         {
             SolveJacobian(m_manifold->contacts[i], m_tangent[i], i, dt);
@@ -85,6 +90,8 @@ namespace CS460
 
     void ContactConstraint::ApplyVelocityConstraints()
     {
+        if (m_b_ghost_constraints)
+            return;
         for (size_t i = 0; i < m_count; ++i)
         {
             m_manifold->contacts[i].tangent_lambda   = m_tangent[i].total_lambda;
@@ -105,6 +112,8 @@ namespace CS460
 
     void ContactConstraint::GeneratePositionConstraints(Real dt)
     {
+        if (m_b_ghost_constraints)
+            return;
         E5_UNUSED_PARAM(dt);
         m_position_term.p_a = m_body_a->GetCentroid();
         m_position_term.p_b = m_body_b->GetCentroid();
@@ -112,6 +121,8 @@ namespace CS460
 
     void ContactConstraint::SolvePositionConstraints(Real dt)
     {
+        if (m_b_ghost_constraints)
+            return;
         bool motion_a = m_body_a->GetMotionMode() == eMotionMode::Dynamic;
         bool motion_b = m_body_b->GetMotionMode() == eMotionMode::Dynamic;
         for (auto& contact : m_manifold->contacts)
@@ -135,12 +146,16 @@ namespace CS460
 
     void ContactConstraint::ApplyPositionConstraints()
     {
+        if (m_b_ghost_constraints)
+            return;
         m_body_a->SetCentroid(m_position_term.p_a);
         m_body_b->SetCentroid(m_position_term.p_b);
     }
 
     void ContactConstraint::Render(PrimitiveRenderer* primitive_renderer, const Color& color) const
     {
+        if (m_b_ghost_constraints)
+            return;
         Quaternion no_rotation;
         for (auto& contact_point : m_manifold->contacts)
         {
@@ -173,6 +188,8 @@ namespace CS460
 
     void ContactConstraint::WarmStart()
     {
+        if (m_b_ghost_constraints)
+            return;
         //apply previous data
         Basis normal_basis;
         for (size_t i = 0; i < m_count; ++i)
@@ -271,6 +288,9 @@ namespace CS460
 
     void ContactConstraint::AwakeState() const
     {
+        if (m_b_ghost_constraints)
+            return;
+
         bool is_a_sleep = m_body_a->IsSleep();
         bool is_b_sleep = m_body_b->IsSleep();
 

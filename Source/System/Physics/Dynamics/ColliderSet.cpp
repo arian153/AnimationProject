@@ -201,6 +201,16 @@ namespace CS460
         UpdateBoundingVolume();
     }
 
+    void ColliderSet::SetGhost(bool is_ghost)
+    {
+        m_is_ghost = is_ghost;
+    }
+
+    bool ColliderSet::IsGhost() const
+    {
+        return m_is_ghost;
+    }
+
     MassData ColliderSet::GetMassData() const
     {
         return m_mass_data;

@@ -66,7 +66,7 @@ namespace CS460
         void SolvePositionConstraints(Real dt) override;
         void ApplyPositionConstraints() override;
 
-        void Render(PrimitiveRenderer* primitive_renderer, const Color& color) const;
+        void Render(PrimitiveRenderer* primitive_renderer, const Color& color) const override;
         void WarmStart();
         Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
         void InitializeJacobian(const ContactPoint& contact, const Vector3& direction, Jacobian& jacobian) const;
@@ -89,8 +89,9 @@ namespace CS460
         Jacobian     m_normal[Physics::Collision::MAX_MANIFOLD_POINT_COUNT];
         Jacobian     m_tangent[Physics::Collision::MAX_MANIFOLD_POINT_COUNT];
         Jacobian     m_bitangent[Physics::Collision::MAX_MANIFOLD_POINT_COUNT];
-        Real         m_tangent_speed = 0.0f;
-        size_t       m_count         = 0;
-        bool         m_b_init        = false;
+        Real         m_tangent_speed       = 0.0f;
+        size_t       m_count               = 0;
+        bool         m_b_init              = false;
+        bool         m_b_ghost_constraints = false;
     };
 }

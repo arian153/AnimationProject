@@ -242,6 +242,7 @@ namespace CS460
         return m_is_2D;
     }
 
+  
     Vector3 ColliderPrimitive::PlaneNormal2D() const
     {
         return m_local.orientation.Rotate(Vector3(0.0f, 0.0f, 1.0f));
@@ -363,6 +364,7 @@ namespace CS460
             m_material.type        = Physics::eMaterial::UserType;
             m_material.restitution = data["Restitution"].asFloat();
         }
+
         SetMassData(m_material.density);
     }
 
@@ -409,19 +411,17 @@ namespace CS460
         ImGui::InputFloat3("##LocalTransformEdit1", &m_local.scale.x, 3);
         ImGui::Text("Orientation");
         ImGui::Text("Axis");
-        if(ImGui::InputFloat3("##LocalTransformEdit2", &axis_rad.axis.x, 3))
+        if (ImGui::InputFloat3("##LocalTransformEdit2", &axis_rad.axis.x, 3))
         {
             m_local.orientation.Set(axis_rad);
         }
         ImGui::Text("Radian");
-        if(ImGui::SliderAngle("##LocalTransformEdit3", &axis_rad.radian))
+        if (ImGui::SliderAngle("##LocalTransformEdit3", &axis_rad.radian))
         {
             m_local.orientation.Set(axis_rad);
         }
         ImGui::Text("Quaternion");
         ImGui::SliderFloat4("##LocalTransformEdit4", &m_local.orientation.r, -1.0f, 1.0f);
-
-
     }
 
     void ColliderPrimitive::UpdateRigidBody()

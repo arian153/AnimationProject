@@ -4,6 +4,7 @@
 #include "../../Dynamics/RigidBody.hpp"
 #include "../../../Math/Algebra/Matrix33.hpp"
 #include "../../../../Manager/Component/EngineComponent/PointConstraintComponent.hpp"
+#include "../../../Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace CS460
 {
@@ -32,6 +33,9 @@ namespace CS460
         m_r           = m_body->LocalToWorldVector(m_local_anchor - m_body->GetLocalCentroid());
         Vector3 c_pos = (m_body->GetCentroid() + m_r) - *m_target;
         Vector3 c_vel = m_body->GetLinearVelocity() + CrossProduct(m_body->GetAngularVelocity(), m_r);
+
+        auto mat = m_r.SkewSymmetricMatrix();
+
         m_cross.SetSkew(-m_r);
         Matrix33 k = m_body->InverseMassMatrix();
         if (m_b_rotation)
@@ -80,6 +84,14 @@ namespace CS460
     {
     }
 
+    void PointConstraint::Render(PrimitiveRenderer* primitive_renderer, const Color& color) const
+    {
+        Vector3 target_pos = *m_target;
+        Vector3 anchor_pos = m_body->GetCentroid();
+
+        primitive_renderer->DrawSegment(anchor_pos, target_pos, color);
+    }
+
     void PointConstraint::SetConstraintMode(eConstraintMode mode)
     {
         m_mode = mode;
@@ -103,6 +115,7 @@ namespace CS460
     void PointConstraint::SetTargetPoint(const Vector3& target)
     {
         m_local_target = target;
+        m_target       = &m_local_target;
     }
 
     void PointConstraint::SetAnchorPoint(const Vector3& anchor)

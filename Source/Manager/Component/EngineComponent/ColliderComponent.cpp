@@ -205,6 +205,12 @@ namespace CS460
             m_collider_set->UpdateMassData();
             m_collider_set->UpdateBoundingVolume();
         }
+
+        if (JsonResource::HasMember(data, "Is Ghost") && data["Is Ghost"].isBool())
+        {
+            m_collider_set->SetGhost(data["Is Ghost"].asBool());
+        }
+
         return true;
     }
 
