@@ -2,6 +2,7 @@
 #include "ComponentFactory.hpp"
 
 //factories
+#include "EngineFactory/AnchorFactory.hpp"
 #include "EngineFactory/AniMeshFactory.hpp"
 #include "EngineFactory/CameraFactory.hpp"
 #include "EngineFactory/ColliderFactory.hpp"
@@ -39,6 +40,7 @@ namespace CS460
         AddFactory(new SkyFactory());
         AddFactory(new AniMeshFactory());
         AddFactory(new IKFactory());
+        AddFactory(new AnchorFactory());
 
         return true;
     }
