@@ -1,6 +1,7 @@
 #pragma once
 #include "BroadPhase.hpp"
 #include "BoundingAABB.hpp"
+#include "../../Math/Primitive/ConvexHull3D/Box.hpp"
 
 namespace CS460
 {
@@ -61,8 +62,8 @@ namespace CS460
         void CrossChildren(DynamicBVHNode* node, std::list<ColliderPair>& result);
 
     private:
-        DynamicBVHNode* m_root = nullptr;
+        DynamicBVHNode*              m_root = nullptr;
         std::vector<DynamicBVHNode*> m_invalid_nodes;
-      
+        Box                          m_drawing_box;
     };
 }

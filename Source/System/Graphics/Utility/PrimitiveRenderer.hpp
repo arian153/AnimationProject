@@ -92,6 +92,11 @@ namespace CS460
         void DrawPrimitiveInstancing(const Primitive& primitive, const Transform& transform, eRenderingMode mode, Color color = Color());
         void DrawPrimitiveInstancing(const Primitive& primitive, const Quaternion& orientation, const Vector3& position, eRenderingMode mode, Color color = Color());
 
+        void DrawPrimitiveInstancing(const Primitive& primitive,  const Vector3& position, eRenderingMode mode, Color color = Color());
+        void DrawPrimitiveInstancing(const Primitive& primitive, const Vector3& position, const Vector3& scale, eRenderingMode mode, Color color = Color());
+        void DrawPrimitiveInstancing(const Primitive& primitive, const Quaternion& orientation, const Vector3& position, const Vector3& scale, eRenderingMode mode, Color color = Color());
+
+
     private:
         MatrixData           m_mvp_data;
         RendererCommon*      m_renderer = nullptr;

@@ -42,7 +42,7 @@ namespace CS460
         eConstraintMode m_mode = eConstraintMode::Hard;
         ConstraintBias  m_bias;
 
-        Real m_frequency     = 5.0f;
+        Real m_frequency     = 0.5f;
         Real m_damping_ratio = 0.5f;
         bool m_b_rotation    = true;
 

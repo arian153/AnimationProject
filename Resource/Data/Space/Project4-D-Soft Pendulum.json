@@ -265,6 +265,49 @@
         }
       ],
       "Name": "Box5"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 15, 0 ],
+            "Scale": [ 1, 1, 1 ]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 1.0,
+                "Material": "Rubber",
+                "Orientation": [ 1, 0, 0, 0 ],
+                "Position": [ 0, 0, 0 ],
+                "Cube": [ 1, 1, 1 ],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        },
+        {
+          "Type": "class CS460::PointConstraintComponent",
+          "Value": {
+            "Mode": "Soft",
+            "Anchor": [ 2, 2, 2 ],
+            "Target Object": "Box5"
+          }
+        }
+      ],
+      "Name": "Box6"
     }
   ],
   "Settings": {

@@ -71,6 +71,7 @@ namespace CS460
 
     void DynamicBVH::Initialize()
     {
+        m_drawing_box.SetUnit();
     }
 
     void DynamicBVH::Update(Real dt)
@@ -593,7 +594,8 @@ namespace CS460
             }
             if (broad_phase_color.b_flag)
             {
-                primitive_renderer->DrawBox(node->aabb.Center(), Quaternion(), node->aabb.Size(), eRenderingMode::Line, broad_phase_color.color);
+                primitive_renderer->DrawPrimitiveInstancing(m_drawing_box, node->aabb.Center(), node->aabb.Size(), eRenderingMode::Line, broad_phase_color.color);
+                //primitive_renderer->DrawBox(node->aabb.Center(), Quaternion(), node->aabb.Size(), eRenderingMode::Line, broad_phase_color.color);
             }
             if (node->children[0] != nullptr)
             {

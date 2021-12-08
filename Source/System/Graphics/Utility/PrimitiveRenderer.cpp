@@ -776,4 +776,26 @@ namespace CS460
         transform_matrix.AddVectorColumn(3, position);
         DrawPrimitiveInstancing(primitive, transform_matrix, mode, color);
     }
+
+    void PrimitiveRenderer::DrawPrimitiveInstancing(const Primitive& primitive, const Vector3& position, eRenderingMode mode, Color color)
+    {
+        Matrix44 transform_matrix = Matrix44::Identity();
+        transform_matrix.AddVectorColumn(3, position);
+        DrawPrimitiveInstancing(primitive, transform_matrix, mode, color);
+    }
+
+    void PrimitiveRenderer::DrawPrimitiveInstancing(const Primitive& primitive, const Vector3& position, const Vector3& scale, eRenderingMode mode, Color color)
+    {
+        CS460::Matrix44 transform_matrix = Math::Matrix44::Scale(scale, 1.0f);
+        transform_matrix.AddVectorColumn(3, position);
+        DrawPrimitiveInstancing(primitive, transform_matrix, mode, color);
+    }
+
+    void PrimitiveRenderer::DrawPrimitiveInstancing(const Primitive& primitive, const Quaternion& orientation, const Vector3& position, const Vector3& scale, eRenderingMode mode, Color color)
+    {
+        CS460::Matrix44 transform_matrix = Math::Matrix44::Scale(scale, 1.0f);
+        transform_matrix                 = Math::Matrix44::Rotation(orientation) * transform_matrix;
+        transform_matrix.AddVectorColumn(3, position);
+        DrawPrimitiveInstancing(primitive, transform_matrix, mode, color);
+    }
 }
