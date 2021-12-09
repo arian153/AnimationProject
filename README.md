@@ -29,7 +29,7 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
     Press R, F           - Change camera position Up & Down");
     Press Mouse LB       - Make point on platform (it will be control point of path)
 
-## Project 3 - Inverse Kinematics
+## Project 4 - Physically Based Simulation
 
 ### Info
 - Model : There was no suitable model using data loader. 

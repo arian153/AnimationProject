@@ -5,8 +5,8 @@ namespace CS460
 {
     enum class eConstraintMode
     {
-        Hard
-      , Soft
+        Hard,
+        Soft
     };
 
     class ConstraintCoefficient
