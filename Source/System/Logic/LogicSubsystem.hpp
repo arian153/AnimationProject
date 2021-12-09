@@ -35,6 +35,9 @@ namespace CS460
         void GetLogicComponents(const std::string& type, std::vector<LogicComponent*>& container);
 
         InputCommon* GetInput() const;
+
+        Ray GetPickingRay() const;
+
     private:
         friend class LogicSystem;
     private:

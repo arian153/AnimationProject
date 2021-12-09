@@ -1,4 +1,6 @@
 #include "Basis.hpp"
+
+#include "../Algebra/Matrix33.hpp"
 #include "../Algebra/Quaternion.hpp"
 
 namespace CS460
@@ -110,5 +112,12 @@ namespace CS460
         i.SetNormalize();
         j.SetNormalize();
         k.SetNormalize();
+    }
+
+    Vector3 Basis::ApplyTransform(const Vector3& vector) const
+    {
+        Matrix33 matrix;
+        matrix.SetColumns(i, j, k);
+        return matrix.Inverse() * vector;
     }
 }

@@ -1,9 +1,16 @@
 #pragma once
 
 #include "..//Component.hpp"
+#include "../../../System/Math/Primitive/ConvexHull3D/Sphere.hpp"
+#include "../../../System/Math/Primitive/Others/Plane.hpp"
+#include "../../../System/Math/Primitive/Others/Ray.hpp"
+#include "../../../System/Math/Structure/Basis.hpp"
+#include "../GameComponent/LogicComponent.hpp"
 
 namespace CS460
 {
+    class CameraComponent;
+    class MouseInput;
     class KeyboardInput;
     class SpacePath;
     class AnimationSpace;
@@ -11,7 +18,7 @@ namespace CS460
     class Transform;
     class PrimitiveRenderer;
 
-    class AnchorComponent final : public Component
+    class AnchorComponent final : public LogicComponent
     {
     public:
         ~AnchorComponent();
@@ -22,7 +29,7 @@ namespace CS460
         void Initialize() override;
         void Update(Real dt) override;
         void Shutdown() override;
-        void Draw(PrimitiveRenderer* renderer);
+        void Render() override;
 
     protected:
         bool Load(const Json::Value& data) override;
@@ -39,7 +46,16 @@ namespace CS460
         void     Clone(AnchorComponent* origin);
 
     private:
-        Transform*     m_transform = nullptr;
-        KeyboardInput* m_input     = nullptr;
+        CameraComponent* m_camera      = nullptr;
+        Transform*       m_transform   = nullptr;
+        KeyboardInput*   m_key_input   = nullptr;
+        MouseInput*      m_mouse_input = nullptr;
+
+        Basis  m_basis;
+        Plane  m_plane;
+        Ray    m_picking_ray;
+        Sphere m_anchor;
+
+        bool m_b_edit = false;
     };
 }

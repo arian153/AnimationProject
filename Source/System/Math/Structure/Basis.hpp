@@ -22,6 +22,8 @@ namespace CS460
         void Rotate(const Quaternion& orientation);
         void Normalize();
 
+        Vector3 ApplyTransform(const Vector3& vector) const;
+
     public:
         Vector3 i = Math::Vector3::X_AXIS;
         Vector3 j = Math::Vector3::Y_AXIS;

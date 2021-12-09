@@ -43,11 +43,12 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 15, 0],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 15, 0 ],
+            "Scale": [ 1, 1, 1 ]
           }
         }
+
       ],
       "Name": "Anchor"
     },
@@ -382,15 +383,14 @@
         {
           "Type": "class CS460::Drag",
           "Value": {
-            "Linear Drag": 0.25,
-            "Angular Drag": 0.25
+            "Linear Drag": 0.65,
+            "Angular Drag": 0.35
           }
         },
         {
           "Type": "class CS460::Gravity",
           "Value": {
-            "Global Gravity": [0, -1, 0],
-            "Gravity Coefficient": 10.0
+            "Global Gravity": [0, -9.8, 0]
           }
         }
       ]

@@ -34,15 +34,13 @@ namespace CS460
         Vector3 c_pos = (m_body->GetCentroid() + m_r) - *m_target;
         Vector3 c_vel = m_body->GetLinearVelocity() + CrossProduct(m_body->GetAngularVelocity(), m_r);
 
-        auto mat = m_r.SkewSymmetricMatrix();
-
         m_cross.SetSkew(-m_r);
         Matrix33 k = m_body->InverseMassMatrix();
         if (m_b_rotation)
         {
             k += m_cross * m_body->InverseInertia() * m_cross.Transpose();
         }
-        k += m_bias.softness_bias * Matrix33();
+        k += m_bias.softness_bias * Matrix33::Identity();
         m_position_error_bias = m_bias.position_bias * c_pos;
         m_effective_mass      = k.Inverse();
         m_total_lambda.SetZero();
@@ -58,6 +56,7 @@ namespace CS460
         Vector3 lambda = m_effective_mass * (-jvb);
         m_total_lambda += lambda;
         v += m_body->InverseMass() * lambda;
+
         m_body->SetLinearVelocity(v);
         if (m_b_rotation)
         {

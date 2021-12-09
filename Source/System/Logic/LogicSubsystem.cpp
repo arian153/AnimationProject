@@ -93,4 +93,9 @@ namespace CS460
     {
         return m_input;
     }
+
+    Ray LogicSubsystem::GetPickingRay() const
+    {
+        return m_picking_ray;
+    }
 }
