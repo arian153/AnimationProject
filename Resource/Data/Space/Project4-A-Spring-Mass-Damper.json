@@ -1,0 +1,422 @@
+{
+  "Create Flag": [
+    "ComponentManager",
+    "ObjectManager",
+    "Scene",
+    "World",
+    "Logic"
+  ],
+  "Update Flag": [
+    "Scene",
+    "Logic"
+  ],
+  "FixedUpdate Flag": [
+    "World"
+  ],
+  "Objects": [
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [0, 0, -60],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::CameraComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [0, 0, -60],
+            "Zoom": 1.0
+          }
+        },
+        {
+          "Type": "class Game::ControllerComponent"
+        }
+      ],
+      "Name": "Camera"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [-30, 15, 0],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::AnchorComponent"
+        }
+      ],
+      "Name": "AnchorA"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [-25, 15, 0],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 1.0,
+                "Material": "Rubber",
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [1, 1, 1],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        }
+      ],
+      "Name": "Box1"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [-15, 15, 0],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 1.0,
+                "Material": "Rubber",
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [1, 1, 1],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        }
+      ],
+      "Name": "Box2"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [-5, 15, 0],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 1.0,
+                "Material": "Rubber",
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [1, 1, 1],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        }
+      ],
+      "Name": "Box3"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [5, 15, 0],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 1.0,
+                "Material": "Rubber",
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [1, 1, 1],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        }
+      ],
+      "Name": "Box4"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [15, 15, 0],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 1.0,
+                "Material": "Rubber",
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [1, 1, 1],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        }
+      ],
+      "Name": "Box5"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [25, 15, 0],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 1.0,
+                "Material": "Rubber",
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [1, 1, 1],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        }
+      ],
+      "Name": "Box6"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [30, 15, 0],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::AnchorComponent"
+        }
+      ],
+      "Name": "AnchorB"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Anchor Object": "AnchorA",
+            "Target Object": "Box1",
+            "A Box Vertex ID": 0
+          }
+        }
+      ],
+      "Name": "Spring0"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Target Object A": "Box1",
+            "Target Object B": "Box2",
+            "A Box Vertex ID": 7,
+            "B Box Vertex ID": 0
+          }
+        }
+      ],
+      "Name": "Spring1"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Target Object A": "Box2",
+            "Target Object B": "Box3",
+            "A Box Vertex ID": 7,
+            "B Box Vertex ID": 0
+          }
+        }
+      ],
+      "Name": "Spring2"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Target Object A": "Box3",
+            "Target Object B": "Box4",
+            "A Box Vertex ID": 7,
+            "B Box Vertex ID": 0
+          }
+        }
+      ],
+      "Name": "Spring3"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Target Object A": "Box4",
+            "Target Object B": "Box5",
+            "A Box Vertex ID": 7,
+            "B Box Vertex ID": 0
+          }
+        }
+      ],
+      "Name": "Spring4"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Target Object A": "Box5",
+            "Target Object B": "Box6",
+            "A Box Vertex ID": 7,
+            "B Box Vertex ID": 0
+          }
+        }
+      ],
+      "Name": "Spring5"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Target Object": "Box6",
+            "Anchor Object": "AnchorB",
+            "A Box Vertex ID": 7
+          }
+        }
+      ],
+      "Name": "Spring6"
+    }
+  ],
+  "Settings": {
+    "ProjectionMatrix": "Perspective",
+    "World": {
+      "Draw Broad Phase": {
+        "Color": [1, 1, 1, 1],
+        "Flag": false
+      },
+      "Draw Contact": {
+        "Color": [1, 0, 0, 1],
+        "Flag": false
+      },
+      "Draw EPA": {
+        "Color": [1, 1, 0, 1],
+        "Flag": false
+      },
+      "Draw GJK": {
+        "Color": [0, 1, 0, 1],
+        "Flag": false
+      },
+      "Draw Primitive": {
+        "Color": [0, 0, 1, 1],
+        "Flag": true
+      },
+      "Enable Sleep": false,
+      "Forces": [
+        {
+          "Type": "class CS460::Drag",
+          "Value": {
+            "Linear Drag": 0.25,
+            "Angular Drag": 0.75
+          }
+        },
+        {
+          "Type": "class CS460::Gravity",
+          "Value": {
+            "Global Gravity": [0, -9.8, 0]
+          }
+        }
+      ]
+    }
+  },
+  "Type": "Space"
+}

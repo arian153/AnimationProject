@@ -15,6 +15,7 @@
 #include "EngineFactory/ParticleEmitterFactory.hpp"
 #include "EngineFactory/PointConstraintFactory.hpp"
 #include "EngineFactory/SkyFactory.hpp"
+#include "EngineFactory/SpringConstraintsFactory.hpp"
 
 namespace CS460
 {
@@ -41,6 +42,7 @@ namespace CS460
         AddFactory(new AniMeshFactory());
         AddFactory(new IKFactory());
         AddFactory(new AnchorFactory());
+        AddFactory(new SpringConstraintsFactory());
 
         return true;
     }

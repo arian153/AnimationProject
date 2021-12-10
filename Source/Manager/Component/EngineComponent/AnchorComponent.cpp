@@ -38,11 +38,10 @@ namespace CS460
         m_mouse_input = input->GetMouseInput();
         m_key_input   = input->GetKeyboardInput();
 
-        m_camera = m_space->GetObjectManager()->FindObjectBegin("Camera")->GetComponent<CameraComponent>();
+        m_camera        = m_space->GetObjectManager()->FindObjectBegin("Camera")->GetComponent<CameraComponent>();
         m_anchor.radius = 0.35f;
 
         m_primitive_renderer->DrawPrimitiveInstancing(m_anchor, m_anchor.position, eRenderingMode::Face, Color(1, 0, 0));
-
     }
 
     void AnchorComponent::Update(Real dt)
@@ -53,18 +52,24 @@ namespace CS460
 
         if (m_mouse_input->IsDown(eKeyCodeMouse::Left) == false)
         {
-            m_b_edit = false;
-             Ray model_ray = m_picking_ray;
-                model_ray.position -= m_anchor.position;
+            m_b_edit      = false;
+          
+        }
+        if (m_mouse_input->IsPressed(eKeyCodeMouse::Left))
+        {
+            Ray model_ray = m_picking_ray;
+            model_ray.position -= m_anchor.position;
             Real min, max;
 
             if (m_anchor.TestRayIntersection(model_ray, min, max))
             {
                 Vector3 depth = m_basis.ApplyTransform(m_anchor.position);
                 m_plane.Set(m_basis.k, -depth.z);
+
                 m_b_edit = true;
             }
         }
+
 
         if (m_mouse_input->IsDown(eKeyCodeMouse::Left))
         {

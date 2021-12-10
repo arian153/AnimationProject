@@ -57,5 +57,6 @@ namespace CS460
         Sphere m_anchor;
 
         bool m_b_edit = false;
+        int m_click_count = 0;
     };
 }
