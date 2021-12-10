@@ -593,15 +593,13 @@ namespace CS460
     {
         if (transform != nullptr)
         {
-            if (m_local.position != transform->position
-                || m_local.orientation != transform->orientation
-            )
             {
                 m_local = *transform;
                 UpdateOrientation();
                 UpdateCentroid();
                 UpdateInertia();
             }
+           
         }
     }
 

@@ -63,7 +63,7 @@ namespace CS460
     class GeometryPointIndex
     {
     public:
-        GeometryPointIndex()  = delete;
+        GeometryPointIndex()  = default;
         ~GeometryPointIndex() = default;
 
         explicit GeometryPointIndex(U32 i)

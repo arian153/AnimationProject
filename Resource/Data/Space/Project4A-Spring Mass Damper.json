@@ -395,8 +395,8 @@
     "ProjectionMatrix": "Perspective",
     "World": {
       "Draw Broad Phase": {
-        "Color": [1, 1, 1, 1],
-        "Flag": false
+        "Color": [ 1, 1, 1, 1 ],
+        "Flag": true
       },
       "Draw Contact": {
         "Color": [1, 0, 0, 1],
@@ -411,7 +411,7 @@
         "Flag": false
       },
       "Draw Primitive": {
-        "Color": [0, 0, 1, 1],
+        "Color": [0, 1, 1, 1],
         "Flag": true
       },
       "Enable Sleep": false,
@@ -419,8 +419,8 @@
         {
           "Type": "class CS460::Drag",
           "Value": {
-            "Linear Drag": 0.25,
-            "Angular Drag": 0.75
+            "Linear Drag": 0.35,
+            "Angular Drag": 0.85
           }
         },
         {

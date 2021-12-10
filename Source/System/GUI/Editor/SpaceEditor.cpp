@@ -36,6 +36,11 @@ namespace CS460
     {
     }
 
+    bool CompareResource( JsonResource* a,  JsonResource* b)
+    {
+        return std::strcmp(a->FileName().c_str(), b->FileName().c_str()) < 0;
+    }
+
     void SpaceEditor::Initialize(Application* application)
     {
         m_application              = application;
@@ -44,6 +49,8 @@ namespace CS460
         m_space_manager            = application->GetSpaceManager();
         m_frame_utility            = application->GetFrameUtility();
         m_resource_manager->GetJsonResources(eJsonType::Space, m_resources);
+
+        std::sort(m_resources.begin(), m_resources.end(), CompareResource);
     }
 
     void SpaceEditor::SetStepFrameTime(Real target_frame_per_second)
@@ -379,7 +386,7 @@ namespace CS460
             {
                 space->Update(dt, eSubsystemFlag::Logic | eSubsystemFlag::Scene);
             }
-            m_render_texture_generator->BeginRenderToTexture(ColorDef::Pure::Gray);
+            m_render_texture_generator->BeginRenderToTexture(ColorDef::Pure::Black);
             m_render_texture_generator->Render(space);
             m_render_texture_generator->EndRenderToTexture();
             ImVec2 min         = ImGui::GetWindowContentRegionMin();

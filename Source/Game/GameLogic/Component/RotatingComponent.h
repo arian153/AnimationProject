@@ -42,7 +42,7 @@ namespace Game
         inline static CS460::Basis   s_basis;
 
         inline static float            s_ball_speed   = 1.0f;
-        inline static float            s_orbit_radius = 3.0f;
+        inline static float            s_orbit_radius = 15.0f;
         inline static CS460::Vector3 s_orbit_center = CS460::Vector3();
         inline static int              s_count        = 0;
     };

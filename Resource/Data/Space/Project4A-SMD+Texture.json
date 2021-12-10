@@ -1,0 +1,763 @@
+{
+  "Create Flag": [
+    "ComponentManager",
+    "ObjectManager",
+    "Scene",
+    "World",
+    "Logic"
+  ],
+  "Update Flag": [
+    "Scene",
+    "Logic"
+  ],
+  "FixedUpdate Flag": [
+    "World"
+  ],
+  "Objects": [
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [0, 0, -60],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::CameraComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [0, 0, -60],
+            "Zoom": 1.0
+          }
+        },
+        {
+          "Type": "class Game::ControllerComponent"
+        }
+      ],
+      "Name": "Camera"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [0, -5, 0],
+            "Scale": [3, 3, 3]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+            "Motion": "Kinematic",
+            "Angular": {
+              "Velocity": [1, 1, 1]
+            }
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 0.4,
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [6, 6, 6],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
+            "Color": {
+              "Ambient": [1, 1, 1, 1],
+              "Diffuse": [1, 1, 1, 1],
+              "Specular": [1, 1, 1, 64]
+            },
+            "Texture": {
+              "DiffuseType": "Texture",
+              "Diffuse0": "../../Resource/Texture/container2.png",
+              "Diffuse1": "",
+              "Diffuse2": "",
+              "Specular": "../../Resource/Texture/container2_specular.png",
+              "NormalMap": 0
+
+            },
+            "Shader Type": "PhongInstancing"
+
+          }
+        }
+      ],
+      "Name": "Box"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [-30, 15, 0],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::AnchorComponent"
+        }
+      ],
+      "Name": "AnchorA"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [-25, 15, 0],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 0.4,
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [2, 2, 2],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
+            "Color": {
+              "Ambient": [1, 1, 1, 1],
+              "Diffuse": [1, 1, 1, 1],
+              "Specular": [1, 1, 1, 64]
+            },
+            "Texture": {
+              "DiffuseType": "Texture",
+              "Diffuse0": "../../Resource/Texture/container2.png",
+              "Diffuse1": "",
+              "Diffuse2": "",
+              "Specular": "../../Resource/Texture/container2_specular.png",
+              "NormalMap": 0
+
+            },
+            "Shader Type": "PhongInstancing"
+
+          }
+        }
+      ],
+      "Name": "Box1"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [-15, 15, 0],
+            "Scale": [2, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 0.4,
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [4, 2, 2],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
+            "Color": {
+              "Ambient": [1, 1, 1, 1],
+              "Diffuse": [1, 1, 1, 1],
+              "Specular": [1, 1, 1, 64]
+            },
+            "Texture": {
+              "DiffuseType": "Texture",
+              "Diffuse0": "../../Resource/Texture/container2.png",
+              "Diffuse1": "",
+              "Diffuse2": "",
+              "Specular": "../../Resource/Texture/container2_specular.png",
+              "NormalMap": 0
+
+            },
+            "Shader Type": "PhongInstancing"
+
+          }
+        }
+      ],
+      "Name": "Box2"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [-5, 15, 0],
+            "Scale": [3, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 0.4,
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [6, 2, 2],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
+            "Color": {
+              "Ambient": [1, 1, 1, 1],
+              "Diffuse": [1, 1, 1, 1],
+              "Specular": [1, 1, 1, 64]
+            },
+            "Texture": {
+              "DiffuseType": "Texture",
+              "Diffuse0": "../../Resource/Texture/container2.png",
+              "Diffuse1": "",
+              "Diffuse2": "",
+              "Specular": "../../Resource/Texture/container2_specular.png",
+              "NormalMap": 0
+
+            },
+            "Shader Type": "PhongInstancing"
+
+          }
+        }
+      ],
+      "Name": "Box3"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [5, 15, 0],
+            "Scale": [3, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 0.4,
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [6, 2, 2],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
+            "Color": {
+              "Ambient": [1, 1, 1, 1],
+              "Diffuse": [1, 1, 1, 1],
+              "Specular": [1, 1, 1, 64]
+            },
+            "Texture": {
+              "DiffuseType": "Texture",
+              "Diffuse0": "../../Resource/Texture/container2.png",
+              "Diffuse1": "",
+              "Diffuse2": "",
+              "Specular": "../../Resource/Texture/container2_specular.png",
+              "NormalMap": 0
+
+            },
+            "Shader Type": "PhongInstancing"
+
+          }
+        }
+      ],
+      "Name": "Box4"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [15, 15, 0],
+            "Scale": [2, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 0.4,
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [4, 2, 2],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
+            "Color": {
+              "Ambient": [1, 1, 1, 1],
+              "Diffuse": [1, 1, 1, 1],
+              "Specular": [1, 1, 1, 64]
+            },
+            "Texture": {
+              "DiffuseType": "Texture",
+              "Diffuse0": "../../Resource/Texture/container2.png",
+              "Diffuse1": "",
+              "Diffuse2": "",
+              "Specular": "../../Resource/Texture/container2_specular.png",
+              "NormalMap": 0
+
+            },
+            "Shader Type": "PhongInstancing"
+
+          }
+        }
+      ],
+      "Name": "Box5"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [25, 15, 0],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 0.4,
+                "Orientation": [1, 0, 0, 0],
+                "Position": [0, 0, 0],
+                "Cube": [2, 2, 2],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        },
+        {
+          "Type": "class CS460::MeshComponent",
+          "Value": {
+            "Mesh": {
+              "Type": "File",
+              "Path": "../../Resource/Mesh/cube.obj"
+            },
+            "Color": {
+              "Ambient": [1, 1, 1, 1],
+              "Diffuse": [1, 1, 1, 1],
+              "Specular": [1, 1, 1, 64]
+            },
+            "Texture": {
+              "DiffuseType": "Texture",
+              "Diffuse0": "../../Resource/Texture/container2.png",
+              "Diffuse1": "",
+              "Diffuse2": "",
+              "Specular": "../../Resource/Texture/container2_specular.png",
+              "NormalMap": 0
+
+            },
+            "Shader Type": "PhongInstancing"
+
+          }
+        }
+      ],
+      "Name": "Box6"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [30, 15, 0],
+            "Scale": [1, 1, 1]
+          }
+        },
+        {
+          "Type": "class CS460::AnchorComponent"
+        }
+      ],
+      "Name": "AnchorB"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Anchor Object": "AnchorA",
+            "Target Object": "Box1",
+            "A Box Vertex ID": 0,
+            "Spring Constant": 7.0,
+            "Damper Constant": 1.0
+          }
+        }
+      ],
+      "Name": "Spring0"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Target Object A": "Box1",
+            "Target Object B": "Box2",
+            "A Box Vertex ID": 7,
+            "B Box Vertex ID": 0,
+            "Spring Constant": 7.0,
+            "Damper Constant": 1.0
+          }
+        }
+      ],
+      "Name": "Spring1"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Target Object A": "Box2",
+            "Target Object B": "Box3",
+            "A Box Vertex ID": 7,
+            "B Box Vertex ID": 0,
+            "Spring Constant": 7.0,
+            "Damper Constant": 1.0
+          }
+        }
+      ],
+      "Name": "Spring2"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Target Object A": "Box3",
+            "Target Object B": "Box4",
+            "A Box Vertex ID": 7,
+            "B Box Vertex ID": 0,
+            "Spring Constant": 7.0,
+            "Damper Constant": 1.0
+          }
+        }
+      ],
+      "Name": "Spring3"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Target Object A": "Box4",
+            "Target Object B": "Box5",
+            "A Box Vertex ID": 7,
+            "B Box Vertex ID": 0,
+            "Spring Constant": 7.0,
+            "Damper Constant": 1.0
+          }
+        }
+      ],
+      "Name": "Spring4"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Target Object A": "Box5",
+            "Target Object B": "Box6",
+            "A Box Vertex ID": 7,
+            "B Box Vertex ID": 0,
+            "Spring Constant": 7.0,
+            "Damper Constant": 1.0
+          }
+        }
+      ],
+      "Name": "Spring5"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::SpringConstraintsComponent",
+          "Value": {
+            "Target Object": "Box6",
+            "Anchor Object": "AnchorB",
+            "A Box Vertex ID": 7,
+            "Spring Constant": 7.0,
+            "Damper Constant": 1.0
+          }
+        }
+      ],
+      "Name": "Spring6"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [10, 0, 0],
+            "Scale": [0.1, 0.1, 0.1]
+          }
+        },
+        {
+          "Type": "class CS460::LightComponent",
+          "Value": {
+            "Type": 2,
+            "Ambient Color": [0, 0, 0, 1.0],
+            "Ambient Range": [0.35, 0.35, 0.95, 1.0],
+            "Diffuse Color": [0.55, 0.55, 0.55, 1.0],
+            "Specular Color": [0.3, 0.3, 0.3, 1.0],
+            "Intensity": 1.2,
+            "Direction": [1.0, 0.0, 0.0],
+            "Position": [0.0, 0.0, 0.0],
+            "Attenuation": [1.0, 0.045, 0.0075],
+            "Length": 1.0,
+            "Range": 1015.0,
+            "Spot": 15.0
+          }
+        }
+      ],
+      "Name": "Light"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [-10, 0, 0],
+            "Scale": [0.1, 0.1, 0.1]
+          }
+        },
+        {
+          "Type": "class CS460::LightComponent",
+          "Value": {
+            "Type": 2,
+            "Ambient Color": [0, 0, 0, 1.0],
+            "Ambient Range": [0.35, 0.35, 0.95, 1.0],
+            "Diffuse Color": [0.255, 0.255, 0.55, 1.0],
+            "Specular Color": [0.3, 0.3, 0.3, 1.0],
+            "Intensity": 1.5,
+            "Direction": [1.0, 0.0, 0.0],
+            "Position": [0.0, 0.0, 0.0],
+            "Attenuation": [1.0, 0.045, 0.0075],
+            "Length": 1.0,
+            "Range": 1015.0,
+            "Spot": 15.0
+          }
+        }
+      ],
+      "Name": "Light"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [0, 10, 0],
+            "Scale": [0.1, 0.1, 0.1]
+          }
+        },
+        {
+          "Type": "class CS460::LightComponent",
+          "Value": {
+            "Type": 2,
+            "Ambient Color": [0, 0, 0, 1.0],
+            "Ambient Range": [0.35, 0.35, 0.95, 1.0],
+            "Diffuse Color": [0.555, 0.555, 0.255, 1.0],
+            "Specular Color": [0.3, 0.3, 0.3, 1.0],
+            "Intensity": 1.5,
+            "Direction": [1.0, 0.0, 0.0],
+            "Position": [0.0, 0.0, 0.0],
+            "Attenuation": [1.0, 0.045, 0.0075],
+            "Length": 1.0,
+            "Range": 1015.0,
+            "Spot": 15.0
+          }
+        }
+      ],
+      "Name": "Light"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [1, 0, 0, 0],
+            "Position": [0, 0, -10],
+            "Scale": [0.1, 0.1, 0.1]
+          }
+        },
+        {
+          "Type": "class CS460::LightComponent",
+          "Value": {
+            "Type": 2,
+            "Ambient Color": [0, 0, 0, 1.0],
+            "Ambient Range": [0.35, 0.35, 0.95, 1.0],
+            "Diffuse Color": [0.8555, 0.8555, 0.855, 1.0],
+            "Specular Color": [0.53, 0.53, 0.53, 1.0],
+            "Intensity": 1.5,
+            "Direction": [1.0, 0.0, 0.0],
+            "Position": [0.0, 0.0, 0.0],
+            "Attenuation": [1.0, 0.045, 0.0075],
+            "Length": 1.0,
+            "Range": 1015.0,
+            "Spot": 15.0
+          }
+        }
+      ],
+      "Name": "Light"
+    }
+  ],
+  "Settings": {
+    "ProjectionMatrix": "Perspective",
+    "World": {
+      "Draw Broad Phase": {
+        "Color": [1, 1, 1, 1],
+        "Flag": false
+      },
+      "Draw Contact": {
+        "Color": [1, 0, 0, 1],
+        "Flag": false
+      },
+      "Draw EPA": {
+        "Color": [1, 1, 0, 1],
+        "Flag": false
+      },
+      "Draw GJK": {
+        "Color": [0, 1, 0, 1],
+        "Flag": false
+      },
+      "Draw Primitive": {
+        "Color": [0, 1, 1, 1],
+        "Flag": true
+      },
+      "Enable Sleep": false,
+      "Forces": [
+        {
+          "Type": "class CS460::Drag",
+          "Value": {
+            "Linear Drag": 0.35,
+            "Angular Drag": 0.85
+          }
+        },
+        {
+          "Type": "class CS460::Gravity",
+          "Value": {
+            "Global Gravity": [0, -9.8, 0]
+          }
+        }
+      ]
+    }
+  },
+  "Type": "Space"
+}

@@ -27,14 +27,14 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
     Press W, S           - Change camera position Front & Back");
     Press A, D           - Change camera position Left & Right");
     Press R, F           - Change camera position Up & Down");
-    Press Mouse LB       - Make point on platform (it will be control point of path)
 
 ## Project 4 - Physically Based Simulation
 
 ### Info
-- Project4-A-Spring-Mass-Damper (Option A : 6 sticks and 2 anchor points connected by springs)
-- Project4-D-Hard Pendulum (Option D : 7 pendulum(ghost collider) connected by Hard String)
-- Project4-D-Soft Pendulum (Option D : 6 pendulum connected by Soft(allowed to stretch) String)
+- Project4A-Spring Mass Damper (Option A : 6 sticks and 2 anchor points connected by springs)
+- Project4A-SMD+Texture (Option A : 6 sticks and 2 anchor points connected by springs, and Texturing, Lighting, Rotating Kinematic Object)
+- Project4D-Hard Pendulum (Option D : 7 pendulum(ghost collider) connected by Hard String)
+- Project4D-Soft Pendulum (Option D : 6 pendulum connected by Soft(allowed to stretch) String)
 
 ## Component Control
     Press Mouse LB & Drag mouse to move selected red anchor point

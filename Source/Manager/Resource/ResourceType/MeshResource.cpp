@@ -40,7 +40,7 @@ namespace CS460
             m_b_loaded = true;
             break;
         case eMeshType::WaveFrontOBJ:
-            LoadOBJOnlyPos(file_stream);
+            LoadWaveFrontOBJ(file_stream);
             m_b_loaded = true;
             break;
         default:
@@ -218,6 +218,8 @@ namespace CS460
             m_mesh_data.indices.push_back(index + 2);
             index += 3;
         }
+        Vector3 min, max;
+        m_mesh_data.Normalize(min, max);
     }
 
     void MeshResource::LoadGeneralOBJ(std::ifstream& file)
@@ -519,55 +521,68 @@ namespace CS460
             m_mesh_data.vertices[point.index].CalculateTangentAndBinormal();
         }
 
-        //Calculate Planar UV Mapping
         size_t size = m_mesh_data.vertices.size();
+
         for (size_t i = 0; i < size; ++i)
         {
-            Vector2 uv;
-            Vector3 point   = m_mesh_data.vertices[i].GetPosition();
-            Vector3 abs_vec = point.Absolute();
-            // +-X
-            if (abs_vec.x >= abs_vec.y && abs_vec.x >= abs_vec.z)
-            {
-                if (point.x < 0.0)
-                {
-                    uv.x = point.z / abs_vec.x;
-                }
-                else
-                {
-                    uv.x = -point.z / abs_vec.x;
-                }
-                uv.y = point.y / abs_vec.x;
-            }
-            // +-Y
-            if (abs_vec.y >= abs_vec.x && abs_vec.y >= abs_vec.z)
-            {
-                if (point.y < 0.0)
-                {
-                    uv.y = point.x / abs_vec.y;
-                }
-                else
-                {
-                    uv.y = -point.x / abs_vec.y;
-                }
-                uv.x = -point.z / abs_vec.y;
-            }
-            // +-Z
-            if (abs_vec.z >= abs_vec.x && abs_vec.z >= abs_vec.y)
-            {
-                if (point.z < 0.0)
-                {
-                    uv.x = -point.x / abs_vec.z;
-                }
-                else
-                {
-                    uv.x = point.x / abs_vec.z;
-                }
-                uv.y = point.y / abs_vec.z;
-            }
-            Vector2 tex_coords = 0.5f * (uv + Vector2(1.0, 1.0));
+            Vector3 p_prime = m_mesh_data.vertices[i].GetPosition();
+            float   theta_r = atan2f(p_prime.y, p_prime.x);
+            float   radius  = sqrtf(p_prime.x * p_prime.x + p_prime.y * p_prime.y + p_prime.z * p_prime.z);
+            float   phi_r   = acosf(p_prime.z / radius);
+
+            Vector2 tex_coords(theta_r / Math::TWO_PI, (Math::PI - phi_r) / Math::PI);
             m_mesh_data.vertices[i].SetUV(tex_coords);
         }
+
+        ////Calculate Planar UV Mapping
+        //size_t size = m_mesh_data.vertices.size();
+        //for (size_t i = 0; i < size; ++i)
+        //{
+        //    Vector2 uv;
+        //    Vector3 point   = m_mesh_data.vertices[i].GetPosition();
+        //    Vector3 abs_vec = point.Absolute();
+        //    // +-X
+        //    if (abs_vec.x >= abs_vec.y && abs_vec.x >= abs_vec.z)
+        //    {
+        //        if (point.x < 0.0)
+        //        {
+        //            uv.x = point.z / abs_vec.x;
+        //        }
+        //        else
+        //        {
+        //            uv.x = -point.z / abs_vec.x;
+        //        }
+        //        uv.y = point.y / abs_vec.x;
+        //    }
+        //    // +-Y
+        //    if (abs_vec.y >= abs_vec.x && abs_vec.y >= abs_vec.z)
+        //    {
+        //        if (point.y < 0.0)
+        //        {
+        //            uv.y = point.x / abs_vec.y;
+        //        }
+        //        else
+        //        {
+        //            uv.y = -point.x / abs_vec.y;
+        //        }
+        //        uv.x = -point.z / abs_vec.y;
+        //    }
+        //    // +-Z
+        //    if (abs_vec.z >= abs_vec.x && abs_vec.z >= abs_vec.y)
+        //    {
+        //        if (point.z < 0.0)
+        //        {
+        //            uv.x = -point.x / abs_vec.z;
+        //        }
+        //        else
+        //        {
+        //            uv.x = point.x / abs_vec.z;
+        //        }
+        //        uv.y = point.y / abs_vec.z;
+        //    }
+        //    Vector2 tex_coords = 0.5f * (uv + Vector2(1.0, 1.0));
+        //    m_mesh_data.vertices[i].SetUV(tex_coords);
+        //}
     }
 
     void MeshResource::LoadCustomTXT(std::ifstream& file)

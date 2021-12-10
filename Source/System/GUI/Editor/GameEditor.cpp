@@ -231,6 +231,9 @@ namespace CS460
         {
             if (ImGui::Begin("Read Me", &m_show_readme))
             {
+                ImGui::BeginGroup();
+                ImGui::BeginChild("Usage", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()));
+
                 ImGui::Text("Usage");
                 ImGui::Text("1. Click File Tab, and Open Space.");
                 ImGui::Text("2. Camera Control");
@@ -252,11 +255,15 @@ namespace CS460
                 ImGui::Text("1. Press Mouse LB button to create path on current root to target object");
                 ImGui::Text("2. Press Mouse LB with Left Shift to extend path on platform");
                 ImGui::NewLine();
-                ImGui::NewLine();
-                if (ImGui::Button("  Close  "))
+                ImGui::Text("Project - 4");
+                ImGui::Text("1. Press Mouse LB & Drag mouse to move selected red anchor point");
+
+                ImGui::EndChild();
+                if (ImGui::Button("Close"))
                 {
                     m_show_readme = false;
                 }
+                ImGui::EndGroup();
                 ImGui::End();
             }
         }

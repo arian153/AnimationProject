@@ -90,7 +90,7 @@ namespace CS460
             {
                 if (texture_data["Diffuse1"].isString())
                 {
-                    m_material_identifier.diffuse0 = texture_data["Diffuse1"].asString();
+                    m_material_identifier.diffuse1 = texture_data["Diffuse1"].asString();
                 }
             }
 
@@ -98,7 +98,7 @@ namespace CS460
             {
                 if (texture_data["Diffuse2"].isString())
                 {
-                    m_material_identifier.diffuse0 = texture_data["Diffuse2"].asString();
+                    m_material_identifier.diffuse2 = texture_data["Diffuse2"].asString();
                 }
             }
 
