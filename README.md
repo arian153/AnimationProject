@@ -32,65 +32,133 @@ Execute Animation-Project.exe in "Bin/Release/Animation-Project.exe"
 ## Project 4 - Physically Based Simulation
 
 ### Info
-- Model : There was no suitable model using data loader. 
-          (previous salamander model contain max 4 links manipulator)
-- Link : 7 link
-
+- Project4-A-Spring-Mass-Damper (Option A : 6 sticks and 2 anchor points connected by springs)
+- Project4-D-Hard Pendulum (Option D : 7 pendulum(ghost collider) connected by Hard String)
+- Project4-D-Soft Pendulum (Option D : 6 pendulum connected by Soft(allowed to stretch) String)
 
 ## Component Control
-    Create New Path     - Button to make new Path for skeleton.
-    Create New COI      - Button to make new COI point for skeleton.
-    COI Mode            - Combo Box for select Orbit mode or Forward mode
-    Select Current Path - Combo Box for select path.
-    Path Duration       - Duration time it takes to proceed with the path. This value is normalized [0:1]. 
-    T1                  - Slider for change t1 parameter of ease in velocity.
-    T2                  - Slider for change t2 parameter of ease out velocity. 
-
-    Press Mouse LB button to create path on current root to target object
-    Press Mouse LB & Hold Left Shift to extend path on platform
+    Press Mouse LB & Drag mouse to move selected red anchor point
 
 ### Algorithm Description
-    Jacobian Matrix Solution per frame
-    while (dist(p_dest, p_curr) > threshold && CF > 0) 
-    1. obtain first derivatives from links to construct jacobian matrix
-        => J(q), but matrix J(q) has problems : Invertibility, Complexity, Redundancy, Singularity
-    2. use pseudo inverse jacobian
-        => J(q)^+ = J(q)^t * [J(q) * J(q)^t]^-1
-    3. calculate velocity of position 
-        => p_dot = (p_dest - p_curr)/CF;
-    4. calculate velocity of angle params 
-        => q_dot = J(q)^+ x p_dot;
-    5. integrate and apply q_dot to q
-        => q = q + q_dot / dt;
-    6. do forward kinematics to obtain new p_curr
-        => p_curr = forward(q);
-    7. decrease converge frames
-        => CF--;
-    8. update links and ready for render
-        => Update(links); Draw(links);
+
+    Physics Engine Loop:
+    1. Do Broad Phase Collision Detection
+        1-1. Update Spatial Data Structure (reinsert dynamic object)
+        1-2. Compute Potential Pairs
+    2. Do Narrow Phase Collision Detection
+        2-1. Filtering Contact Manifolds (if collision was resolved, remove it)
+        2-2. Generate Contact Point (Specify Contact Point with GJK+EPA)
+    3. Do Resolution Phase
+        3-1. Apply External(Global) Forces (Gravity, Drag, ETC...)
+        3-2. Process Contact Constraints (Generate Contact Constrains from Contact Manifold)
+        3-3. Solve Velocity Constraints (Solve contact, spring-damper, ETC...)
+        3-4. Integrate Rigid Bodies (Using Numerical Integrate Methods)
+        3-5. Solve Position Constrains (if it needs)
+
+    Rigid Body
+    Integrator : Semi Implicit Euler Method
+        (Other integrators were also drafted, but did not apply them because there was no time to modify the physics engine loop.)
+    
+    Data
+        linear velocity    (velocity holder)
+        force accumulator  (total force per frame)
+        linear constraints (linear DOF)
+        inverse orientation (inv orientation holder)
+        angular velocity
+        torque accumulator
+        angular constraints (angular DOF)
+        mass
+        inverse mass
+        local centroid
+        local inertia tensor
+        local inverse inertia tensor
+        global centroid
+        global inertia tensor
+        global inverse inertia tensor
+
+        and other data...
+        # "m_local" is a shareable transform data.
+        
+
+    Spring Constraint: 
+    Basic Idea from Class Notes.
+        K (Spring Constant)
+        D (Damper Constant)
+        q_a : spring end point which is connected to rigid body a
+        q_b : spring end point which is connected to rigid body b 
+        v_a : rigid body a's velocity
+        v_b : rigid body b's velocity
+
+        Spring Force 
+        f_a = K * (q_b - q_a) + D * (v_b - v_a);
+        f_b = K * (q_a - q_b) + D * (v_a - v_b); = -f_a;
+
+        Apply Force on centroid
+        Apply Torque on q_a, q_b;
+
+        ApplyForce(force, at): Apply Force & Torque both.
+            force_accumulator += force;
+            torque_accumulator += (at - m_global_centroid).CrossProduct(force);
+
+    Point Constraint: 
+    Basic Idea from 
+        Erin catto's GDC 2011 Soft Constraints Slides.
+        Ming-Lun Chou's Soft Constraints video.
+    
+    1. Generate Coefficients & Constraints
+        1-1. Gathering Frame Info
+            m (mass), h (time step)
+            DR (Damping Ratio) : (given value)
+            Freq (Frequency)   : (given value)
+        1-2. Generate DC & SC
+            DC (Damping Coefficient) = 2 * m * DR * Freq;
+            SC (Spring Coefficient)  = m * Freq * Freq;
+        1-3. Generate Beta & Gamma
+            Beta  (Positional Error Factor) = hk/(d+hk);
+            Gamma (Softness Factor)         = 1/(d+hk);
+
+    2. Solve constraints
+        M (mass matrix), I (identity matrix)
+        J*V2 + Beta/timestep * C + Gamma/timestep * Lambda = 0;
+        V2 = V1 + invM*transJ*Lambda;
+        J(V1 + invM*transJ*Lambda) + Beta/timestep * C + Gamma/timestep * Lambda = 0
+        Lambda = inv(J*invM*transJ + Gamma/timestep * I) * (-(J*V1 + Beta/timestep * C));
+        also set effM(effective matrix) = inv(J*invM*transJ + Gamma/timestep * I);
+
+    3. Soft vs Hard
+        Hard : Beta = 1.0, Gamma = 0.0;
+        Soft : Beta&Gamma is calculated by Constriants Utility
 
 
 ### Relevant Source Codes
 - GUI support & Data holder
-    Source/Manager/Component/EngineComponent/IKComponent.cpp
-    Source/Manager/Component/EngineComponent/IKComponent.hpp
+    Source/Manager/Component/EngineComponent/AnchorComponent.cpp
+    Source/Manager/Component/EngineComponent/AnchorComponent.hpp
+    Source/Manager/Component/EngineComponent/PointConstraintComponent.cpp
+    Source/Manager/Component/EngineComponent/PointConstraintComponent.hpp
+    Source/Manager/Component/EngineComponent/SpringConstraintComponent.cpp
+    Source/Manager/Component/EngineComponent/SpringConstraintComponent.hpp
 
-- Inverse Kinematics structure
-    Source/System/Animation/InverseKinematics/Link.cpp
-    Source/System/Animation/InverseKinematics/Link.hpp
-    Source/System/Animation/InverseKinematics/Manipulator.cpp
-    Source/System/Animation/InverseKinematics/Manipulator.hpp
+- Dynamics (Rigid Body, Mass Data, ETC) : World has a physics loop
+    Source/System/Physics/Dynamics/RigidBody.cpp
+    Source/System/Physics/Dynamics/RigidBody.hpp
+    Source/System/Physics/Dynamics/MassData.cpp
+    Source/System/Physics/Dynamics/MassData.hpp
+    Source/System/Physics/Dynamics/World.cpp
+    Source/System/Physics/Dynamics/World.hpp
 
-- Path Interpolation & Arc Length Calculation:
-    Source/System/Animation/Space/AnimationSpace.cpp
-    Source/System/Animation/Space/AnimationSpace.hpp
-    Source/System/Animation/Space/SpacePath.cpp
-    Source/System/Animation/Space/SpacePath.hpp
-    Source/System/Math/Curve/BezierCurve.cpp
-    Source/System/Math/Curve/BezierCurve.hpp
+- Collider Shape (Box, Sphere, ETC...) : in this Project Only Use Collider Box
+    Source/System/Physics/ColliderPrimitive/ConvexHull3D/ColliderBox.cpp
+    Source/System/Physics/ColliderPrimitive/ConvexHull3D/ColliderBox.hpp
 
-- Speed & Orientation Control:
-    Source/System/Animation/Skeleton/OrientationController.cpp
-    Source/System/Animation/Skeleton/OrientationController.hpp    
-    Source/System/Animation/Skeleton/SpeedController.hpp   
-    Source/System/Animation/Skeleton/SpeedController.hpp   
+- Constraints & Resolution Phase:
+    Source/System/Physics/Resolution/Constraints/SpringConstraint.cpp
+    Source/System/Physics/Resolution/Constraints/SpringConstraint.hpp
+    Source/System/Physics/Resolution/Constraints/PointConstraint.cpp
+    Source/System/Physics/Resolution/Constraints/PointConstraint.hpp
+    Source/System/Physics/Resolution/Force/Drag.cpp
+    Source/System/Physics/Resolution/Force/Drag.hpp
+    Source/System/Physics/Resolution/Force/Gravity.cpp
+    Source/System/Physics/Resolution/Force/Gravity.hpp
+    Source/System/Physics/Utility/ConstraintUtility.cpp
+    Source/System/Physics/Utility/ConstraintUtility.hpp
