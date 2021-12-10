@@ -287,7 +287,9 @@
           "Value": {
             "Anchor Object": "AnchorA",
             "Target Object": "Box1",
-            "A Box Vertex ID": 0
+            "A Box Vertex ID": 0,
+            "Spring Constant": 3.0,
+            "Damper Constant": 1.0
           }
         }
       ],
@@ -301,7 +303,9 @@
             "Target Object A": "Box1",
             "Target Object B": "Box2",
             "A Box Vertex ID": 7,
-            "B Box Vertex ID": 0
+            "B Box Vertex ID": 0,
+            "Spring Constant": 3.0,
+            "Damper Constant": 1.0
           }
         }
       ],
@@ -315,7 +319,9 @@
             "Target Object A": "Box2",
             "Target Object B": "Box3",
             "A Box Vertex ID": 7,
-            "B Box Vertex ID": 0
+            "B Box Vertex ID": 0,
+            "Spring Constant": 3.0,
+            "Damper Constant": 1.0
           }
         }
       ],
@@ -329,7 +335,9 @@
             "Target Object A": "Box3",
             "Target Object B": "Box4",
             "A Box Vertex ID": 7,
-            "B Box Vertex ID": 0
+            "B Box Vertex ID": 0,
+            "Spring Constant": 3.0,
+            "Damper Constant": 1.0
           }
         }
       ],
@@ -343,7 +351,9 @@
             "Target Object A": "Box4",
             "Target Object B": "Box5",
             "A Box Vertex ID": 7,
-            "B Box Vertex ID": 0
+            "B Box Vertex ID": 0,
+            "Spring Constant": 3.0,
+            "Damper Constant": 1.0
           }
         }
       ],
@@ -357,7 +367,9 @@
             "Target Object A": "Box5",
             "Target Object B": "Box6",
             "A Box Vertex ID": 7,
-            "B Box Vertex ID": 0
+            "B Box Vertex ID": 0,
+            "Spring Constant": 3.0,
+            "Damper Constant": 1.0
           }
         }
       ],
@@ -370,7 +382,9 @@
           "Value": {
             "Target Object": "Box6",
             "Anchor Object": "AnchorB",
-            "A Box Vertex ID": 7
+            "A Box Vertex ID": 7,
+            "Spring Constant": 3.0,
+            "Damper Constant": 1.0
           }
         }
       ],

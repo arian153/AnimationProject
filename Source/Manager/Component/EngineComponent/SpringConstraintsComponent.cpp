@@ -71,7 +71,7 @@ namespace CS460
 
         if (JsonResource::HasMember(data, "Target Object A") && data["Target Object A"].isString())
         {
-            std::string name = data["Target Object A"].asString();
+            std::string name  = data["Target Object A"].asString();
             auto        found = m_space->GetObjectManager()->FindObjectBegin(name);
 
             if (found != nullptr && found->HasComponent<RigidBodyComponent>())
@@ -82,7 +82,7 @@ namespace CS460
 
         if (JsonResource::HasMember(data, "Target Object B") && data["Target Object B"].isString())
         {
-            std::string name = data["Target Object B"].asString();
+            std::string name  = data["Target Object B"].asString();
             auto        found = m_space->GetObjectManager()->FindObjectBegin(name);
 
             if (found != nullptr && found->HasComponent<RigidBodyComponent>())
@@ -90,7 +90,6 @@ namespace CS460
                 m_target_b = found;
             }
         }
-
 
         if (JsonResource::HasMember(data, "A Box Vertex ID") && data["A Box Vertex ID"].isInt())
         {
@@ -100,6 +99,16 @@ namespace CS460
         if (JsonResource::HasMember(data, "B Box Vertex ID") && data["B Box Vertex ID"].isInt())
         {
             target_b_idx = data["B Box Vertex ID"].asLargestUInt();
+        }
+
+        if (JsonResource::HasMember(data, "Spring Constant") && data["Spring Constant"].isDouble())
+        {
+            m_spring_constraint->m_spring_constant = data["Spring Constant"].asFloat();
+        }
+
+        if (JsonResource::HasMember(data, "Damper Constant") && data["Damper Constant"].isDouble())
+        {
+            m_spring_constraint->m_damper_constant = data["Damper Constant"].asFloat();
         }
 
         SetUpConstraints();
@@ -112,7 +121,14 @@ namespace CS460
 
     void SpringConstraintsComponent::Edit(CommandRegistry* command_registry)
     {
-        ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
+        if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
+        {
+            ImGui::Text("Spring Constant K");
+            ImGui::SliderFloat("## Spring K", &m_spring_constraint->m_spring_constant, 0.0f, 10.0f);
+
+            ImGui::Text("Damper Constant D");
+            ImGui::SliderFloat("## Damper D", &m_spring_constraint->m_damper_constant, 0.0f, 1.0f);
+        }
     }
 
     void SpringConstraintsComponent::Subscribe()

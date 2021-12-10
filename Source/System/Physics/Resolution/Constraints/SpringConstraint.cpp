@@ -1,7 +1,7 @@
 #include "SpringConstraint.hpp"
 
-
 #include "../../../../Manager/Component/EngineComponent/SpringConstraintsComponent.hpp"
+#include "../../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../../Dynamics/RigidBody.hpp"
 
 namespace CS460
@@ -37,7 +37,7 @@ namespace CS460
 
         if (m_b_anchored)
         {
-            Vector3 v_a = m_body_a->GetLinearVelocity();
+            Vector3 v_a  = m_body_a->GetLinearVelocity();
             Vector3 r_a  = m_local_q_a - m_body_a->GetLocalCentroid();
             Vector3 q_a2 = m_body_a->LocalToWorldVector(r_a) + m_body_a->GetCentroid();
 
@@ -78,6 +78,14 @@ namespace CS460
 
     void SpringConstraint::Render(PrimitiveRenderer* primitive_renderer, const Color& color) const
     {
+        if (m_b_anchored)
+        {
+            primitive_renderer->DrawSegment(m_anchor->position, m_body_a->LocalToWorldPoint(m_local_q_a), color);
+        }
+        else
+        {
+            primitive_renderer->DrawSegment(m_body_a->LocalToWorldPoint(m_local_q_a), m_body_b->LocalToWorldPoint(m_local_q_b), color);
+        }
     }
 
     void SpringConstraint::SetUp(RigidBody* body_a, RigidBody* body_b)
