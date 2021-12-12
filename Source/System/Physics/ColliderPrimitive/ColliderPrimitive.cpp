@@ -171,31 +171,11 @@ namespace CS460
         return point;
     }
 
-    Vector3 ColliderPrimitive::ClosestPointSimplex(const Vector3& point, bool b_global, Simplex& simplex)
+    Vector3 ColliderPrimitive::ClosestPointSimplex(const Vector3& point,  Simplex& simplex)
     {
-        if (m_collider_set->GJKDistanceTest(this, point, simplex) == false)
-        {
-            //outside of collider
+        m_collider_set->GJKDistanceTest(this, point, simplex);
+        return simplex.ClosestPointGlobal(Vector3());
 
-            if(b_global)
-            {
-                //Vector3 local_p = WorldToLocalPoint(m_rigid_body->WorldToLocalPoint(point));
-                //Vector3 local_closest = simplex.ClosestPointLocalA(local_p);
-
-                //return m_rigid_body->LocalToWorldPoint(LocalToWorldPoint(local_closest));
-
-                return simplex.ClosestPointGlobal(point);;
-            }
-            else
-            {
-                Vector3 local_p = WorldToLocalPoint(m_rigid_body->WorldToLocalPoint(point));
-                return simplex.ClosestPointLocalA(local_p);
-            }
-
-           
-        }
-
-        return point;
     }
 
    

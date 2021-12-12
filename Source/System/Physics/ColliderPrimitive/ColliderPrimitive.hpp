@@ -36,7 +36,7 @@ namespace CS460
 
         Vector3 ClosestPointWorld(const Vector3& point);
         Vector3 ClosestPointLocal(const Vector3& point);
-        Vector3 ClosestPointSimplex(const Vector3& point, bool b_global, Simplex& simplex);
+        Vector3 ClosestPointSimplex(const Vector3& point, Simplex& simplex);
 
         Matrix33 WorldInertia() const;
         Vector3  WorldCentroid() const;

@@ -323,23 +323,23 @@ namespace CS460
 
     Vector3 Simplex::ClosestPointGlobal(const Vector3& point) const
     {
-        if (count == 1)
-            return simplex_vertex_b.global;
+        if (count == 0)
+            return simplex_vertex_a.global;
 
-        if (count == 2)
+        if (count == 1)
             return ClosestPointLine(
                                     point,
-                                    simplex_vertex_c.global,
-                                    simplex_vertex_b.global);
+                                    simplex_vertex_b.global,
+                                    simplex_vertex_a.global);
 
-        if (count == 3)
+        if (count == 2)
             return ClosestPointTriangle(
                                         point,
-                                        simplex_vertex_d.global,
                                         simplex_vertex_c.global,
-                                        simplex_vertex_b.global);
+                                        simplex_vertex_b.global,
+                                        simplex_vertex_a.global);
 
-        if (count == 4)
+        if (count > 2)
             return ClosestPointTetrahedron(
                                            point,
                                            simplex_vertex_d.global,

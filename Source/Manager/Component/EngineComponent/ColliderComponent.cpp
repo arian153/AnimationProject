@@ -52,7 +52,7 @@ namespace CS460
             }
         }
 
-        m_drawing_sphere.radius = 0.25f;
+        m_drawing_sphere.radius = 0.1f;
     }
 
     void ColliderComponent::Update(Real dt)
@@ -252,8 +252,10 @@ namespace CS460
 
                 Simplex simplex;
 
-                m_closest_point = collider->ClosestPointSimplex(m_input_point, true, simplex);
+                m_closest_point = collider->ClosestPointSimplex(m_input_point, simplex);
+                m_primitive_renderer->DrawPrimitiveInstancing(m_drawing_sphere, m_input_point, eRenderingMode::Face, Color(1, 0, 0, 1));
                 m_primitive_renderer->DrawPrimitiveInstancing(m_drawing_sphere, m_closest_point, eRenderingMode::Face, Color(1, 0, 0, 1));
+                m_primitive_renderer->DrawSegment(m_input_point, m_closest_point, Color(1, 0, 0));
                 m_primitive_renderer->DrawSimplex(simplex, Vector3(), Quaternion(), Vector3(1, 1, 1), eRenderingMode::Line, Color(1, 0, 0, 1));
             }
         }
