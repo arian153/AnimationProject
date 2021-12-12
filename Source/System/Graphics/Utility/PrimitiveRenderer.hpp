@@ -12,6 +12,7 @@
 
 namespace CS460
 {
+    class Simplex;
     class InstanceBufferCommon;
     class ConstantBufferCommon;
     class VertexBufferCommon;
@@ -63,6 +64,9 @@ namespace CS460
         void DrawBox(const Vector3& position, const Quaternion& orientation, const Vector3& scale, eRenderingMode mode, Color color = Color());
         void DrawRay(const Ray& ray, Color color = Color());
         void DrawArrow(const Vector3& start, const Vector3& end, Color color = Color());
+
+
+        void DrawSimplex(const Simplex& simplex, const Vector3& position, const Quaternion& orientation, const Vector3& scale, eRenderingMode mode, const Color& color);
 
         void DrawCurveLine(const Curve& curve, Color color = Color());
         void DrawDashedLineSegment(const Vector3& start, const Vector3& end, Real length, Color color = Color());

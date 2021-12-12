@@ -18,6 +18,7 @@ namespace Json
 
 namespace CS460
 {
+    class Simplex;
     class CommandRegistry;
     class RayTest;
     class ForceFactory;
@@ -88,6 +89,8 @@ namespace CS460
         void SetPickingRay(const Ray& ray);
 
         ColliderSet* PickColliderSet(const Ray& ray) const;
+
+        bool GJKDistanceTest(ColliderPrimitive* collider, const Vector3& point, Simplex& simplex) const;
 
     private:
         void DrawPotentialPair() const;

@@ -2,6 +2,7 @@
 #include "../Common/Renderer/RendererCommon.hpp"
 #include "MatrixManager.hpp"
 #include "../../Math/Curve/Curve.hpp"
+#include "../../Physics/NarrowPhase/Simplex.hpp"
 #include "../DataType/MatrixData.hpp"
 #include "../DataType/TopologyDef.hpp"
 #include "../Common/Buffer/MeshBufferCommon.hpp"
@@ -238,6 +239,43 @@ namespace CS460
             Quaternion rotation(Vector3(0.0f, 1.0f, 0.0f), (end - start).Normalize());
             DrawPrimitive(Cone(end, rotation, scale * 0.1f, scale * 0.2f), eRenderingMode::Face, color);
             DrawSegment(start, end, color);
+        }
+    }
+
+    void PrimitiveRenderer::DrawSimplex(const Simplex& simplex, const Vector3& position, const Quaternion& orientation, const Vector3& scale, eRenderingMode mode, const Color& color)
+    {
+        Matrix44 transform_matrix = Math::Matrix44::Scale(scale, 1.0f);
+        transform_matrix          = Math::Matrix44::Rotation(orientation) * transform_matrix;
+        transform_matrix.AddVectorColumn(3, position);
+
+        int count = simplex.Count();
+
+        if (count == 1)
+        {
+            DrawPoint(transform_matrix.TransformPoint(simplex[2].global), color);
+        }
+        else if (count == 2)
+        {
+            Vector3 b = transform_matrix.TransformPoint(simplex[2].global);
+            Vector3 c = transform_matrix.TransformPoint(simplex[1].global);
+            DrawSegment(b, c, color);
+        }
+        else if (count == 3)
+        {
+            Vector3 b = transform_matrix.TransformPoint(simplex[2].global);
+            Vector3 c = transform_matrix.TransformPoint(simplex[1].global);
+            Vector3 d = transform_matrix.TransformPoint(simplex[0].global);
+
+            DrawTriangle(b, c, d, mode, color);
+        }
+        else if (count == 4)
+        {
+            Vector3 a = transform_matrix.TransformPoint(simplex[3].global);
+            Vector3 b = transform_matrix.TransformPoint(simplex[2].global);
+            Vector3 c = transform_matrix.TransformPoint(simplex[1].global);
+            Vector3 d = transform_matrix.TransformPoint(simplex[0].global);
+
+            DrawTetrahedron(a, b, c, d, mode, color);
         }
     }
 

@@ -4,6 +4,7 @@
 #include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../GUI/Editor/Command/EditorCommand.hpp"
+#include "../NarrowPhase/Simplex.hpp"
 
 namespace CS460
 {
@@ -139,6 +140,65 @@ namespace CS460
         return m_local.WorldToLocalVector(world_vector);
     }
 
+    Vector3 ColliderPrimitive::ClosestPointWorld(const Vector3& point)
+    {
+        Simplex simplex;
+
+        if (m_collider_set->GJKDistanceTest(this, point, simplex) == false)
+        {
+            //outside of collider
+            Vector3 local_p = WorldToLocalPoint(m_rigid_body->WorldToLocalPoint(point));
+            Vector3 local_closest = simplex.ClosestPointLocalA(local_p);
+
+            return m_rigid_body->LocalToWorldPoint(LocalToWorldPoint(local_closest));
+          
+        }
+
+        return point;
+    }
+
+    Vector3 ColliderPrimitive::ClosestPointLocal(const Vector3& point)
+    {
+        Simplex simplex;
+
+        if (m_collider_set->GJKDistanceTest(this, point, simplex) == false)
+        {
+            //outside of collider
+            Vector3 local_p = WorldToLocalPoint(m_rigid_body->WorldToLocalPoint(point));
+            return simplex.ClosestPointLocalA(local_p);
+        }
+
+        return point;
+    }
+
+    Vector3 ColliderPrimitive::ClosestPointSimplex(const Vector3& point, bool b_global, Simplex& simplex)
+    {
+        if (m_collider_set->GJKDistanceTest(this, point, simplex) == false)
+        {
+            //outside of collider
+
+            if(b_global)
+            {
+                //Vector3 local_p = WorldToLocalPoint(m_rigid_body->WorldToLocalPoint(point));
+                //Vector3 local_closest = simplex.ClosestPointLocalA(local_p);
+
+                //return m_rigid_body->LocalToWorldPoint(LocalToWorldPoint(local_closest));
+
+                return simplex.ClosestPointGlobal(point);;
+            }
+            else
+            {
+                Vector3 local_p = WorldToLocalPoint(m_rigid_body->WorldToLocalPoint(point));
+                return simplex.ClosestPointLocalA(local_p);
+            }
+
+           
+        }
+
+        return point;
+    }
+
+   
     Matrix33 ColliderPrimitive::WorldInertia() const
     {
         return MassData::TranslateInertia(MassData::RotateInertia(m_local_inertia_tensor, m_local.orientation), m_mass, m_local.position);
@@ -242,7 +302,6 @@ namespace CS460
         return m_is_2D;
     }
 
-  
     Vector3 ColliderPrimitive::PlaneNormal2D() const
     {
         return m_local.orientation.Rotate(Vector3(0.0f, 0.0f, 1.0f));

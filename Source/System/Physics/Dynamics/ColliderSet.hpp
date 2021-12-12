@@ -5,10 +5,12 @@
 
 namespace CS460
 {
+    class Simplex;
     class RigidBody;
     enum class eColliderType;
     class ColliderPrimitive;
     class World;
+    class NarrowPhase;
 
     class ColliderSet
     {
@@ -54,6 +56,9 @@ namespace CS460
         void Clone(ColliderSet* origin, RigidBody* body, World* world);
 
         ColliderComponent* GetComponent() const;
+
+
+        bool GJKDistanceTest(ColliderPrimitive* collider, const Vector3& point, Simplex& simplex) const;
 
     private:
         RigidBody*         m_rigid_body = nullptr;

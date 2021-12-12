@@ -789,6 +789,11 @@ namespace CS460
         return nullptr;
     }
 
+    bool World::GJKDistanceTest(ColliderPrimitive* collider, const Vector3& point, Simplex& simplex) const
+    {
+        return m_narrow_phase->GJKDistanceAlgorithm(collider, point, simplex);
+    }
+
     void World::DrawPotentialPair() const
     {
         for (auto& pair : m_pairs)

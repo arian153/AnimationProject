@@ -6,6 +6,7 @@
 #include "TransformComponent.hpp"
 #include "../../Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
+#include "../../../System/Graphics/Element/Scene.hpp"
 #include "../../../System/Graphics/Utility/PrimitiveRenderer.hpp"
 
 namespace CS460
@@ -23,6 +24,8 @@ namespace CS460
             m_collider_set->Initialize();
             m_collider_set->m_component = this;
             Subscribe();
+
+            m_primitive_renderer = m_space->GetScene()->GetPrimitiveRenderer();
         }
         if (m_rigid_body != nullptr)
         {
@@ -48,6 +51,8 @@ namespace CS460
                 m_transform = m_owner->GetComponent<TransformComponent>()->GetTransform();
             }
         }
+
+        m_drawing_sphere.radius = 0.25f;
     }
 
     void ColliderComponent::Update(Real dt)
@@ -220,7 +225,42 @@ namespace CS460
 
     void ColliderComponent::Edit(CommandRegistry* command_registry)
     {
-        ImGui::CollapsingHeader(m_type.c_str(), &m_b_open);
+        if (ImGui::CollapsingHeader(m_type.c_str(), &m_b_open))
+        {
+            ImGui::Text("Closest Point");
+            auto collider = m_collider_set->GetCollider(0);
+            if (collider != nullptr)
+            {
+                ImGui::InputFloat3("##ClosestPoint", &m_input_point.x);
+                //if (ImGui::IsItemDeactivatedAfterEdit())
+                //{
+                //    {
+                //        //collider->ClosestPointLocal(m_closest_point);
+                //        m_closest_point             = collider->ClosestPointLocal(m_input_point);
+                //        m_b_closest_point_rendering = true;
+                //    }
+                //}
+
+                //if (ImGui::Button("Clear"))
+                //    m_b_closest_point_rendering = false;
+
+                //if (m_b_closest_point_rendering)
+                //{
+                //    Vector3 world_pos = m_rigid_body->LocalToWorldPoint(collider->LocalToWorldPoint(m_closest_point));
+                //    m_primitive_renderer->DrawPrimitiveInstancing(m_drawing_sphere, world_pos, eRenderingMode::Face, Color(1, 0, 0, 1));
+                //}
+
+                Simplex simplex;
+
+                m_closest_point = collider->ClosestPointSimplex(m_input_point, true, simplex);
+                m_primitive_renderer->DrawPrimitiveInstancing(m_drawing_sphere, m_closest_point, eRenderingMode::Face, Color(1, 0, 0, 1));
+                m_primitive_renderer->DrawSimplex(simplex, Vector3(), Quaternion(), Vector3(1, 1, 1), eRenderingMode::Line, Color(1, 0, 0, 1));
+            }
+        }
+        else
+        {
+            m_b_closest_point_rendering = false;
+        }
     }
 
     void ColliderComponent::Subscribe()

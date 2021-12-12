@@ -348,4 +348,9 @@ namespace CS460
     {
         return m_component;
     }
+
+    bool ColliderSet::GJKDistanceTest(ColliderPrimitive* collider, const Vector3& point, Simplex& simplex) const
+    {
+        return m_world->GJKDistanceTest(collider, point, simplex);
+    }
 }

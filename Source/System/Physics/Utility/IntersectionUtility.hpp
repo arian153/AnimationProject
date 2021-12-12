@@ -4,6 +4,8 @@
 
 namespace CS460
 {
+    class ColliderPrimitive;
+
     class IntersectionUtility
     {
     public:
@@ -12,7 +14,10 @@ namespace CS460
 
         bool HasIntersection(Primitive* a, Primitive* b) const;
 
+      
+
     private:
-        SupportPoint GenerateCSOSupport(Primitive*  a, Primitive*  b, const Vector3& direction) const;
+        SupportPoint GenerateCSOSupport(Primitive* a, Primitive* b, const Vector3& direction) const;
+  
     };
 }

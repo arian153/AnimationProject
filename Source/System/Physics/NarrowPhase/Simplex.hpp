@@ -31,6 +31,20 @@ namespace CS460
         void Set(const SupportPoint& a, const SupportPoint& b);
         void Set(const SupportPoint& a);
 
+        Vector3 ClosestPointGlobal(const Vector3& point) const;
+        Vector3 ClosestPointLocalA(const Vector3& point) const;
+        Vector3 ClosestPointLocalB(const Vector3& point) const;
+
+        int Count() const;
+ 
+        static Vector3 ClosestPointLine(const Vector3& point, const Vector3& a, const Vector3& b);
+        static Vector3 ClosestPointTriangle(const Vector3& point, const Vector3& a, const Vector3& b, const Vector3& c);
+        static Vector3 ClosestPointTetrahedron(const Vector3& point, const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d);
+
+        static bool PointOutsidePlane(const Vector3& p, const Vector3& a, const Vector3& b, const Vector3& c);
+        static bool PointOutsidePlane(const Vector3& p, const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d);
+
+   
     private:
         friend class NarrowPhase;
         friend class Polytope;
@@ -44,5 +58,4 @@ namespace CS460
 
         int count = 0;
     };
-
 }

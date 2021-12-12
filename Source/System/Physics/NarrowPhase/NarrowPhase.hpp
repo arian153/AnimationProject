@@ -27,10 +27,13 @@ namespace CS460
         void GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table);
         void Render(const ColorFlag& draw_gjk_flag, const ColorFlag& draw_epa_flag);
 
-        SupportPoint GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction);
-        bool         GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex);
-        bool         EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result);
-        bool         EPAContactGeneration2D(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result);
+        SupportPoint GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction) const;
+        SupportPoint GenerateCSOSupport(ColliderPrimitive* a, const Vector3& point, const Vector3& direction) const;
+
+        bool GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex) const;
+        bool GJKDistanceAlgorithm(ColliderPrimitive* collider, const Vector3& point, Simplex& simplex) const;
+        bool EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result) const;
+        bool EPAContactGeneration2D(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result);
 
     private:
         size_t FindLeastSignificantComponent(const Vector3& vector3);
@@ -47,6 +50,4 @@ namespace CS460
         Vector3 m_search_dirs[6];
         Vector3 m_axes[3];
     };
-
-    
 }

@@ -29,7 +29,7 @@ namespace CS460
         void SetTransform(Transform* transform);
         void SetRigidBody(RigidBody* rigid_body);
         void RenderBoundingVolume(PrimitiveRenderer* renderer, const Color& color) const;
-        
+
     protected:
         bool Load(const Json::Value& data) override;
         void Save(Json::Value& data) const override;
@@ -51,6 +51,12 @@ namespace CS460
         RigidBody*   m_rigid_body   = nullptr;
         Transform*   m_transform    = nullptr;
 
-        bool m_b_init = false;
+        PrimitiveRenderer* m_primitive_renderer = nullptr;
+
+        Sphere m_drawing_sphere;
+
+        Vector3 m_closest_point, m_input_point;
+        bool    m_b_init                    = false;
+        bool    m_b_closest_point_rendering = false;
     };
 }

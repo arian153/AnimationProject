@@ -37,7 +37,6 @@ namespace CS460
 
     void NarrowPhase::GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table)
     {
-       
         size_t count = potential_list.size();
         m_simplexes.clear();
         m_simplexes.reserve(count);
@@ -132,7 +131,7 @@ namespace CS460
         }
     }
 
-    SupportPoint NarrowPhase::GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction)
+    SupportPoint NarrowPhase::GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction) const
     {
         RigidBody* body_a     = a->m_rigid_body;
         RigidBody* body_b     = b->m_rigid_body;
@@ -145,7 +144,16 @@ namespace CS460
         return SupportPoint(support_a - support_b, local_a, local_b);
     }
 
-    bool NarrowPhase::GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex)
+    SupportPoint NarrowPhase::GenerateCSOSupport(ColliderPrimitive* a, const Vector3& point, const Vector3& direction) const
+    {
+        RigidBody* body_a     = a->m_rigid_body;
+        Vector3    body_dir_a = body_a != nullptr ? body_a->WorldToLocalVector(direction) : direction;
+        Vector3    local_a    = a->Support(a->WorldToLocalVector(body_dir_a).Unit());
+        Vector3    support_a  = body_a != nullptr ? body_a->LocalToWorldPoint(a->LocalToWorldPoint(local_a)) : a->LocalToWorldPoint(local_a);
+        return SupportPoint(support_a - point, local_a, point);
+    }
+
+    bool NarrowPhase::GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex) const
     {
         if (a->Is2DPrimitive() && b->Is2DPrimitive())
         {
@@ -196,7 +204,32 @@ namespace CS460
         return false;
     }
 
-    bool NarrowPhase::EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result)
+    bool NarrowPhase::GJKDistanceAlgorithm(ColliderPrimitive* collider, const Vector3& point, Simplex& simplex) const
+    {
+        Vector3 direction = Vector3(
+                                    random.GetRangedRandomReal(-10.0f, 10.0f),
+                                    random.GetRangedRandomReal(-10.0f, 10.0f),
+                                    random.GetRangedRandomReal(-10.0f, 10.0f)).Unit();
+        for (size_t i = 0; i < m_gjk_exit_iteration; ++i)
+        {
+            if (direction.IsValid() == false)
+            {
+                return false;
+            }
+            simplex.simplex_vertex_a = GenerateCSOSupport(collider, point, direction);
+            if (simplex.simplex_vertex_a.global.DotProduct(direction) < 0.0f)
+            {
+                return false;
+            }
+            if (simplex.DoSimplex(direction) == true)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool NarrowPhase::EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result) const
     {
         PolytopeFace closest_face = polytope.PickClosestFace();
         PolytopeFace prev_face    = closest_face;

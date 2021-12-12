@@ -34,6 +34,7 @@ namespace CS460
         return false;
     }
 
+  
     SupportPoint IntersectionUtility::GenerateCSOSupport(Primitive* a, Primitive* b, const Vector3& direction) const
     {
         // convert search direction to model space
