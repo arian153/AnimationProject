@@ -207,11 +207,12 @@ namespace CS460
     bool NarrowPhase::GJKDistanceAlgorithm(ColliderPrimitive* collider, const Vector3& point, Simplex& simplex) const
     {
         //direction need to be changed...
-        Vector3 direction = (point).Unit();
+        Vector3 direction = (collider->GetBodyPosition() - point).Unit();
 
         for (size_t i = 0; i < m_gjk_exit_iteration; ++i)
         {
             simplex.simplex_vertex_a = GenerateCSOSupport(collider, point, direction);
+
             if (simplex.simplex_vertex_a.global.DotProduct(direction) < 0.0f)
             {
                 return false;

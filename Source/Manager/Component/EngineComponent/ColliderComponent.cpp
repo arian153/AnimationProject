@@ -249,14 +249,11 @@ namespace CS460
                 //    Vector3 world_pos = m_rigid_body->LocalToWorldPoint(collider->LocalToWorldPoint(m_closest_point));
                 //    m_primitive_renderer->DrawPrimitiveInstancing(m_drawing_sphere, world_pos, eRenderingMode::Face, Color(1, 0, 0, 1));
                 //}
-
-                Simplex simplex;
-
-                m_closest_point = collider->ClosestPointSimplex(m_input_point, simplex);
-                m_primitive_renderer->DrawPrimitiveInstancing(m_drawing_sphere, m_input_point, eRenderingMode::Face, Color(1, 0, 0, 1));
-                m_primitive_renderer->DrawPrimitiveInstancing(m_drawing_sphere, m_closest_point, eRenderingMode::Face, Color(1, 0, 0, 1));
-                m_primitive_renderer->DrawSegment(m_input_point, m_closest_point, Color(1, 0, 0));
-                m_primitive_renderer->DrawSimplex(simplex, Vector3(), Quaternion(), Vector3(1, 1, 1), eRenderingMode::Line, Color(1, 0, 0, 1));
+ 
+                 m_closest_point = collider->CastPointWorld(m_input_point);
+                 m_primitive_renderer->DrawPrimitiveInstancing(m_drawing_sphere, m_input_point, eRenderingMode::Face, Color(1, 0, 0, 1));
+                 m_primitive_renderer->DrawPrimitiveInstancing(m_drawing_sphere, m_closest_point, eRenderingMode::Face, Color(1, 0, 0, 1));
+                 m_primitive_renderer->DrawSegment(m_input_point, m_closest_point, Color(1, 0, 0));
             }
         }
         else

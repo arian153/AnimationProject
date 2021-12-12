@@ -34,8 +34,8 @@ namespace CS460
         Vector3 LocalToWorldVector(const Vector3& local_vector) const;
         Vector3 WorldToLocalVector(const Vector3& world_vector) const;
 
-        Vector3 ClosestPointWorld(const Vector3& point);
-        Vector3 ClosestPointLocal(const Vector3& point);
+        Vector3 CastPointWorld(const Vector3& point);
+        Vector3 CastPointLocal(const Vector3& point);
         Vector3 ClosestPointSimplex(const Vector3& point, Simplex& simplex);
 
         Matrix33 WorldInertia() const;

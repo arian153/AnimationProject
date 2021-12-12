@@ -63,11 +63,12 @@
             "Colliders": [
               {
                 "Density": 0.4,
-                "Orientation": [1, 0, 0, 0],
-                "Position": [0, 0, 0],
-                "Cube": [6, 6, 6],
+                "Orientation": [ 1, 0, 0, 0 ],
+                "Position": [ 0, 0, 0 ],
+                "Cube": [ 6, 6, 6 ],
+                "Radius": [ 6, 4, 4 ],
                 "Scale": 1,
-                "Type": "Box"
+                "Type": "Ellipsoid"
               }
             ],
             "Is Ghost": false

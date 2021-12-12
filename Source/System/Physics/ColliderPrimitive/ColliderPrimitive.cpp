@@ -140,45 +140,30 @@ namespace CS460
         return m_local.WorldToLocalVector(world_vector);
     }
 
-    Vector3 ColliderPrimitive::ClosestPointWorld(const Vector3& point)
+    Vector3 ColliderPrimitive::CastPointWorld(const Vector3& point)
     {
-        Simplex simplex;
+        Ray           ray(point, (GetBodyPosition() - point).Unit());
+        RayCastResult result(ray);
+        CastRay(result);
 
-        if (m_collider_set->GJKDistanceTest(this, point, simplex) == false)
-        {
-            //outside of collider
-            Vector3 local_p = WorldToLocalPoint(m_rigid_body->WorldToLocalPoint(point));
-            Vector3 local_closest = simplex.ClosestPointLocalA(local_p);
-
-            return m_rigid_body->LocalToWorldPoint(LocalToWorldPoint(local_closest));
-          
-        }
-
-        return point;
+        return result.GetWorldIntersection();
     }
 
-    Vector3 ColliderPrimitive::ClosestPointLocal(const Vector3& point)
+    Vector3 ColliderPrimitive::CastPointLocal(const Vector3& point)
     {
-        Simplex simplex;
+        Ray           ray(point, (GetBodyPosition() - point).Unit());
+        RayCastResult result(ray);
+        CastRay(result);
 
-        if (m_collider_set->GJKDistanceTest(this, point, simplex) == false)
-        {
-            //outside of collider
-            Vector3 local_p = WorldToLocalPoint(m_rigid_body->WorldToLocalPoint(point));
-            return simplex.ClosestPointLocalA(local_p);
-        }
-
-        return point;
+        return result.GetLocalIntersection();
     }
 
-    Vector3 ColliderPrimitive::ClosestPointSimplex(const Vector3& point,  Simplex& simplex)
+    Vector3 ColliderPrimitive::ClosestPointSimplex(const Vector3& point, Simplex& simplex)
     {
         m_collider_set->GJKDistanceTest(this, point, simplex);
         return simplex.ClosestPointGlobal(Vector3());
-
     }
 
-   
     Matrix33 ColliderPrimitive::WorldInertia() const
     {
         return MassData::TranslateInertia(MassData::RotateInertia(m_local_inertia_tensor, m_local.orientation), m_mass, m_local.position);
