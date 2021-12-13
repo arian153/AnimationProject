@@ -2,5 +2,11 @@
 
 namespace CS460
 {
-    
+    SoftBody::SoftBody()
+    {
+    }
+
+    SoftBody::~SoftBody()
+    {
+    }
 }
