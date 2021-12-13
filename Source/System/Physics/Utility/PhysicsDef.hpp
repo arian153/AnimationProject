@@ -19,28 +19,72 @@ namespace CS460
         Sphere,
         Tetrahedron,
         Truncated,
-        InvalidPrimitive
+        Point,
+        Invalid
+    };
+
+    inline const char* E_COLLIDER_TYPE[] = {
+        "Circle",
+        "Ellipse",
+        "Polygon",
+        "Rectangle",
+        "Triangle",
+        "Box",
+        "Capsule",
+        "Cone",
+        "Cylinder",
+        "Dome",
+        "Ellipsoid",
+        "Polyhedron",
+        "Sphere",
+        "Tetrahedron",
+        "Point",
+        "Invalid"
     };
 
     enum class eMotionMode : int
     {
         Dynamic,
         Static,
-        Kinematic
+        Kinematic,
+        Invalid
+    };
+
+    inline const char* E_MOTION_MODE[] = {
+        "Dynamic",
+        "Static",
+        "Kinematic"
+        "Invalid"
     };
 
     enum class eBroadPhaseMode : int
     {
         DynamicBVH,
         NSquared,
-        GridPartition
+        GridPartition,
+        Invalid
+    };
+
+    inline const char* E_BROAD_PHASE_MODE[] = {
+        "DynamicBVH",
+        "NSquared",
+        "GridPartition"
+        "Invalid"
     };
 
     enum class eCollisionDetectionMode : int
     {
         Discrete,
         ContinuousStatic,
-        ContinuousFull
+        ContinuousFull,
+        Invalid
+    };
+
+    inline const char* E_COLLISION_DETECTION_MODE[] = {
+        "Discrete",
+        "ContinuousStatic",
+        "ContinuousFull"
+        "Invalid"
     };
 
     namespace Physics

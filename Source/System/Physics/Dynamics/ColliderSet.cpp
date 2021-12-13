@@ -106,7 +106,7 @@ namespace CS460
         case CS460::eColliderType::Truncated:
             primitive = new ColliderTruncated();
             break;
-        case CS460::eColliderType::InvalidPrimitive:
+        case CS460::eColliderType::Invalid:
             return nullptr;
         default:
             return nullptr;

@@ -9,7 +9,7 @@
 namespace CS460
 {
     ColliderPrimitive::ColliderPrimitive()
-        : m_mass(1.0f), m_type(eColliderType::InvalidPrimitive)
+        : m_mass(1.0f), m_type(eColliderType::Invalid)
     {
     }
 

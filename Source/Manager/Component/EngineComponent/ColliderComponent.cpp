@@ -139,7 +139,7 @@ namespace CS460
                 if (JsonResource::HasMember(collider, "Type") && collider["Type"].isString())
                 {
                     std::string   type          = collider["Type"].asString();
-                    eColliderType collider_type = eColliderType::InvalidPrimitive;
+                    eColliderType collider_type = eColliderType::Invalid;
                     if (type == "Circle")
                     {
                         collider_type = eColliderType::Circle;
@@ -200,7 +200,7 @@ namespace CS460
                     {
                         collider_type = eColliderType::Truncated;
                     }
-                    if (collider_type != eColliderType::InvalidPrimitive)
+                    if (collider_type != eColliderType::Invalid)
                     {
                         auto created = AddCollider(collider_type);
                         created->Load(collider);
