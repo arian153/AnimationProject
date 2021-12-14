@@ -571,7 +571,7 @@ namespace CS460
         }
     }
 
-    void DynamicBVH::RenderNodeRecursive(DynamicBVHNode* node, PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color)
+    void DynamicBVH::RenderNodeRecursive(DynamicBVHNode* node, PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color) const
     {
         if (node != nullptr)
         {

@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 #include "../../Math/Structure/Transform.hpp"
 #include "../Utility/PhysicsDef.hpp"
 
@@ -94,5 +96,8 @@ namespace CS460
 
         bool m_b_sleep        = false;
         Real m_sleep_momentum = Physics::Collision::SLEEP_AWAKE;
+
+
+        std::vector<>
     };
 }
