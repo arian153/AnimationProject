@@ -18,6 +18,7 @@ namespace Json
 
 namespace CS460
 {
+    class IBroadPhaseData;
     class Simplex;
     class CommandRegistry;
     class RayTest;
@@ -53,12 +54,12 @@ namespace CS460
         void SetDrawFlagVelocity(bool b_draw, const Color& color = ColorDef::Pure::White);
         void SetDrawFlagPositionTrace(bool b_draw, const Color& color = ColorDef::Pure::White);
 
-        ColliderPrimitive* CreateCollider(ColliderSet* collider_set, eColliderType type) const;
+        ColliderPrimitive* CreateCollider(ColliderSet* collider_set, eColliderType type);
         Force*             CreateForce(const std::string& type) const;
 
         RigidBody*   AddRigidBody(RigidBody* body);
         ColliderSet* AddColliderSet(ColliderSet* set);
-        void         AddPrimitive(ColliderPrimitive* collider_primitive) const;
+        void         AddPrimitive(ColliderPrimitive* collider_primitive);
         void         AddConstraint(Constraint* constraint) const;
         void         AddForce(Force* force) const;
 
@@ -104,11 +105,13 @@ namespace CS460
         ManifoldTable*     m_manifold_table     = nullptr;
         PrimitiveRenderer* m_primitive_renderer = nullptr;
 
-        std::vector<ColliderSet*> m_collider_sets;
-        std::vector<RigidBody*>   m_rigid_bodies;
-        std::list<ColliderPair>   m_pairs;
-        std::vector<RayTest>      m_rays;
-        Ray                       m_picking_ray;
+        std::vector<ColliderSet*>     m_collider_sets;
+        std::vector<RigidBody*>       m_rigid_bodies;
+        std::vector<IBroadPhaseData*> m_bpd_lists;
+
+        std::list<ColliderPair> m_pairs;
+        std::vector<RayTest>    m_rays;
+        Ray                     m_picking_ray;
 
         //factory
         std::unordered_map<std::string, ForceFactory*>* m_factories = nullptr;

@@ -3,13 +3,14 @@
 
 namespace CS460
 {
+    class IBroadPhaseData;
     class ColliderSet;
     class ColliderPrimitive;
 
     class BoundingAABB
     {
     public:
-        explicit BoundingAABB(ColliderPrimitive* collider = nullptr);
+        explicit BoundingAABB(IBroadPhaseData* bpd_data = nullptr);
         ~BoundingAABB();
 
         void         Set(const Vector3& min, const Vector3& max);
@@ -26,8 +27,10 @@ namespace CS460
         Vector3      Min() const;
         Vector3      Max() const;
         BoundingAABB Union(const BoundingAABB& aabb) const;
+
         //getter
         ColliderPrimitive* GetCollider() const;
+        ColliderSet*       GetColliderSet() const;
         void*              GetUserData() const;
     private:
         friend class DynamicBVHNode;
@@ -35,10 +38,9 @@ namespace CS460
         friend class GridData;
         friend class GridPartition;
     private:
-        Vector3            m_min;
-        Vector3            m_max;
-        ColliderSet*       m_collider_set = nullptr;
-        ColliderPrimitive* m_collider     = nullptr;
-        void*              m_userdata     = nullptr;
+        Vector3          m_min;
+        Vector3          m_max;
+        IBroadPhaseData* m_bpd_data = nullptr;
+        void*            m_userdata = nullptr;
     };
 }

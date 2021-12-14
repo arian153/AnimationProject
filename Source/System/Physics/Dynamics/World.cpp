@@ -14,6 +14,7 @@
 #include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../Graphics/Utility/TextRenderer.hpp"
+#include "../BroadPhase/IBroadPhaseData.hpp"
 
 namespace CS460
 {
@@ -534,6 +535,14 @@ namespace CS460
             delete m_broad_phase;
             m_broad_phase = nullptr;
         }
+
+        for (auto& bpd : m_bpd_lists)
+        {
+            delete bpd;
+            bpd = nullptr;
+        }
+
+        m_bpd_lists.clear();
     }
 
     void World::SetBroadPhaseMode(eBroadPhaseMode mode)
@@ -625,7 +634,7 @@ namespace CS460
         m_draw_position.color  = color;
     }
 
-    ColliderPrimitive* World::CreateCollider(ColliderSet* collider_set, eColliderType type) const
+    ColliderPrimitive* World::CreateCollider(ColliderSet* collider_set, eColliderType type)
     {
         if (collider_set != nullptr)
         {
@@ -660,10 +669,12 @@ namespace CS460
         return set;
     }
 
-    void World::AddPrimitive(ColliderPrimitive* collider_primitive) const
+    void World::AddPrimitive(ColliderPrimitive* collider_primitive)
     {
-        BoundingAABB* bounding_volume = new BoundingAABB(collider_primitive);
+        BPDCollider*  bpd_data        = new BPDCollider(collider_primitive);
+        BoundingAABB* bounding_volume = new BoundingAABB(bpd_data);
         m_broad_phase->Add(bounding_volume);
+        m_bpd_lists.push_back(bpd_data);
     }
 
     void World::AddConstraint(Constraint* constraint) const

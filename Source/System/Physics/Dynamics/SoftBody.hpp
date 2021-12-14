@@ -98,6 +98,6 @@ namespace CS460
         Real m_sleep_momentum = Physics::Collision::SLEEP_AWAKE;
 
 
-        std::vector<>
+        //std::vector<>
     };
 }

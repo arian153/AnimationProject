@@ -1,15 +1,16 @@
 #include "BoundingAABB.hpp"
+
+#include "IBroadPhaseData.hpp"
 #include "..//ColliderPrimitive/ColliderPrimitive.hpp"
 
 namespace CS460
 {
-    BoundingAABB::BoundingAABB(ColliderPrimitive* collider)
-        : m_collider(collider)
+    BoundingAABB::BoundingAABB(IBroadPhaseData* bpd_data)
+        : m_bpd_data(bpd_data)
     {
-        if (m_collider != nullptr)
+        if (m_bpd_data != nullptr)
         {
-            m_collider->m_bounding_volume = this;
-            m_collider_set                = m_collider->m_collider_set;
+            m_bpd_data->SetBoundingVolume(this);
         }
     }
 
@@ -41,7 +42,7 @@ namespace CS460
         if (m_min.z > aabb->m_max.z || aabb->m_min.z > m_max.z)
             return false;
         // if same collider set, skip intersection
-        if (m_collider_set != nullptr && m_collider_set == aabb->m_collider_set)
+        if (m_bpd_data != nullptr && m_bpd_data->SkipIntersectionTest(aabb))
         {
             return false;
         }
@@ -193,7 +194,6 @@ namespace CS460
         return (m_max.x - m_min.x) * (m_max.y - m_min.y) * (m_max.z - m_min.z);
     }
 
-   
     Vector3 BoundingAABB::Center() const
     {
         return 0.5f * (m_max + m_min);
@@ -253,7 +253,22 @@ namespace CS460
 
     ColliderPrimitive* BoundingAABB::GetCollider() const
     {
-        return m_collider;
+        if (m_bpd_data != nullptr && m_bpd_data->bpd_type == eBPDType::Collider)
+        {
+            return static_cast<BPDCollider*>(m_bpd_data)->m_collider;
+        }
+
+        return nullptr;
+    }
+
+    ColliderSet* BoundingAABB::GetColliderSet() const
+    {
+        if (m_bpd_data != nullptr && m_bpd_data->bpd_type == eBPDType::Collider)
+        {
+            return static_cast<BPDCollider*>(m_bpd_data)->m_collider_set;
+        }
+
+        return nullptr;
     }
 
     void* BoundingAABB::GetUserData() const
