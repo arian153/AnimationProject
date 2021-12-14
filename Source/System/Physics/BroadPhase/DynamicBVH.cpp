@@ -617,7 +617,20 @@ namespace CS460
             {
                 if (n0->data->Intersect(n1->data) == true)
                 {
-                    result.emplace_back(n0->data->GetCollider(), n1->data->GetCollider());
+                    if (n0->data->m_bpd_type == eBPDType::Collider)
+                    {
+                        if (n1->data->m_bpd_type == eBPDType::Collider)
+                            result.emplace_back(n0->data->GetCollider(), n1->data->GetCollider());
+                        else if (n1->data->m_bpd_type == eBPDType::SoftBody)
+                            result.emplace_back(n0->data->GetCollider(), n1->data->GetSoftBody());
+                    }
+                    else if (n0->data->m_bpd_type == eBPDType::SoftBody)
+                    {
+                        if (n1->data->m_bpd_type == eBPDType::Collider)
+                            result.emplace_back(n1->data->GetCollider(), n0->data->GetSoftBody());
+                        else if (n1->data->m_bpd_type == eBPDType::SoftBody)
+                            result.emplace_back(n0->data->GetSoftBody(), n1->data->GetSoftBody());
+                    }
                 }
             }
             else // 1 branch / 1 leaf, 2 cross checks

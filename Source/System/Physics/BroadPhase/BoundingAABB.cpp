@@ -267,22 +267,17 @@ namespace CS460
 
     ColliderPrimitive* BoundingAABB::GetCollider() const
     {
-        if (m_bpd_type == eBPDType::Collider)
-        {
-            return m_collider;
-        }
-
-        return nullptr;
+        return m_collider;
     }
 
     ColliderSet* BoundingAABB::GetColliderSet() const
     {
-        if (m_bpd_type == eBPDType::Collider)
-        {
-            return m_collider_set;
-        }
+        return m_collider_set;
+    }
 
-        return nullptr;
+    SoftBody* BoundingAABB::GetSoftBody() const
+    {
+        return m_softbody;
     }
 
     void* BoundingAABB::GetUserData() const

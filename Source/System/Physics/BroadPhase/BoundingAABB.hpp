@@ -39,6 +39,7 @@ namespace CS460
         //getter
         ColliderPrimitive* GetCollider() const;
         ColliderSet*       GetColliderSet() const;
+        SoftBody*          GetSoftBody() const;
         void*              GetUserData() const;
     private:
         friend class DynamicBVHNode;
@@ -48,7 +49,7 @@ namespace CS460
     private:
         Vector3            m_min;
         Vector3            m_max;
-        eBPDType           m_bpd_type       = eBPDType::Invalid;
+        eBPDType           m_bpd_type     = eBPDType::Invalid;
         ColliderSet*       m_collider_set = nullptr;
         ColliderPrimitive* m_collider     = nullptr;
         SoftBody*          m_softbody     = nullptr;
