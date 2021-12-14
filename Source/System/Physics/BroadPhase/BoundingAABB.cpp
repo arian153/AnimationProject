@@ -1,16 +1,26 @@
 #include "BoundingAABB.hpp"
 
-#include "IBroadPhaseData.hpp"
 #include "..//ColliderPrimitive/ColliderPrimitive.hpp"
 
 namespace CS460
 {
-    BoundingAABB::BoundingAABB(IBroadPhaseData* bpd_data)
-        : m_bpd_data(bpd_data)
+    BoundingAABB::BoundingAABB(ColliderPrimitive* collider)
+        : m_collider(collider)
     {
-        if (m_bpd_data != nullptr)
+        if (m_collider != nullptr)
         {
-            m_bpd_data->SetBoundingVolume(this);
+            m_collider->m_bounding_volume = this;
+            m_collider_set                = m_collider->m_collider_set;
+            m_bpd_type                    = eBPDType::Collider;
+        }
+    }
+
+    BoundingAABB::BoundingAABB(SoftBody* softbody)
+        : m_softbody(softbody)
+    {
+        if (m_softbody != nullptr)
+        {
+            m_bpd_type = eBPDType::SoftBody;
         }
     }
 
@@ -42,9 +52,13 @@ namespace CS460
         if (m_min.z > aabb->m_max.z || aabb->m_min.z > m_max.z)
             return false;
         // if same collider set, skip intersection
-        if (m_bpd_data != nullptr && m_bpd_data->SkipIntersectionTest(aabb))
+
+        if (m_bpd_type == aabb->m_bpd_type)
         {
-            return false;
+            if (m_bpd_type == eBPDType::Collider && m_collider_set != nullptr && m_collider_set == aabb->m_collider_set)
+            {
+                return false;
+            }
         }
         // no separation, must be intersecting
         return true;
@@ -253,9 +267,9 @@ namespace CS460
 
     ColliderPrimitive* BoundingAABB::GetCollider() const
     {
-        if (m_bpd_data != nullptr && m_bpd_data->bpd_type == eBPDType::Collider)
+        if (m_bpd_type == eBPDType::Collider)
         {
-            return static_cast<BPDCollider*>(m_bpd_data)->m_collider;
+            return m_collider;
         }
 
         return nullptr;
@@ -263,9 +277,9 @@ namespace CS460
 
     ColliderSet* BoundingAABB::GetColliderSet() const
     {
-        if (m_bpd_data != nullptr && m_bpd_data->bpd_type == eBPDType::Collider)
+        if (m_bpd_type == eBPDType::Collider)
         {
-            return static_cast<BPDCollider*>(m_bpd_data)->m_collider_set;
+            return m_collider_set;
         }
 
         return nullptr;

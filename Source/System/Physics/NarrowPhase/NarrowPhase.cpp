@@ -35,7 +35,7 @@ namespace CS460
         m_primitive_renderer = primitive_renderer;
     }
 
-    void NarrowPhase::GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table)
+    void NarrowPhase::GenerateContact(std::list<PotentialPair>& potential_list, ManifoldTable* data_table)
     {
         size_t count = potential_list.size();
         m_simplexes.clear();
@@ -45,16 +45,16 @@ namespace CS460
         for (auto& pair : potential_list)
         {
             Simplex      simplex;
-            ColliderSet* set_a = pair.first->m_collider_set;
-            ColliderSet* set_b = pair.second->m_collider_set;
-            if (GJKCollisionDetection(pair.first, pair.second, simplex) == true)
+            ColliderSet* set_a = pair.collider_a->m_collider_set;
+            ColliderSet* set_b = pair.collider_b->m_collider_set;
+            if (GJKCollisionDetection(pair.collider_a, pair.collider_b, simplex) == true)
             {
                 ////collider pair have a collision do epa and create collision.
                 m_simplexes.push_back(simplex);
                 Polytope polytope = Polytope(simplex);
                 //draw gjk result simplex
                 ContactPoint new_contact_data;
-                if (EPAContactGeneration(pair.first, pair.second, polytope, new_contact_data) == true)
+                if (EPAContactGeneration(pair.collider_a, pair.collider_b, polytope, new_contact_data) == true)
                 {
                     //draw EPA result
                     m_polytopes.push_back(polytope);

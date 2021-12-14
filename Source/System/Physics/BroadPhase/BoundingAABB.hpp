@@ -3,14 +3,22 @@
 
 namespace CS460
 {
-    class IBroadPhaseData;
+    class SoftBody;
     class ColliderSet;
     class ColliderPrimitive;
+
+    enum class eBPDType
+    {
+        Collider,
+        SoftBody,
+        Invalid
+    };
 
     class BoundingAABB
     {
     public:
-        explicit BoundingAABB(IBroadPhaseData* bpd_data = nullptr);
+        explicit BoundingAABB(ColliderPrimitive* collider = nullptr);
+        explicit BoundingAABB(SoftBody* softbody);
         ~BoundingAABB();
 
         void         Set(const Vector3& min, const Vector3& max);
@@ -38,9 +46,12 @@ namespace CS460
         friend class GridData;
         friend class GridPartition;
     private:
-        Vector3          m_min;
-        Vector3          m_max;
-        IBroadPhaseData* m_bpd_data = nullptr;
-        void*            m_userdata = nullptr;
+        Vector3            m_min;
+        Vector3            m_max;
+        eBPDType           m_bpd_type       = eBPDType::Invalid;
+        ColliderSet*       m_collider_set = nullptr;
+        ColliderPrimitive* m_collider     = nullptr;
+        SoftBody*          m_softbody     = nullptr;
+        void*              m_userdata     = nullptr;
     };
 }

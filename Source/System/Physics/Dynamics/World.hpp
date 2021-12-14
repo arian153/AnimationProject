@@ -10,6 +10,7 @@
 #include "../../Graphics/DataType/Color.hpp"
 #include "../Utility/FrictionUtility.hpp"
 #include "../BroadPhase/RayTest.hpp"
+#include "../BroadPhase/ColliderPair.hpp"
 
 namespace Json
 {
@@ -54,12 +55,12 @@ namespace CS460
         void SetDrawFlagVelocity(bool b_draw, const Color& color = ColorDef::Pure::White);
         void SetDrawFlagPositionTrace(bool b_draw, const Color& color = ColorDef::Pure::White);
 
-        ColliderPrimitive* CreateCollider(ColliderSet* collider_set, eColliderType type);
+        ColliderPrimitive* CreateCollider(ColliderSet* collider_set, eColliderType type) const;
         Force*             CreateForce(const std::string& type) const;
 
         RigidBody*   AddRigidBody(RigidBody* body);
         ColliderSet* AddColliderSet(ColliderSet* set);
-        void         AddPrimitive(ColliderPrimitive* collider_primitive);
+        void         AddPrimitive(ColliderPrimitive* collider_primitive) const;
         void         AddConstraint(Constraint* constraint) const;
         void         AddForce(Force* force) const;
 
@@ -107,9 +108,8 @@ namespace CS460
 
         std::vector<ColliderSet*>     m_collider_sets;
         std::vector<RigidBody*>       m_rigid_bodies;
-        std::vector<IBroadPhaseData*> m_bpd_lists;
 
-        std::list<ColliderPair> m_pairs;
+        std::list<PotentialPair> m_pairs;
         std::vector<RayTest>    m_rays;
         Ray                     m_picking_ray;
 

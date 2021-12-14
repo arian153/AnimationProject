@@ -25,7 +25,7 @@ namespace CS460
         virtual void Clear() = 0;
         virtual void Release() = 0;
         virtual void Render(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color) = 0;
-        virtual void ComputePairs(std::list<ColliderPair>& result) = 0;
+        virtual void ComputePairs(std::list<PotentialPair>& result) = 0;
 
         //Query
         virtual ColliderPrimitive* Pick(const Vector3& point) const = 0;

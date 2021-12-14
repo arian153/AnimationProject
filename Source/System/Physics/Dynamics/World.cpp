@@ -14,7 +14,7 @@
 #include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../Graphics/Utility/TextRenderer.hpp"
-#include "../BroadPhase/IBroadPhaseData.hpp"
+#include "../BroadPhase/ColliderPair.hpp"
 
 namespace CS460
 {
@@ -535,14 +535,6 @@ namespace CS460
             delete m_broad_phase;
             m_broad_phase = nullptr;
         }
-
-        for (auto& bpd : m_bpd_lists)
-        {
-            delete bpd;
-            bpd = nullptr;
-        }
-
-        m_bpd_lists.clear();
     }
 
     void World::SetBroadPhaseMode(eBroadPhaseMode mode)
@@ -634,7 +626,7 @@ namespace CS460
         m_draw_position.color  = color;
     }
 
-    ColliderPrimitive* World::CreateCollider(ColliderSet* collider_set, eColliderType type)
+    ColliderPrimitive* World::CreateCollider(ColliderSet* collider_set, eColliderType type) const
     {
         if (collider_set != nullptr)
         {
@@ -669,12 +661,10 @@ namespace CS460
         return set;
     }
 
-    void World::AddPrimitive(ColliderPrimitive* collider_primitive)
+    void World::AddPrimitive(ColliderPrimitive* collider_primitive) const
     {
-        BPDCollider*  bpd_data        = new BPDCollider(collider_primitive);
-        BoundingAABB* bounding_volume = new BoundingAABB(bpd_data);
+        BoundingAABB* bounding_volume = new BoundingAABB(collider_primitive);
         m_broad_phase->Add(bounding_volume);
-        m_bpd_lists.push_back(bpd_data);
     }
 
     void World::AddConstraint(Constraint* constraint) const
@@ -809,8 +799,8 @@ namespace CS460
     {
         for (auto& pair : m_pairs)
         {
-            auto a = pair.first->GetBoundingVolume();
-            auto b = pair.second->GetBoundingVolume();
+            auto a = pair.collider_a->GetBoundingVolume();
+            auto b = pair.collider_b->GetBoundingVolume();
             m_primitive_renderer->DrawBox(a->Center(), Quaternion(), a->Size(), eRenderingMode::Line, m_draw_potential_pair.color);
             m_primitive_renderer->DrawBox(b->Center(), Quaternion(), b->Size(), eRenderingMode::Line, m_draw_potential_pair.color);
         }

@@ -174,7 +174,7 @@ namespace CS460
         RenderNodeRecursive(m_root, primitive_renderer, broad_phase_color, primitive_color);
     }
 
-    void DynamicBVH::ComputePairs(std::list<ColliderPair>& result)
+    void DynamicBVH::ComputePairs(std::list<PotentialPair>& result)
     {
         result.clear();
         if (m_root == nullptr || m_root->IsLeaf())
@@ -608,7 +608,7 @@ namespace CS460
         }
     }
 
-    void DynamicBVH::ComputePairsRecursive(DynamicBVHNode* n0, DynamicBVHNode* n1, std::list<ColliderPair>& result)
+    void DynamicBVH::ComputePairsRecursive(DynamicBVHNode* n0, DynamicBVHNode* n1, std::list<PotentialPair>& result)
     {
         if (n0->IsLeaf() == true)
         {
@@ -658,7 +658,7 @@ namespace CS460
         }
     }
 
-    void DynamicBVH::CrossChildren(DynamicBVHNode* node, std::list<ColliderPair>& result)
+    void DynamicBVH::CrossChildren(DynamicBVHNode* node, std::list<PotentialPair>& result)
     {
         if (node->children_crossed == false)
         {

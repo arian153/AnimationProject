@@ -106,7 +106,7 @@ namespace CS460
         friend class ColliderSet;
         friend class RigidBody;
         friend class NarrowPhase;
-        friend class BPDCollider;
+        friend class BoundingAABB;
         friend class World;
         friend class ManifoldTable;
         friend class ColliderComponent;

@@ -24,7 +24,7 @@ namespace CS460
 
         void SetPrimitiveRenderer(PrimitiveRenderer* primitive_renderer);
 
-        void GenerateContact(std::list<ColliderPair>& potential_list, ManifoldTable* data_table);
+        void GenerateContact(std::list<PotentialPair>& potential_list, ManifoldTable* data_table);
         void Render(const ColorFlag& draw_gjk_flag, const ColorFlag& draw_epa_flag);
 
         SupportPoint GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction) const;

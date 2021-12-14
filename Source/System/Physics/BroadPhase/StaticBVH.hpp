@@ -19,7 +19,7 @@ namespace CS460
         void Clear() override;
         void Release() override;
         void Render(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color) override;
-        void ComputePairs(std::list<ColliderPair>& result) override;
+        void ComputePairs(std::list<PotentialPair>& result) override;
 
         //Query
         ColliderPrimitive* Pick(const Vector3& point) const override;
