@@ -19,16 +19,16 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 0, -60],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 0, -60 ],
+            "Scale": [ 1, 1, 1 ]
           }
         },
         {
           "Type": "class CS460::CameraComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 0, -60],
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 0, -60 ],
             "Zoom": 1.0
           }
         },
@@ -43,9 +43,68 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, -5, 0],
-            "Scale": [3, 3, 3]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 15, 0 ],
+            "Scale": [ 1, 1, 1 ]
+          }
+        },
+        {
+          "Type": "class CS460::AnchorComponent"
+        }
+      ],
+      "Name": "Anchor"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 15, 0 ],
+            "Scale": [ 1, 1, 1 ]
+          }
+        },
+        {
+          "Type": "class CS460::RigidBodyComponent",
+          "Value": {
+          }
+        },
+        {
+          "Type": "class CS460::ColliderComponent",
+          "Value": {
+            "Colliders": [
+              {
+                "Density": 1.0,
+                "Material": "Rubber",
+                "Orientation": [ 1, 0, 0, 0 ],
+                "Position": [ 0, 0, 0 ],
+                "Cube": [ 1, 1, 1 ],
+                "Scale": 1,
+                "Type": "Box"
+              }
+            ],
+            "Is Ghost": false
+          }
+        },
+        {
+          "Type": "class CS460::PointConstraintComponent",
+          "Value": {
+            "Mode": "Soft",
+            "Anchor": [ 2, 2, 2 ],
+            "Target Object": "Anchor"
+          }
+        }
+      ],
+      "Name": "Box1"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, -5, 0 ],
+            "Scale": [ 3, 3, 3 ]
           }
         },
         {
@@ -53,7 +112,6 @@
           "Value": {
             "Motion": "Kinematic",
             "Angular": {
-              "Velocity": [1, 1, 1]
             }
           }
         },
@@ -67,15 +125,20 @@
                 "Position": [ 0, 0, 0 ],
                 "Cube": [ 6, 6, 6 ],
                 "Radius": [ 6, 4, 4 ],
+                "Vertices": [
+                  [ 0, 1 ],
+                  [ -1, 0 ],
+                  [ 1, 0 ]
+                ],
                 "Scale": 1,
-                "Type": "Ellipsoid"
+                "Type": "Triangle"
               }
             ],
             "Is Ghost": false
           }
         }
       ],
-      "Name": "Box"
+      "Name": "Triangle"
     }
   ],
   "Settings": {
