@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 
+#include "MassPoint.hpp"
 #include "../../Math/Structure/Transform.hpp"
 #include "../Utility/PhysicsDef.hpp"
 
@@ -18,11 +19,7 @@ namespace CS460
         void Shutdown() const;
 
         void IntegrateEuler(Real dt);
-        //void IntegrateRK2(Real dt);
-        //void IntegrateRK4(Real dt);
-        //void IntegrateVerlet(Real dt);
-        //void IntegrateMidpoint(Real dt);
-
+     
         void UpdateCentroid();
         void UpdatePosition();
         void UpdateInertia();
@@ -97,7 +94,9 @@ namespace CS460
         bool m_b_sleep        = false;
         Real m_sleep_momentum = Physics::Collision::SLEEP_AWAKE;
 
+        Vector3 m_local_centroid;
+        Vector3 m_global_centroid;
 
-        //std::vector<>
+        std::vector<MassPoint> m_mass_points;
     };
 }
