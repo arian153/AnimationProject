@@ -88,7 +88,7 @@ namespace CS460
 
     private:
         Vector3 GetLinearAcceleration(const Vector3& v, const Vector3& p, Real dt) const;
-        Vector3 GetAngularAcceleration(const Vector3& w, const Quaternion& r, Real dt ) const;
+        Vector3 GetAngularAcceleration(const Vector3& w, const Quaternion& r, Real dt) const;
 
         void CalculateStepData(StepData& step_data);
 
@@ -119,8 +119,8 @@ namespace CS460
 
         //others
         eMotionMode         m_motion_mode = eMotionMode::Dynamic;
-        Transform*          m_transform   = nullptr;
-        Transform           m_local;
+        Transform*          m_shared_data = nullptr;
+        Transform           m_transform;
         RigidBodyComponent* m_component      = nullptr;
         bool                m_b_sleep        = false;
         Real                m_sleep_momentum = Physics::Collision::SLEEP_AWAKE;

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 
+#include "MassData.hpp"
 #include "MassPoint.hpp"
 #include "../../Math/Structure/Transform.hpp"
 #include "../Utility/PhysicsDef.hpp"
@@ -19,13 +20,12 @@ namespace CS460
         void Shutdown() const;
 
         void IntegrateEuler(Real dt);
-     
+
+        void UpdateMassData();
         void UpdateCentroid();
         void UpdatePosition();
         void UpdateInertia();
         void UpdateOrientation();
-
-        void SetMassData(const MassData& mass_data);
 
         void ApplyForce(const Vector3& force, const Vector3& at);
         void ApplyForceCentroid(const Vector3& force);
@@ -55,21 +55,16 @@ namespace CS460
         void SetAwake();
         void UpdateSleepState();
 
-        void     SetMassInfinite();
-        void     SetMass(Real mass = 1.0f);
         Real     Mass() const;
         Real     InverseMass() const;
         Matrix33 MassMatrix() const;
         Matrix33 InverseMassMatrix() const;
 
-        void     SetInertiaInfinite();
-        void     SetInertia(const Matrix33& inertia_tensor);
         Matrix33 Inertia() const;
         Matrix33 InverseInertia() const;
 
         Matrix33 LocalInertia() const;
         Matrix33 InverseLocalInertia() const;
-        void     SetLocalInertia(const Matrix33& inertia);
 
         void        SetMotionMode(eMotionMode motion_mode);
         eMotionMode GetMotionMode() const;
@@ -88,14 +83,28 @@ namespace CS460
     private:
 
         eMotionMode m_motion_mode = eMotionMode::Dynamic;
-        Transform*  m_transform   = nullptr;
-        Transform   m_local_copy;
+        Transform*  m_shared_data = nullptr;
+        Transform   m_transform;
+
+        //linear data
+        Vector3 m_linear_velocity;
+        Vector3 m_force_accumulator;
+        Vector3 m_linear_constraints = Vector3(1.0f, 1.0f, 1.0f);
+
+        //angular data
+        Quaternion m_inverse_orientation;
+        Vector3    m_angular_velocity;
+        Vector3    m_torque_accumulator;
+        Vector3    m_angular_constraints = Vector3(1.0f, 1.0f, 1.0f);
+
 
         bool m_b_sleep        = false;
         Real m_sleep_momentum = Physics::Collision::SLEEP_AWAKE;
 
-        Vector3 m_local_centroid;
-        Vector3 m_global_centroid;
+        MassData   m_mass_data;
+        Vector3    m_global_centroid;
+        Matrix33   m_global_inertia;
+        Matrix33   m_global_inverse_inertia;
 
         std::vector<MassPoint> m_mass_points;
     };

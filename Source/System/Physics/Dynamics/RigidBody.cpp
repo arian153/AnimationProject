@@ -38,7 +38,7 @@ namespace CS460
         m_force_accumulator.SetZero();
         m_torque_accumulator.SetZero();
 
-        SyncFromTransform(m_transform);
+        SyncFromTransform(m_shared_data);
         Vector3 delta_linear_velocity = m_linear_velocity * dt;
         delta_linear_velocity         = delta_linear_velocity.HadamardProduct(m_linear_constraints);
         m_global_centroid += delta_linear_velocity;
@@ -47,12 +47,12 @@ namespace CS460
         delta_angular_velocity         = delta_angular_velocity.HadamardProduct(m_angular_constraints);
         Vector3 axis                   = delta_angular_velocity.Unit();
         Real    radian                 = delta_angular_velocity.Length() * dt;
-        m_local.orientation.AddRotation(axis, radian);
+        m_transform.orientation.AddRotation(axis, radian);
         // update remain properties
         UpdateOrientation();
         UpdateInertia();
         UpdatePosition();
-        SyncToTransform(m_transform);
+        SyncToTransform(m_shared_data);
     }
 
     void RigidBody::IntegrateRK2(Real dt)
@@ -104,14 +104,14 @@ namespace CS460
 
         m_global_centroid += delta_pos;
         m_linear_velocity += delta_lv;
-        m_local.orientation.AddRotation(delta_rot);
+        m_transform.orientation.AddRotation(delta_rot);
         m_angular_velocity += delta_rv;
 
         // update remain properties
         UpdateOrientation();
         UpdateInertia();
         UpdatePosition();
-        SyncToTransform(m_transform);
+        SyncToTransform(m_shared_data);
     }
 
     void RigidBody::IntegrateRK4(Real dt)
@@ -122,7 +122,7 @@ namespace CS460
         if (m_b_sleep)
             return;
 
-        SyncFromTransform(m_transform);
+        SyncFromTransform(m_shared_data);
 
         // Runge-Kutta 4 method
         StepData step_data;
@@ -201,14 +201,14 @@ namespace CS460
 
         m_global_centroid += delta_pos;
         m_linear_velocity += delta_lv;
-        m_local.orientation.AddRotation(delta_rot);
+        m_transform.orientation.AddRotation(delta_rot);
         m_angular_velocity += delta_rv;
 
         // update remain properties
         UpdateOrientation();
         UpdateInertia();
         UpdatePosition();
-        SyncToTransform(m_transform);
+        SyncToTransform(m_shared_data);
     }
 
     void RigidBody::IntegrateVerlet(Real dt)
@@ -219,7 +219,7 @@ namespace CS460
         if (m_b_sleep)
             return;
 
-        SyncFromTransform(m_transform);
+        SyncFromTransform(m_shared_data);
 
         // Verlet method
         StepData step_data;
@@ -247,14 +247,14 @@ namespace CS460
 
         m_global_centroid += step_data.linear_position_step;
         m_linear_velocity += half_step_linear_velocity;
-        m_local.orientation.AddRotation(step_data.angular_rotation_step);
+        m_transform.orientation.AddRotation(step_data.angular_rotation_step);
         m_angular_velocity += half_step_angular_velocity;
 
         // update remain properties
         UpdateOrientation();
         UpdateInertia();
         UpdatePosition();
-        SyncToTransform(m_transform);
+        SyncToTransform(m_shared_data);
     }
 
     void RigidBody::IntegrateMidpoint(Real dt)
@@ -265,7 +265,7 @@ namespace CS460
         if (m_b_sleep)
             return;
 
-        SyncFromTransform(m_transform);
+        SyncFromTransform(m_shared_data);
 
         // Midpoint method
         StepData step_data;
@@ -287,36 +287,36 @@ namespace CS460
         //apply midpoint method
         m_global_centroid += delta_linear_velocity * dt;
         m_linear_velocity += dt * m_mass_data.inverse_mass * step_data.force_result;
-        m_local.orientation.AddRotation(Quaternion(delta_angular_velocity.Unit(), delta_angular_velocity.Length() * dt));
+        m_transform.orientation.AddRotation(Quaternion(delta_angular_velocity.Unit(), delta_angular_velocity.Length() * dt));
         m_angular_velocity += m_global_inverse_inertia * step_data.torque_result * dt;
 
         // update remain properties
         UpdateOrientation();
         UpdateInertia();
         UpdatePosition();
-        SyncToTransform(m_transform);
+        SyncToTransform(m_shared_data);
     }
 
     void RigidBody::UpdateCentroid()
     {
-        m_global_centroid = m_local.orientation.Rotate(m_mass_data.local_centroid) + m_local.position;
+        m_global_centroid = m_transform.orientation.Rotate(m_mass_data.local_centroid) + m_transform.position;
     }
 
     void RigidBody::UpdatePosition()
     {
-        m_local.position = m_local.orientation.Rotate(-m_mass_data.local_centroid) + m_global_centroid;
+        m_transform.position = m_transform.orientation.Rotate(-m_mass_data.local_centroid) + m_global_centroid;
     }
 
     void RigidBody::UpdateInertia()
     {
-        m_global_inverse_inertia = m_local.orientation * m_mass_data.local_inverse_inertia * m_inverse_orientation;
-        m_global_inertia         = m_local.orientation * m_mass_data.local_inertia * m_inverse_orientation;
+        m_global_inverse_inertia = m_transform.orientation * m_mass_data.local_inverse_inertia * m_inverse_orientation;
+        m_global_inertia         = m_transform.orientation * m_mass_data.local_inertia * m_inverse_orientation;
     }
 
     void RigidBody::UpdateOrientation()
     {
-        m_local.orientation.SetNormalize();
-        m_inverse_orientation = m_local.orientation.Inverse();
+        m_transform.orientation.SetNormalize();
+        m_inverse_orientation = m_transform.orientation.Inverse();
         m_inverse_orientation.SetNormalize();
     }
 
@@ -351,7 +351,7 @@ namespace CS460
 
     void RigidBody::SetPosition(const Vector3& position)
     {
-        m_local.position = position;
+        m_transform.position = position;
         UpdateCentroid();
     }
 
@@ -363,7 +363,7 @@ namespace CS460
 
     void RigidBody::SetOrientation(const Quaternion& orientation)
     {
-        m_local.orientation = orientation;
+        m_transform.orientation = orientation;
         UpdateOrientation();
         UpdateCentroid();
         UpdateInertia();
@@ -371,7 +371,7 @@ namespace CS460
 
     Vector3 RigidBody::GetPosition() const
     {
-        return m_local.position;
+        return m_transform.position;
     }
 
     Vector3 RigidBody::GetCentroid() const
@@ -386,7 +386,7 @@ namespace CS460
 
     Quaternion RigidBody::GetOrientation() const
     {
-        return m_local.orientation;
+        return m_transform.orientation;
     }
 
     void RigidBody::SetLinearVelocity(const Vector3& linear)
@@ -520,7 +520,7 @@ namespace CS460
     void RigidBody::SetInertia(const Matrix33& inertia_tensor)
     {
         m_global_inverse_inertia          = inertia_tensor.Inverse();
-        m_mass_data.local_inverse_inertia = m_inverse_orientation * m_global_inverse_inertia * m_local.orientation;
+        m_mass_data.local_inverse_inertia = m_inverse_orientation * m_global_inverse_inertia * m_transform.orientation;
         m_mass_data.local_inertia         = m_mass_data.local_inverse_inertia.Inverse();
     }
 
@@ -548,7 +548,7 @@ namespace CS460
     {
         m_mass_data.local_inertia         = inertia;
         m_mass_data.local_inverse_inertia = inertia.Inverse();
-        m_global_inverse_inertia          = m_local.orientation * m_mass_data.local_inverse_inertia * m_inverse_orientation;
+        m_global_inverse_inertia          = m_transform.orientation * m_mass_data.local_inverse_inertia * m_inverse_orientation;
     }
 
     void RigidBody::SetMotionMode(eMotionMode motion_mode)
@@ -563,29 +563,29 @@ namespace CS460
 
     Vector3 RigidBody::LocalToWorldPoint(const Vector3& local_point) const
     {
-        return m_local.LocalToWorldPoint(local_point);
+        return m_transform.LocalToWorldPoint(local_point);
     }
 
     Vector3 RigidBody::WorldToLocalPoint(const Vector3& world_point) const
     {
-        return m_local.WorldToLocalPoint(world_point);;
+        return m_transform.WorldToLocalPoint(world_point);;
     }
 
     Vector3 RigidBody::LocalToWorldVector(const Vector3& local_vector) const
     {
-        return m_local.LocalToWorldVector(local_vector);
+        return m_transform.LocalToWorldVector(local_vector);
     }
 
     Vector3 RigidBody::WorldToLocalVector(const Vector3& world_vector) const
     {
-        return m_local.WorldToLocalVector(world_vector);
+        return m_transform.WorldToLocalVector(world_vector);
     }
 
     void RigidBody::SyncToTransform(Transform* transform) const
     {
         if (transform != nullptr)
         {
-            *transform = m_local;
+            *transform = m_transform;
         }
     }
 
@@ -593,19 +593,16 @@ namespace CS460
     {
         if (transform != nullptr)
         {
-            {
-                m_local = *transform;
-                UpdateOrientation();
-                UpdateCentroid();
-                UpdateInertia();
-            }
-           
+            m_transform = *transform;
+            UpdateOrientation();
+            UpdateCentroid();
+            UpdateInertia();
         }
     }
 
     void RigidBody::SetTransform(Transform* transform)
     {
-        m_transform = transform;
+        m_shared_data = transform;
     }
 
     void RigidBody::Clone(RigidBody* origin)
@@ -626,7 +623,7 @@ namespace CS460
             m_global_centroid        = origin->m_global_centroid;
             m_global_inverse_inertia = origin->m_global_inverse_inertia;
             //others
-            m_local       = origin->m_local;
+            m_transform   = origin->m_transform;
             m_motion_mode = origin->m_motion_mode;
         }
     }
@@ -646,7 +643,7 @@ namespace CS460
     Vector3 RigidBody::GetAngularAcceleration(const Vector3& w, const Quaternion& r, Real dt) const
     {
         //Dummy
-        Quaternion rotation = m_local.orientation.Inverse() * r;
+        Quaternion rotation = m_transform.orientation.Inverse() * r;
         rotation.SetNormalize();
         AxisRadian axis_radian                = rotation.ToAxisRadian();
         Vector3    avg_delta_angular_velocity = axis_radian.axis * (axis_radian.radian / dt);

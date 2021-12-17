@@ -219,7 +219,7 @@ namespace CS460
             auto linear = data["Linear"];
             if (JsonResource::HasMember(linear, "Position") && JsonResource::IsVector3(linear["Position"]))
             {
-                m_rigid_body->m_transform->position = JsonResource::AsVector3(linear["Position"]);
+                m_rigid_body->m_shared_data->position = JsonResource::AsVector3(linear["Position"]);
             }
             if (JsonResource::HasMember(linear, "Velocity") && JsonResource::IsVector3(linear["Velocity"]))
             {
@@ -502,10 +502,10 @@ namespace CS460
             ImGui::Text("Local Transform");
             ImGui::Separator();
             ImGui::Text("Position");
-            Vector3 p = m_rigid_body->m_local.position;
+            Vector3 p = m_rigid_body->m_transform.position;
             ImGui::Text("[%.3f, %.3f, %.3f]", p[0], p[1], p[2]);
             ImGui::Text("Orientation");
-            Quaternion o = m_rigid_body->m_local.orientation;
+            Quaternion o = m_rigid_body->m_transform.orientation;
             ImGui::Text("[%.3f, %.3f, %.3f, %.3f]", o.r, o.i, o.j, o.k);
             ImGui::Separator();
         }

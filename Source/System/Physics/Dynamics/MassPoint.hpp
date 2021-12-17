@@ -16,6 +16,7 @@ namespace CS460
     public:
         //local value
         Real    effective_radius = 0.1f;
+        Real    mass             = 1.0f;
         Real    inverse_mass     = 1.0f;
         Vector3 local_position;
 
