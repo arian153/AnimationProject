@@ -14,7 +14,7 @@
 #include "../../../Manager/Resource/ResourceType/JsonResource.hpp"
 #include "../../../External/JSONCPP/json/json.h"
 #include "../../Graphics/Utility/TextRenderer.hpp"
-#include "../BroadPhase/ColliderPair.hpp"
+#include "../BroadPhase/PotentialPair.hpp"
 
 namespace CS460
 {
@@ -467,13 +467,13 @@ namespace CS460
         if (m_do_broad_phase)
         {
             m_broad_phase->Update(dt);
-            m_broad_phase->ComputePairs(m_pairs);
+            m_broad_phase->ComputePairs(m_potential_pairs);
         }
 
         if (m_do_narrow_phase)
         {
             m_manifold_table->FilteringManifolds();
-            m_narrow_phase->GenerateContact(m_pairs, m_manifold_table);
+            m_narrow_phase->GenerateContact(m_potential_pairs.collider_pairs, m_manifold_table);
         }
 
         if (m_do_resolution)
@@ -514,7 +514,7 @@ namespace CS460
             delete m_manifold_table;
             m_manifold_table = nullptr;
         }
-        m_pairs.clear();
+        m_potential_pairs.clear();
         for (auto& body : m_rigid_bodies)
         {
             body->Shutdown();
@@ -797,7 +797,7 @@ namespace CS460
 
     void World::DrawPotentialPair() const
     {
-        for (auto& pair : m_pairs)
+        for (auto& pair : m_potential_pairs.collider_pairs)
         {
             auto a = pair.collider_a->GetBoundingVolume();
             auto b = pair.collider_b->GetBoundingVolume();

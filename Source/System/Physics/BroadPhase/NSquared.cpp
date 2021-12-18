@@ -87,7 +87,7 @@ namespace CS460
         }
     }
 
-    void NSquared::ComputePairs(std::list<PotentialPair>& result)
+    void NSquared::ComputePairs(PotentialPairs& result)
     {
         result.clear();
         auto aabb_end = m_aabb_list.end();

@@ -199,7 +199,7 @@ namespace CS460
     {
     }
 
-    void Octree::ComputePairs(std::list<PotentialPair>& result)
+    void Octree::ComputePairs(PotentialPairs& result)
     {
         IntersectNode(m_root, result);
     }
@@ -403,7 +403,7 @@ namespace CS460
         }
     }
 
-    void Octree::IntersectNode(OctreeNode* node, std::list<PotentialPair>& result)
+    void Octree::IntersectNode(OctreeNode* node, PotentialPairs& result)
     {
         if (node->IsLeaf())
         {
@@ -435,7 +435,7 @@ namespace CS460
         }
     }
 
-    void Octree::IntersectAABB(BoundingAABB* aabb, OctreeNode* node, size_t index, std::list<PotentialPair>& result)
+    void Octree::IntersectAABB(BoundingAABB* aabb, OctreeNode* node, size_t index, PotentialPairs& result)
     {
         size_t size = node->aabb_list.size();
         for (size_t i = index; i < size; i++)

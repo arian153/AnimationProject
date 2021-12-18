@@ -174,15 +174,15 @@ namespace CS460
         RenderNodeRecursive(m_root, primitive_renderer, broad_phase_color, primitive_color);
     }
 
-    void DynamicBVH::ComputePairs(std::list<PotentialPair>& result)
+    void DynamicBVH::ComputePairs(PotentialPairs& potential_pairs)
     {
-        result.clear();
+        potential_pairs.clear();
         if (m_root == nullptr || m_root->IsLeaf())
             return;
         // clear Node::childrenCrossed flags
         ClearChildrenCrossFlagRecursive(m_root);
         // base recursive call
-        ComputePairsRecursive(m_root->children[0], m_root->children[1], result);
+        ComputePairsRecursive(m_root->children[0], m_root->children[1], potential_pairs);
     }
 
     ColliderPrimitive* DynamicBVH::Pick(const Vector3& point) const
@@ -608,7 +608,7 @@ namespace CS460
         }
     }
 
-    void DynamicBVH::ComputePairsRecursive(DynamicBVHNode* n0, DynamicBVHNode* n1, std::list<PotentialPair>& result)
+    void DynamicBVH::ComputePairsRecursive(DynamicBVHNode* n0, DynamicBVHNode* n1, PotentialPairs& potential_pairs)
     {
         if (n0->IsLeaf() == true)
         {
@@ -620,24 +620,24 @@ namespace CS460
                     if (n0->data->m_bpd_type == eBPDType::Collider)
                     {
                         if (n1->data->m_bpd_type == eBPDType::Collider)
-                            result.emplace_back(n0->data->GetCollider(), n1->data->GetCollider());
+                            potential_pairs.emplace_back(n0->data->GetCollider(), n1->data->GetCollider());
                         else if (n1->data->m_bpd_type == eBPDType::SoftBody)
-                            result.emplace_back(n0->data->GetCollider(), n1->data->GetSoftBody());
+                            potential_pairs.emplace_back(n0->data->GetCollider(), n1->data->GetSoftBody());
                     }
                     else if (n0->data->m_bpd_type == eBPDType::SoftBody)
                     {
                         if (n1->data->m_bpd_type == eBPDType::Collider)
-                            result.emplace_back(n1->data->GetCollider(), n0->data->GetSoftBody());
+                            potential_pairs.emplace_back(n0->data->GetSoftBody(), n1->data->GetCollider());
                         else if (n1->data->m_bpd_type == eBPDType::SoftBody)
-                            result.emplace_back(n0->data->GetSoftBody(), n1->data->GetSoftBody());
+                            potential_pairs.emplace_back(n0->data->GetSoftBody(), n1->data->GetSoftBody());
                     }
                 }
             }
             else // 1 branch / 1 leaf, 2 cross checks
             {
-                CrossChildren(n1, result);
-                ComputePairsRecursive(n0, n1->children[0], result);
-                ComputePairsRecursive(n0, n1->children[1], result);
+                CrossChildren(n1, potential_pairs);
+                ComputePairsRecursive(n0, n1->children[0], potential_pairs);
+                ComputePairsRecursive(n0, n1->children[1], potential_pairs);
             }
         }
         else
@@ -645,18 +645,18 @@ namespace CS460
             // 1 branch / 1 leaf, 2 cross checks
             if (n1->IsLeaf() == true)
             {
-                CrossChildren(n0, result);
-                ComputePairsRecursive(n0->children[0], n1, result);
-                ComputePairsRecursive(n0->children[1], n1, result);
+                CrossChildren(n0, potential_pairs);
+                ComputePairsRecursive(n0->children[0], n1, potential_pairs);
+                ComputePairsRecursive(n0->children[1], n1, potential_pairs);
             }
             else // 2 branches, 4 cross checks
             {
-                CrossChildren(n0, result);
-                CrossChildren(n1, result);
-                ComputePairsRecursive(n0->children[0], n1->children[0], result);
-                ComputePairsRecursive(n0->children[0], n1->children[1], result);
-                ComputePairsRecursive(n0->children[1], n1->children[0], result);
-                ComputePairsRecursive(n0->children[1], n1->children[1], result);
+                CrossChildren(n0, potential_pairs);
+                CrossChildren(n1, potential_pairs);
+                ComputePairsRecursive(n0->children[0], n1->children[0], potential_pairs);
+                ComputePairsRecursive(n0->children[0], n1->children[1], potential_pairs);
+                ComputePairsRecursive(n0->children[1], n1->children[0], potential_pairs);
+                ComputePairsRecursive(n0->children[1], n1->children[1], potential_pairs);
             }
         } // end of if (n0->IsLeaf())
     }
@@ -671,11 +671,11 @@ namespace CS460
         }
     }
 
-    void DynamicBVH::CrossChildren(DynamicBVHNode* node, std::list<PotentialPair>& result)
+    void DynamicBVH::CrossChildren(DynamicBVHNode* node, PotentialPairs& potential_pairs)
     {
         if (node->children_crossed == false)
         {
-            ComputePairsRecursive(node->children[0], node->children[1], result);
+            ComputePairsRecursive(node->children[0], node->children[1], potential_pairs);
             node->children_crossed = true;
         }
     }

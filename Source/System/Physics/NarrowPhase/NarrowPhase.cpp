@@ -35,14 +35,14 @@ namespace CS460
         m_primitive_renderer = primitive_renderer;
     }
 
-    void NarrowPhase::GenerateContact(std::list<PotentialPair>& potential_list, ManifoldTable* data_table)
+    void NarrowPhase::GenerateContact(std::vector<ColliderPair>& potential_pairs, ManifoldTable* data_table)
     {
-        size_t count = potential_list.size();
+        size_t count = potential_pairs.size();
         m_simplexes.clear();
         m_simplexes.reserve(count);
         m_polytopes.clear();
         m_polytopes.reserve(count);
-        for (auto& pair : potential_list)
+        for (auto& pair : potential_pairs)
         {
             Simplex      simplex;
             ColliderSet* set_a = pair.collider_a->m_collider_set;

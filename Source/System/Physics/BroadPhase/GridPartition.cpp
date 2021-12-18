@@ -186,7 +186,7 @@ namespace CS460
         }
     }
 
-    void GridPartition::ComputePairs(std::list<PotentialPair>& result)
+    void GridPartition::ComputePairs(PotentialPairs& result)
     {
         size_t cell_size = m_grid_cell_list.size();
         for (size_t i = 0; i < cell_size; ++i)
@@ -343,7 +343,7 @@ namespace CS460
     {
     }
 
-    void GridPartition::IntersectAABB(BoundingAABB* aabb, GridCell* cell, size_t index, std::list<PotentialPair>& result)
+    void GridPartition::IntersectAABB(BoundingAABB* aabb, GridCell* cell, size_t index, PotentialPairs& result)
     {
         size_t size = cell->data_list.size();
         for (size_t i = index; i < size; i++)

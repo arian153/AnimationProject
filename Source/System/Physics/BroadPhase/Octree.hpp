@@ -40,7 +40,7 @@ namespace CS460
         void Clear() override;
         void Release() override;
         void Render(PrimitiveRenderer* primitive_renderer, const ColorFlag& broad_phase_color, const ColorFlag& primitive_color) override;
-        void ComputePairs(std::list<PotentialPair>& result) override;
+        void ComputePairs(PotentialPairs& potential_pairs) override;
 
         //Query
         ColliderPrimitive* Pick(const Vector3& point) const override;
@@ -57,11 +57,11 @@ namespace CS460
         void ReleaseNode(OctreeNode* node);
         void ClearNode(OctreeNode* node);
         void CopyNode(OctreeNode* node, BroadPhase* other) const;
-        void IntersectNode(OctreeNode* node, std::list<PotentialPair>& result);
+        void IntersectNode(OctreeNode* node, PotentialPairs& potential_pairs);
         void CreateChildrenNode(OctreeNode* node) const;
 
         void InsertAABB(OctreeNode* node, BoundingAABB* aabb) const;
-        void IntersectAABB(BoundingAABB* aabb, OctreeNode* node, size_t index, std::list<PotentialPair>& result);
+        void IntersectAABB(BoundingAABB* aabb, OctreeNode* node, size_t index, PotentialPairs& potential_pairs);
         bool RemoveAABB(OctreeNode* node, BoundingAABB* aabb);
 
         

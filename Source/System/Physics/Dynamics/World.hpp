@@ -10,7 +10,7 @@
 #include "../../Graphics/DataType/Color.hpp"
 #include "../Utility/FrictionUtility.hpp"
 #include "../BroadPhase/RayTest.hpp"
-#include "../BroadPhase/ColliderPair.hpp"
+#include "../BroadPhase/PotentialPair.hpp"
 
 namespace Json
 {
@@ -105,13 +105,13 @@ namespace CS460
         Resolution*        m_resolution_phase   = nullptr;
         ManifoldTable*     m_manifold_table     = nullptr;
         PrimitiveRenderer* m_primitive_renderer = nullptr;
+        PotentialPairs     m_potential_pairs;
 
-        std::vector<ColliderSet*>     m_collider_sets;
-        std::vector<RigidBody*>       m_rigid_bodies;
+        std::vector<ColliderSet*> m_collider_sets;
+        std::vector<RigidBody*>   m_rigid_bodies;
 
-        std::list<PotentialPair> m_pairs;
-        std::vector<RayTest>    m_rays;
-        Ray                     m_picking_ray;
+        std::vector<RayTest> m_rays;
+        Ray                  m_picking_ray;
 
         //factory
         std::unordered_map<std::string, ForceFactory*>* m_factories = nullptr;
