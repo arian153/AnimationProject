@@ -178,7 +178,7 @@ namespace CS460
     {
         if (m_rigid_body != nullptr)
         {
-            return m_rigid_body->m_local.position;
+            return m_rigid_body->m_transform.position;
         }
         return Vector3();
     }
@@ -187,7 +187,7 @@ namespace CS460
     {
         if (m_rigid_body != nullptr)
         {
-            return m_rigid_body->m_local.orientation;
+            return m_rigid_body->m_transform.orientation;
         }
         return Quaternion();
     }
@@ -196,7 +196,7 @@ namespace CS460
     {
         if (m_rigid_body != nullptr)
         {
-            return m_rigid_body->m_transform;
+            return m_rigid_body->m_shared_data;
         }
         return nullptr;
     }

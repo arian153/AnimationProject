@@ -20,16 +20,20 @@ namespace CS460
         void Shutdown() const;
 
         void IntegrateEuler(Real dt);
+        void IntegrateVerlet(Real dt);
 
         void UpdateMassData();
+        void ResolveInternalSpringForce();
+        void ResolveInternalCollision();
         void UpdateCentroid();
         void UpdatePosition();
         void UpdateInertia();
         void UpdateOrientation();
 
-        void ApplyForce(const Vector3& force, const Vector3& at);
+        void ApplyForce(const Vector3& force, const Vector3& at_world);
         void ApplyForceCentroid(const Vector3& force);
         void ApplyTorque(const Vector3& torque);
+        void ClearForceStatus();
 
         void SetPosition(const Vector3& position);
         void SetCentroid(const Vector3& centroid);
@@ -97,15 +101,16 @@ namespace CS460
         Vector3    m_torque_accumulator;
         Vector3    m_angular_constraints = Vector3(1.0f, 1.0f, 1.0f);
 
+        bool m_b_internal_collision = false;
+        bool m_b_sleep              = false;
+        Real m_sleep_momentum       = Physics::Collision::SLEEP_AWAKE;
 
-        bool m_b_sleep        = false;
-        Real m_sleep_momentum = Physics::Collision::SLEEP_AWAKE;
+        MassData m_mass_data;
+        Vector3  m_global_centroid;
+        Matrix33 m_global_inertia;
+        Matrix33 m_global_inverse_inertia;
 
-        MassData   m_mass_data;
-        Vector3    m_global_centroid;
-        Matrix33   m_global_inertia;
-        Matrix33   m_global_inverse_inertia;
-
-        std::vector<MassPoint> m_mass_points;
+        std::vector<MassPoint>      m_mass_points;
+        std::vector<SoftBodySpring> m_springs;
     };
 }

@@ -19,6 +19,41 @@ namespace CS460
 
     void SoftBody::IntegrateEuler(Real dt)
     {
+        if (m_motion_mode == eMotionMode::Static)
+            return;
+
+        if (m_b_sleep)
+            return;
+
+        // integrate velocity
+
+        for (auto& mass_point : m_mass_points)
+        {
+            mass_point.linear_velocity += mass_point.mass * mass_point.force_accumulator * dt;
+            mass_point.force_accumulator.SetZero();
+            Vector3 d_pos = (m_linear_velocity * dt).HadamardProduct(m_linear_constraints);
+            mass_point.local_position += d_pos;
+        }
+
+        SyncFromTransform(m_shared_data);
+        Vector3 delta_linear_velocity = m_linear_velocity * dt;
+        delta_linear_velocity         = delta_linear_velocity.HadamardProduct(m_linear_constraints);
+        m_global_centroid += delta_linear_velocity;
+        // integrate orientation
+        Vector3 delta_angular_velocity = m_angular_velocity;
+        delta_angular_velocity         = delta_angular_velocity.HadamardProduct(m_angular_constraints);
+        Vector3 axis                   = delta_angular_velocity.Unit();
+        Real    radian                 = delta_angular_velocity.Length() * dt;
+        m_transform.orientation.AddRotation(axis, radian);
+        // update remain properties
+        UpdateOrientation();
+        UpdateInertia();
+        UpdatePosition();
+        SyncToTransform(m_shared_data);
+    }
+
+    void SoftBody::IntegrateVerlet(Real dt)
+    {
     }
 
     void SoftBody::UpdateMassData()
@@ -63,6 +98,47 @@ namespace CS460
         m_mass_data.local_inverse_inertia = m_mass_data.local_inertia.Inverse();
     }
 
+    void SoftBody::ResolveInternalSpringForce()
+    {
+        for (auto& spring : m_springs)
+        {
+            MassPoint& mass_a = m_mass_points[spring.id_a];
+            MassPoint& mass_b = m_mass_points[spring.id_b];
+
+            Vector3 spring_force = spring.K * (mass_b.world_position - mass_a.world_position)
+                    + spring.D * (mass_b.linear_velocity - mass_a.linear_velocity);
+
+            mass_a.force_accumulator += spring_force;
+            mass_b.force_accumulator -= spring_force;
+        }
+    }
+
+    void SoftBody::ResolveInternalCollision()
+    {
+        if (m_b_internal_collision)
+        {
+            size_t size = m_mass_points.size();
+            size_t last = size - 1;
+            for (size_t i = 0; i < last; ++i)
+            {
+                for (size_t j = i + 1; j < size; ++j)
+                {
+                    //resolve collision
+                    Vector3 distance = m_mass_points[i].local_position - m_mass_points[j].local_position;
+                    Real    radius   = m_mass_points[i].effective_radius + m_mass_points[j].effective_radius;
+                    if (distance.LengthSquared() < radius * radius)
+                    {
+                        Real    dist      = distance.Length();
+                        Real    depth     = radius - dist;
+                        Vector3 normal    = distance / dist;
+                        Vector3 contact_i = normal * m_mass_points[i].effective_radius + m_mass_points[i].local_position;
+                        Vector3 contact_j = -normal * m_mass_points[j].effective_radius + m_mass_points[j].local_position;
+                    }
+                }
+            }
+        }
+    }
+
     void SoftBody::UpdateCentroid()
     {
         m_global_centroid = m_transform.orientation.Rotate(m_mass_data.local_centroid) + m_transform.position;
@@ -86,27 +162,51 @@ namespace CS460
         m_inverse_orientation.SetNormalize();
     }
 
-    void SoftBody::ApplyForce(const Vector3& force, const Vector3& at)
+    void SoftBody::ApplyForce(const Vector3& force, const Vector3& at_world)
     {
-        //ToDo apply all mass point
         SetAwake();
+        Vector3 torque = (at_world - m_global_centroid).CrossProduct(force);
+        m_force_accumulator += force;
+        m_torque_accumulator += torque;
 
-        //m_force_accumulator += force;
-        //m_torque_accumulator += (at - m_global_centroid).CrossProduct(force);
+        for (auto& mass_point : m_mass_points)
+        {
+            mass_point.force_accumulator += force;
+            Vector3 r = mass_point.world_position - m_global_centroid;
+            mass_point.force_accumulator += r.SkewSymmetricMatrix().Inverse() * torque;
+        }
     }
 
     void SoftBody::ApplyForceCentroid(const Vector3& force)
     {
-        //ToDo apply all mass point
         SetAwake();
-        //m_force_accumulator += force;
+        m_force_accumulator += force;
+        for (auto& mass_point : m_mass_points)
+        {
+            mass_point.force_accumulator += force;
+        }
     }
 
     void SoftBody::ApplyTorque(const Vector3& torque)
     {
-        //ToDo apply all mass point
         SetAwake();
-        //m_torque_accumulator += torque;
+        m_torque_accumulator += torque;
+        for (auto& mass_point : m_mass_points)
+        {
+            Vector3 r = mass_point.world_position - m_global_centroid;
+            mass_point.force_accumulator += r.SkewSymmetricMatrix().Inverse() * torque;
+        }
+    }
+
+    void SoftBody::ClearForceStatus()
+    {
+        m_force_accumulator.SetZero();
+        m_torque_accumulator.SetZero();
+
+        for (auto& mass_point : m_mass_points)
+        {
+            mass_point.force_accumulator.SetZero();
+        }
     }
 
     void SoftBody::SetPosition(const Vector3& position)
@@ -151,26 +251,41 @@ namespace CS460
 
     void SoftBody::SetLinearVelocity(const Vector3& linear)
     {
-        //ToDo apply all mass point
         m_linear_velocity = linear;
+        for (auto& mass_point : m_mass_points)
+        {
+            mass_point.linear_velocity = linear;
+        }
     }
 
     void SoftBody::SetAngularVelocity(const Vector3& angular)
     {
-        //ToDo apply all mass point
         m_angular_velocity = angular;
+
+        for (auto& mass_point : m_mass_points)
+        {
+            Vector3 r                  = mass_point.local_position - m_mass_data.local_centroid;
+            mass_point.linear_velocity = r.SkewSymmetricMatrix().Inverse() * angular;
+        }
     }
 
     void SoftBody::AddLinearVelocity(const Vector3& linear_delta)
     {
-        //ToDo apply all mass point
         m_linear_velocity += linear_delta;
+        for (auto& mass_point : m_mass_points)
+        {
+            mass_point.linear_velocity += linear_delta;
+        }
     }
 
     void SoftBody::AddAngularVelocity(const Vector3& angular_delta)
     {
-        //ToDo apply all mass point
         m_angular_velocity += angular_delta;
+        for (auto& mass_point : m_mass_points)
+        {
+            Vector3 r = mass_point.local_position - m_mass_data.local_centroid;
+            mass_point.linear_velocity += r.SkewSymmetricMatrix().Inverse() * angular_delta;
+        }
     }
 
     Vector3 SoftBody::GetLinearVelocity() const

@@ -25,4 +25,18 @@ namespace CS460
         Vector3 linear_velocity;
         Vector3 force_accumulator;
     };
+
+    class SoftBodySpring
+    {
+    public:
+        SoftBodySpring()  = default;
+        ~SoftBodySpring() = default;
+
+    public:
+        int id_a = -1; //anchor a id
+        int id_b = -1; //anchor b id
+
+        Real K = 1.0f;
+        Real D = 1.0f;
+    };
 }
