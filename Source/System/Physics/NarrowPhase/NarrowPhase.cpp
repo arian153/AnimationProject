@@ -91,6 +91,22 @@ namespace CS460
         }
     }
 
+    void NarrowPhase::GenerateContact(std::vector<SoftBodyPair>& potential_pairs)
+    {
+        for (auto& pair : potential_pairs)
+        {
+            //prepare softbody vs softbody
+        }
+    }
+
+    void NarrowPhase::GenerateContact(std::vector<CompoundPair>& potential_pairs)
+    {
+        for (auto& pair : potential_pairs)
+        {
+            //prepare softbody vs rigid body
+        }
+    }
+
     void NarrowPhase::Render(const ColorFlag& draw_gjk_flag, const ColorFlag& draw_epa_flag)
     {
         if (draw_gjk_flag.b_flag)
