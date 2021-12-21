@@ -8,8 +8,8 @@ namespace CS460
 {
     class ColorFlag;
     class ColliderPrimitive;
-    class ContactPoint;
-    class ContactManifold;
+    class RigidContactPoint;
+    class RigidContactManifold;
     class RigidBody;
 
     class ContactConstraint final : public Constraint
@@ -53,7 +53,7 @@ namespace CS460
         };
 
     public:
-        explicit ContactConstraint(ContactManifold* input, FrictionUtility* friction_utility, bool enable_baum, Real tangent_speed = 0.0f);
+        explicit ContactConstraint(RigidContactManifold* input, FrictionUtility* friction_utility, bool enable_baum, Real tangent_speed = 0.0f);
         ~ContactConstraint();
 
         void Shutdown() override;
@@ -69,13 +69,13 @@ namespace CS460
         void Render(PrimitiveRenderer* primitive_renderer, const Color& color) const override;
         void WarmStart();
         Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
-        void InitializeJacobian(const ContactPoint& contact, const Vector3& direction, Jacobian& jacobian) const;
-        void SolveJacobian(const ContactPoint& contact, Jacobian& jacobian, size_t i, Real dt, bool b_normal = false);
+        void InitializeJacobian(const RigidContactPoint& contact, const Vector3& direction, Jacobian& jacobian) const;
+        void SolveJacobian(const RigidContactPoint& contact, Jacobian& jacobian, size_t i, Real dt, bool b_normal = false);
         void AwakeState() const;
 
     private:
         FrictionUtility* m_friction_utility = nullptr;
-        ContactManifold* m_manifold         = nullptr;
+        RigidContactManifold* m_manifold         = nullptr;
         RigidBody*       m_body_a           = nullptr;
         RigidBody*       m_body_b           = nullptr;
 

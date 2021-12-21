@@ -13,8 +13,8 @@ namespace CS460
     class Force;
     class ColorFlag;
     class Constraint;
-    class ContactPoint;
-    class ContactManifold;
+    class RigidContactPoint;
+    class RigidContactManifold;
 
     class Resolution
     {

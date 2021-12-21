@@ -5,17 +5,17 @@ namespace CS460
 {
     class ColliderPrimitive;
 
-    class ContactPoint
+    class RigidContactPoint
     {
     public:
-        ContactPoint();
-        ~ContactPoint();
+        RigidContactPoint();
+        ~RigidContactPoint();
         void          Clear();
-        ContactPoint& operator=(const ContactPoint& rhs);
-        bool          operator==(const ContactPoint& rhs) const;
+        RigidContactPoint& operator=(const RigidContactPoint& rhs);
+        bool          operator==(const RigidContactPoint& rhs) const;
         void          Swap();
-        void          UpdateContactPoint(const ContactPoint& rhs);
-        ContactPoint  SwappedContactPoint() const;
+        void          UpdateContactPoint(const RigidContactPoint& rhs);
+        RigidContactPoint  SwappedContactPoint() const;
     public:
         //Two contact points in world space, each representing the deepest penetrating point of one collider.
         Vector3 global_position_a;

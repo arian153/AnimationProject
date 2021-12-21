@@ -5,31 +5,31 @@
 
 namespace CS460
 {
-    class ContactPoint;
+    class RigidContactPoint;
     class RigidBody;
     class ColliderSet;
 
-    class ContactManifold
+    class RigidContactManifold
     {
     public:
-        ContactManifold() = delete;
-        explicit ContactManifold(ColliderSet* a, ColliderSet* b);
-        ~ContactManifold();
-        ContactManifold(const ContactManifold& rhs);
-        ContactManifold& operator=(const ContactManifold& rhs);
+        RigidContactManifold() = delete;
+        explicit RigidContactManifold(ColliderSet* a, ColliderSet* b);
+        ~RigidContactManifold();
+        RigidContactManifold(const RigidContactManifold& rhs);
+        RigidContactManifold& operator=(const RigidContactManifold& rhs);
 
-        void   Set(const ContactManifold& manifold);
+        void   Set(const RigidContactManifold& manifold);
         void   UpdateInvalidContact();
-        void   UpdateCurrentManifold(const ContactPoint& new_contact);
+        void   UpdateCurrentManifold(const RigidContactPoint& new_contact);
         void   CutDownManifold();
         size_t ContactsCount() const;
         void   ClearContacts();
 
     private:
-        Real DistanceFromPoint(const ContactPoint& contact, ContactPoint* p0);
-        Real DistanceFromLineSegment(const ContactPoint& contact, ContactPoint* p0, ContactPoint* p1);
-        Real DistanceFromTriangle(const ContactPoint& contact, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2);
-        bool OnTriangle(ContactPoint* point, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2);
+        Real DistanceFromPoint(const RigidContactPoint& contact, RigidContactPoint* p0);
+        Real DistanceFromLineSegment(const RigidContactPoint& contact, RigidContactPoint* p0, RigidContactPoint* p1);
+        Real DistanceFromTriangle(const RigidContactPoint& contact, RigidContactPoint* p0, RigidContactPoint* p1, RigidContactPoint* p2);
+        bool OnTriangle(RigidContactPoint* point, RigidContactPoint* p0, RigidContactPoint* p1, RigidContactPoint* p2);
 
     private:
         friend class Resolution;
@@ -44,6 +44,6 @@ namespace CS460
         ColliderSet* m_set_a = nullptr;
         ColliderSet* m_set_b = nullptr;
 
-        std::vector<ContactPoint> contacts;
+        std::vector<RigidContactPoint> contacts;
     };
 }

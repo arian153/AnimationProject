@@ -19,7 +19,7 @@ namespace CS460
         friend class RigidBody;
         friend class ColliderComponent;
         friend class ManifoldTable;
-        friend class ContactManifold;
+        friend class RigidContactManifold;
     public:
         explicit ColliderSet(World* world);
         ~ColliderSet();
