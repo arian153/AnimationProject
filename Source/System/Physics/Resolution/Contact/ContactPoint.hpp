@@ -1,5 +1,5 @@
 #pragma once
-#include "../../Math/Math.hpp"
+#include "../../../Math/Math.hpp"
 
 namespace CS460
 {

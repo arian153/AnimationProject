@@ -1,7 +1,7 @@
 #pragma once
-#include "../../Math/Math.hpp"
+#include "../../../Math/Math.hpp"
 #include "ContactPoint.hpp"
-#include "../Utility/PhysicsDef.hpp"
+#include "../../Utility/PhysicsDef.hpp"
 
 namespace CS460
 {

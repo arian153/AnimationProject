@@ -1,5 +1,5 @@
 #include "ContactPoint.hpp"
-#include "../../Core/Utility/CoreUtility.hpp"
+#include "../../../Core/Utility/CoreUtility.hpp"
 
 namespace CS460
 {

@@ -21,8 +21,8 @@
 
 //Resolution
 #include "Resolution/Resolution.hpp"
-#include "Resolution/ContactPoint.hpp"
-#include "Resolution/ContactManifold.hpp"
+#include "Resolution/Contact/ContactPoint.hpp"
+#include "Resolution/Contact/ContactManifold.hpp"
 #include "Resolution/Constraints/ContactConstraint.hpp"
 #include "Resolution/Constraints/Constraint.hpp"
 #include "Resolution/Constraints/PointConstraint.hpp"

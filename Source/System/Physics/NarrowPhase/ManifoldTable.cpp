@@ -1,5 +1,5 @@
 #include "ManifoldTable.hpp"
-#include "../Resolution/ContactManifold.hpp"
+#include "../Resolution/Contact/ContactManifold.hpp"
 #include "../Dynamics/ColliderSet.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 

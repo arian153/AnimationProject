@@ -1,8 +1,8 @@
 #include "ContactManifold.hpp"
 #include <list>
-#include "../ColliderPrimitive/ColliderPrimitive.hpp"
-#include "../Dynamics/RigidBody.hpp"
-#include "../Dynamics/ColliderSet.hpp"
+#include "../../ColliderPrimitive/ColliderPrimitive.hpp"
+#include "../../Dynamics/RigidBody.hpp"
+#include "../../Dynamics/ColliderSet.hpp"
 
 namespace CS460
 {
