@@ -194,7 +194,7 @@ namespace CS460
         return reinterpret_cast<size_t>(a->m_collider_set) + reinterpret_cast<size_t>(b->m_collider_set);
     }
 
-    size_t ManifoldTable::GenerateKey(ContactManifold* manifold)
+    size_t ManifoldTable::GenerateKey(RigidContactManifold* manifold)
     {
         return reinterpret_cast<size_t>(manifold->m_set_a) + reinterpret_cast<size_t>(manifold->m_set_b);
     }
@@ -254,7 +254,7 @@ namespace CS460
         return eCollisionState::None;
     }
 
-    ContactManifold* ManifoldTable::FindManifold(ColliderSet* a, ColliderSet* b)
+    RigidContactManifold* ManifoldTable::FindManifold(ColliderSet* a, ColliderSet* b)
     {
         size_t key        = reinterpret_cast<size_t>(a) + reinterpret_cast<size_t>(b);
         auto   data_range = m_manifold_table.equal_range(key);
@@ -272,10 +272,10 @@ namespace CS460
         return nullptr;
     }
 
-    ContactManifold* ManifoldTable::CreateManifold(ColliderSet* a, ColliderSet* b)
+    RigidContactManifold* ManifoldTable::CreateManifold(ColliderSet* a, ColliderSet* b)
     {
         size_t key    = RegisterKey(a, b);
-        auto   result = m_manifold_table.emplace(key, ContactManifold(a, b));
+        auto   result = m_manifold_table.emplace(key, RigidContactManifold(a, b));
         return &result->second;
     }
 

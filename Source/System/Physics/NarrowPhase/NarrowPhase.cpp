@@ -54,13 +54,13 @@ namespace CS460
                 m_simplexes.push_back(simplex);
                 Polytope polytope = Polytope(simplex);
                 //draw gjk result simplex
-                ContactPoint new_contact_data;
+                RigidContactPoint new_contact_data;
                 if (EPAContactGeneration(pair.collider_a, pair.collider_b, polytope, new_contact_data) == true)
                 {
                     //draw EPA result
                     m_polytopes.push_back(polytope);
                     //send a event about start and persist.
-                    ContactManifold* found = data_table->FindManifold(set_a, set_b);
+                    RigidContactManifold* found = data_table->FindManifold(set_a, set_b);
                     if (found == nullptr)
                     {
                         found = data_table->CreateManifold(set_a, set_b);
@@ -81,7 +81,7 @@ namespace CS460
             {
                 //if gjk result false, they are not colliding each other.
                 //send a event about none and end.
-                ContactManifold* found = data_table->FindManifold(set_a, set_b);
+                RigidContactManifold* found = data_table->FindManifold(set_a, set_b);
                 if (found != nullptr)
                 {
                     data_table->SendNotCollision(set_a, set_b, found->is_collide);
@@ -293,7 +293,7 @@ namespace CS460
         return false;
     }
 
-    bool NarrowPhase::EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result) const
+    bool NarrowPhase::EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, RigidContactPoint& result) const
     {
         PolytopeFace closest_face = polytope.PickClosestFace();
         PolytopeFace prev_face    = closest_face;
@@ -359,7 +359,7 @@ namespace CS460
         return true;
     }
 
-    bool NarrowPhase::EPAContactGeneration2D(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result)
+    bool NarrowPhase::EPAContactGeneration2D(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, RigidContactPoint& result)
     {
         return false;
     }

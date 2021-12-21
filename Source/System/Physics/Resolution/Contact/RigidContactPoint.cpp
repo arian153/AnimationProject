@@ -3,15 +3,15 @@
 
 namespace CS460
 {
-    ContactPoint::ContactPoint()
+    RigidContactPoint::RigidContactPoint()
     {
     }
 
-    ContactPoint::~ContactPoint()
+    RigidContactPoint::~RigidContactPoint()
     {
     }
 
-    void ContactPoint::Clear()
+    void RigidContactPoint::Clear()
     {
         global_position_a.SetZero();
         global_position_b.SetZero();
@@ -26,7 +26,7 @@ namespace CS460
         b_persistent     = false;
     }
 
-    ContactPoint& ContactPoint::operator=(const ContactPoint& rhs)
+    RigidContactPoint& RigidContactPoint::operator=(const RigidContactPoint& rhs)
     {
         if (this != &rhs)
         {
@@ -47,12 +47,12 @@ namespace CS460
         return *this;
     }
 
-    bool ContactPoint::operator==(const ContactPoint& rhs) const
+    bool RigidContactPoint::operator==(const RigidContactPoint& rhs) const
     {
         return (normal == rhs.normal && depth == rhs.depth && local_position_a == rhs.local_position_a && local_position_b == rhs.local_position_b);
     }
 
-    void ContactPoint::Swap()
+    void RigidContactPoint::Swap()
     {
         Math::Swap(collider_a, collider_b);
         Math::Swap(global_position_a, global_position_b);
@@ -60,7 +60,7 @@ namespace CS460
         normal = -normal;
     }
 
-    void ContactPoint::UpdateContactPoint(const ContactPoint& rhs)
+    void RigidContactPoint::UpdateContactPoint(const RigidContactPoint& rhs)
     {
         normal            = rhs.normal;
         depth             = rhs.depth;
@@ -72,9 +72,9 @@ namespace CS460
         b_persistent      = true;
     }
 
-    ContactPoint ContactPoint::SwappedContactPoint() const
+    RigidContactPoint RigidContactPoint::SwappedContactPoint() const
     {
-        ContactPoint result;
+        RigidContactPoint result;
         result.normal            = -normal;
         result.depth             = this->depth;
         result.collider_a        = this->collider_b;

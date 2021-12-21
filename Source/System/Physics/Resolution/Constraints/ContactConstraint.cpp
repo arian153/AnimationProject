@@ -9,7 +9,7 @@
 
 namespace CS460
 {
-    ContactConstraint::ContactConstraint(ContactManifold* input, FrictionUtility* friction_utility, bool enable_baum, Real tangent_speed)
+    ContactConstraint::ContactConstraint(RigidContactManifold* input, FrictionUtility* friction_utility, bool enable_baum, Real tangent_speed)
         : m_friction_utility(friction_utility), m_manifold(input), m_motion_a(), m_motion_b(), m_b_enable_baumgarte(enable_baum), m_tangent_speed(tangent_speed)
     {
         m_b_ghost_constraints = input->m_set_a->IsGhost() || input->m_set_b->IsGhost();
@@ -194,7 +194,7 @@ namespace CS460
         Basis normal_basis;
         for (size_t i = 0; i < m_count; ++i)
         {
-            ContactPoint& contact_point = m_manifold->contacts[i];
+            RigidContactPoint& contact_point = m_manifold->contacts[i];
             normal_basis.CalculateBasisApprox(contact_point.normal);
             Vector3 p = contact_point.normal_lambda * normal_basis.i
                     + contact_point.tangent_lambda * normal_basis.j
@@ -215,7 +215,7 @@ namespace CS460
         return Math::Min(a->GetMaterial().restitution, b->GetMaterial().restitution);
     }
 
-    void ContactConstraint::InitializeJacobian(const ContactPoint& contact, const Vector3& direction, Jacobian& jacobian) const
+    void ContactConstraint::InitializeJacobian(const RigidContactPoint& contact, const Vector3& direction, Jacobian& jacobian) const
     {
         jacobian.v_a  = -direction;
         jacobian.w_a  = -CrossProduct(contact.r_a, direction);
@@ -232,7 +232,7 @@ namespace CS460
         jacobian.total_lambda   = 0.0f;
     }
 
-    void ContactConstraint::SolveJacobian(const ContactPoint& contact, Jacobian& jacobian, size_t i, Real dt, bool b_normal)
+    void ContactConstraint::SolveJacobian(const RigidContactPoint& contact, Jacobian& jacobian, size_t i, Real dt, bool b_normal)
     {
         Vector3 dir = jacobian.v_b;
         // jv = Jacobian * velocity vector

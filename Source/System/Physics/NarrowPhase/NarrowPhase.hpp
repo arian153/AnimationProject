@@ -37,8 +37,8 @@ namespace CS460
         bool GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex) const;
         bool GJKCollisionDetection(ColliderPrimitive* primitive, SoftBody* b, const MassPoint& mass_point, Simplex& simplex) const;
         bool GJKDistanceAlgorithm(ColliderPrimitive* collider, const Vector3& point, Simplex& simplex) const;
-        bool EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result) const;
-        bool EPAContactGeneration2D(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result);
+        bool EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, RigidContactPoint& result) const;
+        bool EPAContactGeneration2D(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, RigidContactPoint& result);
 
     private:
         size_t FindLeastSignificantComponent(const Vector3& vector3);

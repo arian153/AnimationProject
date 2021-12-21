@@ -6,16 +6,16 @@
 
 namespace CS460
 {
-    ContactManifold::ContactManifold(ColliderSet* a, ColliderSet* b)
+    RigidContactManifold::RigidContactManifold(ColliderSet* a, ColliderSet* b)
         : m_set_a(a), m_set_b(b)
     {
     }
 
-    ContactManifold::~ContactManifold()
+    RigidContactManifold::~RigidContactManifold()
     {
     }
 
-    ContactManifold::ContactManifold(const ContactManifold& rhs)
+    RigidContactManifold::RigidContactManifold(const RigidContactManifold& rhs)
     {
         m_set_a    = rhs.m_set_a;
         m_set_b    = rhs.m_set_b;
@@ -26,7 +26,7 @@ namespace CS460
         }
     }
 
-    ContactManifold& ContactManifold::operator=(const ContactManifold& rhs)
+    RigidContactManifold& RigidContactManifold::operator=(const RigidContactManifold& rhs)
     {
         if (this != &rhs)
         {
@@ -41,7 +41,7 @@ namespace CS460
         return *this;
     }
 
-    void ContactManifold::Set(const ContactManifold& manifold)
+    void RigidContactManifold::Set(const RigidContactManifold& manifold)
     {
         m_set_a    = manifold.m_set_a;
         m_set_b    = manifold.m_set_b;
@@ -52,10 +52,10 @@ namespace CS460
         }
     }
 
-    void ContactManifold::UpdateInvalidContact()
+    void RigidContactManifold::UpdateInvalidContact()
     {
         //erase contact list.
-        std::list<ContactPoint*> remove_list;
+        std::list<RigidContactPoint*> remove_list;
         for (auto& contact : contacts)
         {
             //convert existing contact point from local space to world space.
@@ -99,7 +99,7 @@ namespace CS460
         remove_list.clear();
     }
 
-    void ContactManifold::UpdateCurrentManifold(const ContactPoint& new_contact)
+    void RigidContactManifold::UpdateCurrentManifold(const RigidContactPoint& new_contact)
     {
         bool discard_contact = false;
 
@@ -140,14 +140,14 @@ namespace CS460
         }
     }
 
-    void ContactManifold::CutDownManifold()
+    void RigidContactManifold::CutDownManifold()
     {
         if (contacts.size() <= Physics::Collision::MAX_MANIFOLD_POINT_COUNT)
         {
             return;
         }
         // find the deepest penetrating one
-        ContactPoint* deepest     = nullptr;
+        RigidContactPoint* deepest     = nullptr;
         Real          penetration = Math::REAL_NEGATIVE_MAX;
         for (auto& contact : contacts)
         {
@@ -158,7 +158,7 @@ namespace CS460
             }
         }
         // find second contact
-        ContactPoint* furthest1         = nullptr;
+        RigidContactPoint* furthest1         = nullptr;
         Real          distance_squared1 = Math::REAL_NEGATIVE_MAX;
         for (auto& contact : contacts)
         {
@@ -170,7 +170,7 @@ namespace CS460
             }
         }
         // find third contact
-        ContactPoint* furthest2         = nullptr;
+        RigidContactPoint* furthest2         = nullptr;
         float         distance_squared2 = Math::REAL_NEGATIVE_MAX;
         for (auto& contact : contacts)
         {
@@ -182,7 +182,7 @@ namespace CS460
             }
         }
         // find fourth contact
-        ContactPoint* furthest3         = nullptr;
+        RigidContactPoint* furthest3         = nullptr;
         float         distance_squared3 = Math::REAL_NEGATIVE_MAX;
         for (auto& contact : contacts)
         {
@@ -213,18 +213,18 @@ namespace CS460
         }
     }
 
-    size_t ContactManifold::ContactsCount() const
+    size_t RigidContactManifold::ContactsCount() const
     {
         return contacts.size();
     }
 
-    void ContactManifold::ClearContacts()
+    void RigidContactManifold::ClearContacts()
     {
         contacts.clear();
         is_collide = false;
     }
 
-    Real ContactManifold::DistanceFromPoint(const ContactPoint& contact, ContactPoint* p0)
+    Real RigidContactManifold::DistanceFromPoint(const RigidContactPoint& contact, RigidContactPoint* p0)
     {
         if (p0 == nullptr)
         {
@@ -233,7 +233,7 @@ namespace CS460
         return (contact.global_position_a - p0->global_position_a).LengthSquared();
     }
 
-    Real ContactManifold::DistanceFromLineSegment(const ContactPoint& contact, ContactPoint* p0, ContactPoint* p1)
+    Real RigidContactManifold::DistanceFromLineSegment(const RigidContactPoint& contact, RigidContactPoint* p0, RigidContactPoint* p1)
     {
         if (p0 == nullptr || p1 == nullptr)
         {
@@ -246,7 +246,7 @@ namespace CS460
         return d.DotProduct(d);
     }
 
-    Real ContactManifold::DistanceFromTriangle(const ContactPoint& contact, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2)
+    Real RigidContactManifold::DistanceFromTriangle(const RigidContactPoint& contact, RigidContactPoint* p0, RigidContactPoint* p1, RigidContactPoint* p2)
     {
         if (p0 == nullptr || p1 == nullptr || p2 == nullptr)
         {
@@ -268,7 +268,7 @@ namespace CS460
         return (closest - contact.global_position_a).LengthSquared();
     }
 
-    bool ContactManifold::OnTriangle(ContactPoint* point, ContactPoint* p0, ContactPoint* p1, ContactPoint* p2)
+    bool RigidContactManifold::OnTriangle(RigidContactPoint* point, RigidContactPoint* p0, RigidContactPoint* p1, RigidContactPoint* p2)
     {
         if (point == nullptr || p0 == nullptr || p1 == nullptr || p2 == nullptr)
         {
