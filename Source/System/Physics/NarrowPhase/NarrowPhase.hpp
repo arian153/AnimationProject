@@ -1,9 +1,9 @@
 #pragma once
 #include "SupportPoint.hpp"
 #include "Simplex.hpp"
-#include "../Resolution/Contact/ContactPoint.hpp"
+#include "../Resolution/Contact/RigidContactPoint.hpp"
 #include <unordered_map>
-#include "../Resolution/Contact/ContactManifold.hpp"
+#include "../Resolution/Contact/RigidContactManifold.hpp"
 #include "../BroadPhase/PotentialPair.hpp"
 
 namespace CS460

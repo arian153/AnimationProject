@@ -1,6 +1,6 @@
 #pragma once
 #include "../../../Math/Math.hpp"
-#include "ContactPoint.hpp"
+#include "RigidContactPoint.hpp"
 #include "../../Utility/PhysicsDef.hpp"
 
 namespace CS460

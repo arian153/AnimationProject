@@ -1,4 +1,4 @@
-#include "ContactManifold.hpp"
+#include "RigidContactManifold.hpp"
 #include <list>
 #include "../../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "../../Dynamics/RigidBody.hpp"

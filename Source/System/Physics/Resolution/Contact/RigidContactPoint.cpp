@@ -1,4 +1,4 @@
-#include "ContactPoint.hpp"
+#include "RigidContactPoint.hpp"
 #include "../../../Core/Utility/CoreUtility.hpp"
 
 namespace CS460

@@ -3,7 +3,7 @@
 #include "Constraints/ContactConstraint.hpp"
 #include <vector>
 // ReSharper disable once CppUnusedIncludeDirective
-#include "Contact/ContactManifold.hpp"
+#include "Contact/RigidContactManifold.hpp"
 #include "../../Graphics/DataType/Color.hpp"
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "Force/Force.hpp"
