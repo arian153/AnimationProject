@@ -8,6 +8,7 @@
 
 namespace CS460
 {
+    class MassPoint;
     class ColorFlag;
     class ManifoldTable;
     class ColliderPrimitive;
@@ -31,8 +32,10 @@ namespace CS460
 
         SupportPoint GenerateCSOSupport(ColliderPrimitive* a, ColliderPrimitive* b, const Vector3& direction) const;
         SupportPoint GenerateCSOSupport(ColliderPrimitive* a, const Vector3& point, const Vector3& direction) const;
+        SupportPoint GenerateCSOSupport(ColliderPrimitive* a, SoftBody* b, const MassPoint& mass_point, const Vector3& direction) const;
 
         bool GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex) const;
+        bool GJKCollisionDetection(ColliderPrimitive* primitive, SoftBody* b, const MassPoint& mass_point, Simplex& simplex) const;
         bool GJKDistanceAlgorithm(ColliderPrimitive* collider, const Vector3& point, Simplex& simplex) const;
         bool EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result) const;
         bool EPAContactGeneration2D(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, ContactPoint& result);

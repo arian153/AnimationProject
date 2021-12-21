@@ -4,6 +4,7 @@
 #include "../../Graphics/Utility/PrimitiveRenderer.hpp"
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "ManifoldTable.hpp"
+#include "../Dynamics/SoftBody.hpp"
 
 namespace
 {
@@ -104,6 +105,19 @@ namespace CS460
         for (auto& pair : potential_pairs)
         {
             //prepare softbody vs rigid body
+            Simplex      simplex;
+            ColliderSet* collider_set = pair.collider->m_collider_set;
+
+            for (auto& mass_point : pair.softbody->m_mass_points)
+            {
+                if (pair.collider->m_bounding_volume->Intersect(mass_point.world_position, mass_point.effective_radius))
+                {
+                    if (GJKCollisionDetection(pair.collider, pair.softbody, mass_point, simplex) == true)
+                    {
+                        //do EPA to generate soft body contact manifold.
+                    }
+                }
+            }
         }
     }
 
@@ -169,6 +183,19 @@ namespace CS460
         return SupportPoint(support_a - point, local_a, point);
     }
 
+    SupportPoint NarrowPhase::GenerateCSOSupport(ColliderPrimitive* a, SoftBody* body_b, const MassPoint& mass_point, const Vector3& direction) const
+    {
+        RigidBody* body_a     = a->m_rigid_body;
+        Vector3    body_dir_a = body_a != nullptr ? body_a->WorldToLocalVector(direction) : direction;
+        Vector3    body_dir_b = body_b != nullptr ? body_b->WorldToLocalVector(-direction) : -direction;
+
+        Vector3 local_a   = a->Support(a->WorldToLocalVector(body_dir_a).Unit());
+        Vector3 local_b   = mass_point.Support(body_dir_b.Unit());
+        Vector3 support_a = body_a != nullptr ? body_a->LocalToWorldPoint(a->LocalToWorldPoint(local_a)) : a->LocalToWorldPoint(local_a);
+        Vector3 support_b = body_b != nullptr ? body_b->LocalToWorldPoint(local_b) : local_b;
+        return SupportPoint(support_a - support_b, local_a, local_b);
+    }
+
     bool NarrowPhase::GJKCollisionDetection(ColliderPrimitive* a, ColliderPrimitive* b, Simplex& simplex) const
     {
         if (a->Is2DPrimitive() && b->Is2DPrimitive())
@@ -208,6 +235,31 @@ namespace CS460
                 return false;
             }
             simplex.simplex_vertex_a = GenerateCSOSupport(a, b, direction);
+            if (simplex.simplex_vertex_a.global.DotProduct(direction) < 0.0f)
+            {
+                return false;
+            }
+            if (simplex.DoSimplex(direction) == true)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool NarrowPhase::GJKCollisionDetection(ColliderPrimitive* primitive, SoftBody* b, const MassPoint& mass_point, Simplex& simplex) const
+    {
+        Vector3 direction = Vector3(
+                                    random.GetRangedRandomReal(-10.0f, 10.0f),
+                                    random.GetRangedRandomReal(-10.0f, 10.0f),
+                                    random.GetRangedRandomReal(-10.0f, 10.0f)).Unit();
+        for (size_t i = 0; i < m_gjk_exit_iteration; ++i)
+        {
+            if (direction.IsValid() == false)
+            {
+                return false;
+            }
+            simplex.simplex_vertex_a = GenerateCSOSupport(primitive, b, mass_point, direction);
             if (simplex.simplex_vertex_a.global.DotProduct(direction) < 0.0f)
             {
                 return false;

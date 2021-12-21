@@ -79,6 +79,20 @@ namespace CS460
         return true;
     }
 
+    bool BoundingAABB::Intersect(const Vector3& pos, Real radius) const
+    {
+        Real sq_d = 0.0f;
+        for (size_t i = 0; i < 3; ++i)
+        {
+            Real v = pos[i];
+            if (v < m_min[i])
+                sq_d += (m_min[i] - v) * (m_min[i] - v);
+            if (v > m_max[i])
+                sq_d += (v - m_max[i]) * (v - m_max[i]);
+        }
+        return sq_d <= radius * radius;
+    }
+
     bool BoundingAABB::Contains(const Vector3& point) const
     {
         if (m_min.x > point.x || point.x > m_max.x)

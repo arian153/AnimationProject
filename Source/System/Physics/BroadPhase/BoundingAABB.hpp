@@ -25,6 +25,7 @@ namespace CS460
         void         ExpandMargin(Real margin);
         bool         Intersect(BoundingAABB* aabb) const;
         bool         Intersect(const BoundingAABB& aabb) const;
+        bool         Intersect(const Vector3& pos, Real radius) const;
         bool         Contains(const Vector3& point) const;
         bool         TestRayIntersection(const Ray& ray, Real& t, Real max_distance = -1.0f) const;
         bool         Contains(BoundingAABB* aabb) const;

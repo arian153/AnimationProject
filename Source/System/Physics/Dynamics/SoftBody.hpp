@@ -85,6 +85,9 @@ namespace CS460
         bool IsSleep() const;
 
     private:
+        friend class NarrowPhase;
+
+    private:
 
         eMotionMode m_motion_mode = eMotionMode::Dynamic;
         Transform*  m_shared_data = nullptr;
