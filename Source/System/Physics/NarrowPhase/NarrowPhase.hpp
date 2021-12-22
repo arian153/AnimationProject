@@ -8,6 +8,7 @@
 
 namespace CS460
 {
+    class SoftContactPoint;
     class MassPoint;
     class ColorFlag;
     class ManifoldTable;
@@ -38,6 +39,8 @@ namespace CS460
         bool GJKCollisionDetection(ColliderPrimitive* primitive, SoftBody* b, const MassPoint& mass_point, Simplex& simplex) const;
         bool GJKDistanceAlgorithm(ColliderPrimitive* collider, const Vector3& point, Simplex& simplex) const;
         bool EPAContactGeneration(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, RigidContactPoint& result) const;
+        bool EPAContactGeneration(ColliderPrimitive* a, SoftBody* b, const MassPoint& mass_point, Polytope& polytope, SoftContactPoint& result) const;
+
         bool EPAContactGeneration2D(ColliderPrimitive* a, ColliderPrimitive* b, Polytope& polytope, RigidContactPoint& result);
 
     private:

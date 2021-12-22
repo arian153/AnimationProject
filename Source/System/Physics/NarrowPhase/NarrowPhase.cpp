@@ -5,6 +5,7 @@
 #include "../ColliderPrimitive/ColliderPrimitive.hpp"
 #include "ManifoldTable.hpp"
 #include "../Dynamics/SoftBody.hpp"
+#include "../Resolution/Contact/SoftContactPoint.hpp"
 
 namespace
 {
@@ -115,6 +116,8 @@ namespace CS460
                     if (GJKCollisionDetection(pair.collider, pair.softbody, mass_point, simplex) == true)
                     {
                         //do EPA to generate soft body contact manifold.
+
+                        //EPAContactGeneration();
                     }
                 }
             }
@@ -356,6 +359,73 @@ namespace CS460
                       : b->LocalToWorldPoint(result.local_position_b);
         result.normal = closest_face.normal.Normalize();
         result.depth  = closest_face.distance;
+        return true;
+    }
+
+    bool NarrowPhase::EPAContactGeneration(ColliderPrimitive* a, SoftBody* b, const MassPoint& mass_point, Polytope& polytope, SoftContactPoint& result) const
+    {
+        PolytopeFace closest_face = polytope.PickClosestFace();
+        PolytopeFace prev_face    = closest_face;
+        for (size_t i = 0; i < m_epa_exit_iteration; ++i)
+        {
+            if (polytope.faces.empty())
+            {
+                result.b_valid = false;
+                return false;
+            }
+            closest_face               = polytope.PickClosestFace();
+            SupportPoint support_point = GenerateCSOSupport(a, b, mass_point, closest_face.normal);
+            if (support_point.IsValid() == false)
+            {
+                closest_face = prev_face;
+                break;
+            }
+            Real distance = support_point.global.DotProduct(closest_face.normal);
+            if (distance - closest_face.distance < Math::EPSILON)
+            {
+                break;
+            }
+            polytope.Push(support_point);
+            polytope.Expand(support_point);
+            prev_face = closest_face;
+        }
+        Real u, v, w;
+        closest_face.BarycentricCoordinates(closest_face.normal * closest_face.distance, u, v, w, &polytope);
+        if (Math::IsValid(u) == false || Math::IsValid(v) == false || Math::IsValid(w) == false)
+        {
+            //barycentric can fail and generate invalid coordinates, if this happens return invalid result.
+            result.b_valid = false;
+            return false;
+        }
+        if (fabsf(u) > 1.0f || fabsf(v) > 1.0f || fabsf(w) > 1.0f)
+        {
+            //if any of the barycentric coefficients have a magnitude greater than 1, 
+            //then the origin is not within the triangular prism described by 'triangle'
+            //thus, there is no collision here, return invalid result.
+            result.b_valid = false;
+            return false;
+        }
+
+        result.b_soft_vs_soft = false;
+        result.collider_a     = a;
+        result.softbody_b     = b;
+        result.local_position_a
+                = u * polytope.vertices[closest_face.a].local_a
+                + v * polytope.vertices[closest_face.b].local_a
+                + w * polytope.vertices[closest_face.c].local_a;
+        result.local_position_b
+                = u * polytope.vertices[closest_face.a].local_b
+                + v * polytope.vertices[closest_face.b].local_b
+                + w * polytope.vertices[closest_face.c].local_b;
+        result.global_position_a
+                = a->m_rigid_body != nullptr
+                      ? a->m_rigid_body->LocalToWorldPoint(a->LocalToWorldPoint(result.local_position_a))
+                      : a->LocalToWorldPoint(result.local_position_a);
+        result.global_position_b = b->LocalToWorldPoint(result.local_position_b);
+
+        result.mass_point_idx_b = mass_point.idx;
+        result.normal           = closest_face.normal.Normalize();
+        result.depth            = closest_face.distance;
         return true;
     }
 

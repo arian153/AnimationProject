@@ -24,6 +24,8 @@ namespace CS460
         Vector3 world_position;
         Vector3 linear_velocity;
         Vector3 force_accumulator;
+
+        int idx = -1;
     };
 
     class SoftBodySpring
