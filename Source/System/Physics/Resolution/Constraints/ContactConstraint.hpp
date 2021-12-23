@@ -54,7 +54,7 @@ namespace CS460
 
     public:
         explicit ContactConstraint(RigidContactManifold* input, FrictionUtility* friction_utility, bool enable_baum, Real tangent_speed = 0.0f);
-        ~ContactConstraint();
+        ~ContactConstraint() override;
 
         void Shutdown() override;
 
@@ -68,7 +68,7 @@ namespace CS460
 
         void Render(PrimitiveRenderer* primitive_renderer, const Color& color) const override;
         void WarmStart();
-        Real GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const;
+        Real GetRestitution(const ColliderPrimitive* a, const ColliderPrimitive* b) const;
         void InitializeJacobian(const RigidContactPoint& contact, const Vector3& direction, Jacobian& jacobian) const;
         void SolveJacobian(const RigidContactPoint& contact, Jacobian& jacobian, size_t i, Real dt, bool b_normal = false);
         void AwakeState() const;
@@ -82,7 +82,6 @@ namespace CS460
         eMotionMode m_motion_a;
         eMotionMode m_motion_b;
         bool        m_b_enable_baumgarte = true;
-
         PositionTerm m_position_term;
         VelocityTerm m_velocity_term;
         MassTerm     m_mass_term;

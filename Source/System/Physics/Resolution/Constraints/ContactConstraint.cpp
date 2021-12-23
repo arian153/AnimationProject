@@ -156,11 +156,11 @@ namespace CS460
     {
         if (m_b_ghost_constraints)
             return;
-        Quaternion no_rotation;
         for (auto& contact_point : m_manifold->contacts)
         {
-            Vector3 pos_a = contact_point.global_position_a;
-            Vector3 pos_b = contact_point.global_position_b;
+            Quaternion no_rotation;
+            Vector3    pos_a = contact_point.global_position_a;
+            Vector3    pos_b = contact_point.global_position_b;
             primitive_renderer->DrawPrimitive(Sphere(pos_a, no_rotation, 0.05f), eRenderingMode::Face, color);
             primitive_renderer->DrawPrimitive(Sphere(pos_b, no_rotation, 0.05f), eRenderingMode::Face, color);
             primitive_renderer->DrawSegment(pos_a, pos_a - contact_point.normal * contact_point.depth, color);
@@ -210,7 +210,7 @@ namespace CS460
         }
     }
 
-    Real ContactConstraint::GetRestitution(ColliderPrimitive* a, ColliderPrimitive* b) const
+    Real ContactConstraint::GetRestitution(const ColliderPrimitive* a, const ColliderPrimitive* b) const
     {
         return Math::Min(a->GetMaterial().restitution, b->GetMaterial().restitution);
     }

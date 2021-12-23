@@ -432,7 +432,7 @@ namespace CS460
                 ImGui::Checkbox("##Enable Warm Start", &m_resolution_phase->m_b_warm_starting);
 
                 ImGui::Text("Velocity Iteration");
-                ImGui::SliderInt("##Velocity Iteration", &m_resolution_phase->m_velocity_iteration, 1, 10);
+                ImGui::SliderInt("##Velocity Iteration", &m_resolution_phase->m_velocity_iteration, 1, 30);
 
                 ImGui::Text("Position Iteration");
                 ImGui::SliderInt("##Position Iteration", &m_resolution_phase->m_position_iteration, 0, 5);

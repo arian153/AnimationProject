@@ -218,6 +218,7 @@ namespace CS460
                     {
                         return false;
                     }
+
                     if (simplex.DoSimplex2D(direction) == true)
                     {
                         return true;
@@ -242,6 +243,7 @@ namespace CS460
             {
                 return false;
             }
+          
             if (simplex.DoSimplex(direction) == true)
             {
                 return true;
