@@ -5,7 +5,7 @@ namespace CS460::Math
 {
     inline bool IsValid(Real rhs)
     {
-        return (!isnan(rhs)) && isfinite(rhs);
+        return !isnan(rhs) && isfinite(rhs);
     }
 
     inline bool IsInfinite(Real rhs)
