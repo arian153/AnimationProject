@@ -69,4 +69,38 @@ namespace P2D
         Real x = 0;
         Real y = 0;
     };
+
+    class Orientation
+    {
+    public:
+        Orientation();
+        ~Orientation();
+
+        explicit Orientation(Real angle);
+        Orientation(Real sine, Real cosine);
+
+        void Set(Real angle);
+        void Set(Real sine, Real cosine);
+        void SetIdentity();
+        void SetInverse();
+
+        void AddRotation(Real angle);
+        void AddRotation(const Orientation& r);
+
+        Real Angle() const;
+
+        Vector2 XAxis() const;
+        Vector2 YAxis() const;
+
+        Orientation Inverse() const;
+        Orientation Concatenate(const Orientation& r) const;
+        Orientation ConcatenateInverse(const Orientation& r) const;
+
+        static Orientation Concatenate(const Orientation& q, const Orientation& r);
+        static Orientation ConcatenateInverse(const Orientation& q, const Orientation& r);
+
+    public:
+        Real s = 0;
+        Real c = 1;
+    };
 }

@@ -133,4 +133,109 @@ namespace P2D
         if (!Math::IsValid(y))
             y = 0;
     }
+
+    Orientation::Orientation()
+    {
+    }
+
+    Orientation::~Orientation()
+    {
+    }
+
+    Orientation::Orientation(Real angle)
+    {
+        s = std::sin(angle);
+        c = std::cos(angle);
+    }
+
+    Orientation::Orientation(Real sine, Real cosine)
+    {
+        s = sine;
+        c = cosine;
+    }
+
+    void Orientation::Set(Real angle)
+    {
+        s = std::sin(angle);
+        c = std::cos(angle);
+    }
+
+    void Orientation::Set(Real sine, Real cosine)
+    {
+        s = sine;
+        c = cosine;
+    }
+
+    void Orientation::SetIdentity()
+    {
+        s = 0;
+        c = 1;
+    }
+
+    void Orientation::SetInverse()
+    {
+        s = -s;
+    }
+
+    void Orientation::AddRotation(Real angle)
+    {
+        Orientation result = Concatenate(Orientation(angle));
+
+        s = result.s;
+        c = result.c;
+    }
+
+    void Orientation::AddRotation(const Orientation& r)
+    {
+        Orientation result = Concatenate(r);
+
+        s = result.s;
+        c = result.c;
+    }
+
+    Real Orientation::Angle() const
+    {
+        return std::atan2(s, c);
+    }
+
+    Vector2 Orientation::XAxis() const
+    {
+        return Vector2(c, s);
+    }
+
+    Vector2 Orientation::YAxis() const
+    {
+        return Vector2(-s, c);
+    }
+
+    Orientation Orientation::Inverse() const
+    {
+        return Orientation(-s, c);
+    }
+
+    Orientation Orientation::Concatenate(const Orientation& r) const
+    {
+        return Orientation(s * r.c + c * r.s, c * r.c - s * r.s);
+    }
+
+    Orientation Orientation::ConcatenateInverse(const Orientation& r) const
+    {
+        return Orientation(c * r.s - s * r.c, c * r.c + s * r.s);
+    }
+
+    Orientation Orientation::Concatenate(const Orientation& q, const Orientation& r)
+    {
+        Orientation qr;
+        qr.s = q.s * r.c + q.c * r.s;
+        qr.c = q.c * r.c - q.s * r.s;
+        return qr;
+    }
+
+    Orientation Orientation::ConcatenateInverse(const Orientation& q, const Orientation& r)
+    {
+        Orientation qr;
+        qr.s = q.c * r.s - q.s * r.c;
+        qr.c = q.c * r.c + q.s * r.s;
+        return qr;
+    }
 }
