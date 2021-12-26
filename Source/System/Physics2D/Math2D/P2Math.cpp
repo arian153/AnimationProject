@@ -208,6 +208,16 @@ namespace P2D
         return Vector2(-s, c);
     }
 
+    Vector2 Orientation::Rotate(const Vector2& v) const
+    {
+        return Vector2(c * v.x - s * v.y, s * v.x + c * v.y);
+    }
+
+    Vector2 Orientation::RotateInverse(const Vector2& v) const
+    {
+        return Vector2(c * v.x + s * v.y, -s * v.x + c * v.y);
+    }
+
     Orientation Orientation::Inverse() const
     {
         return Orientation(-s, c);
@@ -221,6 +231,16 @@ namespace P2D
     Orientation Orientation::ConcatenateInverse(const Orientation& r) const
     {
         return Orientation(c * r.s - s * r.c, c * r.c + s * r.s);
+    }
+
+    Vector2 Orientation::Rotate(const Orientation& q, const Vector2& v)
+    {
+        return Vector2(q.c * v.x - q.s * v.y, q.s * v.x + q.c * v.y);
+    }
+
+    Vector2 Orientation::RotateInverse(const Orientation& q, const Vector2& v)
+    {
+        return Vector2(q.c * v.x + q.s * v.y, -q.s * v.x + q.c * v.y);
     }
 
     Orientation Orientation::Concatenate(const Orientation& q, const Orientation& r)

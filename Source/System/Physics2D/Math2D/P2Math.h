@@ -91,10 +91,15 @@ namespace P2D
 
         Vector2 XAxis() const;
         Vector2 YAxis() const;
+        Vector2 Rotate(const Vector2& v) const;
+        Vector2 RotateInverse(const Vector2& v) const;
 
         Orientation Inverse() const;
         Orientation Concatenate(const Orientation& r) const;
         Orientation ConcatenateInverse(const Orientation& r) const;
+
+        static Vector2 Rotate(const Orientation& q, const Vector2& v);
+        static Vector2 RotateInverse(const Orientation& q, const Vector2& v);
 
         static Orientation Concatenate(const Orientation& q, const Orientation& r);
         static Orientation ConcatenateInverse(const Orientation& q, const Orientation& r);
