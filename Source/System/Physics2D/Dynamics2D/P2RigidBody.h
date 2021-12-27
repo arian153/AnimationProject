@@ -1,4 +1,5 @@
 #pragma once
+#include "P2Transform.h"
 #include "../Math2D/P2Math.h"
 
 namespace P2D
@@ -13,8 +14,7 @@ namespace P2D
 
     public:
         Collider* collider = nullptr;
-        Vector2   position;
-        Real      rotation = 0;
+        Transform transform;
 
         //mass data
         Real    mass        = 1;

@@ -1,4 +1,5 @@
 #pragma once
+#include "P2Transform.h"
 
 namespace P2D
 {
@@ -9,7 +10,7 @@ namespace P2D
         ~Collider();
 
     public:
-
+        Transform transform;
 
     };
 }
