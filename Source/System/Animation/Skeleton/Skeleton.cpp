@@ -171,46 +171,37 @@ namespace CS460
             return;
         }
 
-        m_to_roots.resize(size);
+        m_to_root_vqs.resize(size);
         m_final_vqs.resize(size);
 
         m_final_mats.resize(size);
         m_to_root_mats.resize(size);
         //m_bind_mats;
 
-        Matrix44 identity = Matrix44::Identity();
+        Matrix44     identity = Matrix44::Identity();
+        VQSTransform identity_vqs;
         for (I32 i = 0; i < size; ++i)
         {
             I32 parent_idx = m_bones[i]->m_parent_idx;
-            Matrix44 parent_tf = parent_idx >= 0 ? m_to_root_mats[parent_idx] : identity;
+
+            Matrix44 parent_tf = parent_idx > -1 ? m_to_root_mats[parent_idx] : identity;
             Matrix44 local_tf  = key_frames[i].to_parent.ToMatrix();
             m_to_root_mats[i]  = local_tf * parent_tf;
-        }
 
-        //for (uint boneIndex = 0; boneIndex < bones.size(); ++boneIndex)
-        //{
-        //    Bone& bone = bones[boneIndex];
-        //    AnimTransform atx;
-        //    //anim.CalculateTransform(time, boneIndex, atx, trackData[boneIndex]);
-        //    Matrix4 parentTransform = bone.ParentBoneIndex != -1 ? buffer[bone.ParentBoneIndex] : identity;
-        //    Matrix4 localTransform = atx.GetMatrix();
-        //    Matrix4 modelTransform = localTransform * parentTransform;
-        //    buffer[boneIndex] = modelTransform;
-        //}
-
-        for (I32 i = 0; i < size; ++i)
-        {
-            m_final_vqs[i] = Concatenate(m_bones[i]->m_to_root, m_to_roots[i]);
-            m_final_vqs[i].rotation.SetNormalize();
-            m_final_mats[i] = m_bind_mats[i] * m_to_root_mats[i];
+            VQSTransform parent_transform = parent_idx > -1 ? m_to_root_vqs[parent_idx] : identity_vqs;
+            VQSTransform local_transform  = key_frames[i].to_parent;
+            m_to_root_vqs[i]              = Concatenate(local_transform, parent_transform);
         }
 
         for (I32 i = 0; i < size; ++i)
         {
-            I32          parent_idx       = m_bones[i]->m_parent_idx;
-            VQSTransform parent_transform = parent_idx > -1 ? m_final_vqs[parent_idx] : VQSTransform();
-            VQSTransform local_transform  = Concatenate(key_frames[i].to_parent, m_bones[i]->m_to_root);
-            m_final_vqs[i]                = Concatenate(local_transform, parent_transform);
+            m_final_vqs[i]  = m_to_root_vqs[i];
+            m_final_mats[i] = m_to_root_mats[i];
+        }
+
+        if(m_render_mode == 2)
+        {
+            SetUpBind();
         }
     }
 
@@ -373,9 +364,11 @@ namespace CS460
     {
         size_t size = m_bones.size();
         m_bind_mats.resize(size);
+        m_final_vqs.resize(size);
         for (size_t i = 0; i < size; ++i)
         {
             m_bind_mats[i] = m_bones[i]->m_to_root.ToMatrix();
+            m_final_vqs[i] = VQSTransform();// m_bones[i]->m_to_root;
         }
     }
 

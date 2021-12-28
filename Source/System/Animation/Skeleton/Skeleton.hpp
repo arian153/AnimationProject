@@ -78,7 +78,7 @@ namespace CS460
         std::vector<Manipulator>    m_manipulators;
         std::vector<AnimationClip*> m_animation_clips;
         std::vector<VQSTransform>   m_final_vqs;
-        std::vector<VQSTransform>   m_to_roots;
+        std::vector<VQSTransform>   m_to_root_vqs;
         std::vector<std::string>    m_clip_names;
 
         std::vector<Matrix44> m_final_mats;

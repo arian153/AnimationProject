@@ -146,7 +146,7 @@ namespace CS460
             mesh->Draw();
         }
 
-       /* for (auto& skinned_mesh : m_skinned_meshes)
+        for (auto& skinned_mesh : m_skinned_meshes)
         {
             size_t count = skinned_mesh->SubMeshCount();
 
@@ -162,7 +162,7 @@ namespace CS460
                 m_shader_manager->Bind(type);
                 skinned_mesh->Draw(i);
             }
-        }*/
+        }
 
         for (auto& particle : m_particle_emitters)
         {
