@@ -102,7 +102,7 @@ float4 PixelShaderEntry(VSOut input) : SV_TARGET
     float3 tangent_world = normalize(input.tangent);
     float3 binormal_world = normalize(input.binormal);
     float3 normal_world = normalize(input.normal);
-    float3 normal_vec = normal_world;//ProcessNormal(input.tex, norm_type, 4, tangent_world, binormal_world, normal_world);
+    float3 normal_vec = ProcessNormal(input.tex, norm_type, 4, tangent_world, binormal_world, normal_world);
 
     //process eye vector
     float3 to_eye_world = normalize(cam_pos - input.pos_world);
