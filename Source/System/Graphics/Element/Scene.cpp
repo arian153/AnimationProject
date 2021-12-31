@@ -117,28 +117,6 @@ namespace CS460
         m_primitive_renderer->RenderInstancing(m_color_ins_shader, m_matrix_instancing_buffer);
         m_primitive_renderer->Clear();
 
-        //sky-box
-        {
-            m_renderer->SetCullMode(false);
-            m_renderer->SetDSMode(false);
-            for (auto& sky_box : m_cube_map_skies)
-            {
-                MatrixBufferData mvp_buffer;
-                mvp_buffer.world = sky_box->GetModelMatrix();
-                mvp_buffer.view  = m_main_camera->GetViewMatrix();
-                mvp_buffer.proj  = m_projection_matrix;
-                m_matrix_buffer->Update(mvp_buffer);
-
-                sky_box->Bind();
-                m_matrix_buffer->Bind();
-                m_shader_manager->Bind("SkyBox");
-                sky_box->Draw();
-            }
-
-            m_renderer->SetCullMode(true);
-            m_renderer->SetDSMode(true);
-        }
-
         {
             int count = (int)m_lights.size();
             count     = count < 16 ? count : 16;
@@ -207,6 +185,28 @@ namespace CS460
         //                                          text_sprite->GetTexture(),
         //                                          text_sprite->GetColor());
         //}
+
+        //sky-box
+        {
+            m_renderer->SetCullMode(false);
+            m_renderer->SetDSMode(false);
+            for (auto& sky_box : m_cube_map_skies)
+            {
+                MatrixBufferData mvp_buffer;
+                mvp_buffer.world = sky_box->GetModelMatrix();
+                mvp_buffer.view  = m_main_camera->GetViewMatrix();
+                mvp_buffer.proj  = m_projection_matrix;
+                m_matrix_buffer->Update(mvp_buffer);
+
+                sky_box->Bind();
+                m_matrix_buffer->Bind();
+                m_shader_manager->Bind("SkyBox");
+                sky_box->Draw();
+            }
+
+            m_renderer->SetCullMode(true);
+            m_renderer->SetDSMode(true);
+        }
     }
 
     void Scene::Shutdown()
