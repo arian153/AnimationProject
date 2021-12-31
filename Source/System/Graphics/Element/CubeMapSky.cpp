@@ -8,6 +8,7 @@
 #include "../Common/Texture/TextureCommon.hpp"
 #include "../DataType/MeshData.hpp"
 #include "../Utility/MeshGenerator.hpp"
+#include "../../../Manager/Component/EngineComponent/SkyComponent.hpp"
 
 namespace CS460
 {
@@ -45,6 +46,8 @@ namespace CS460
 
     void CubeMapSky::Shutdown()
     {
+        m_component->m_cube_map_sky = nullptr;
+
         if (m_index_buffer != nullptr)
         {
             m_index_buffer->Shutdown();

@@ -34,6 +34,8 @@ namespace CS460
         void SetRasterStateWireFrame(bool flag) const;
         void ResetViewport() const;
         void SetUpDWRenderTarget();
+        void SetCullMode(bool b_back) const;
+        void SetDSMode(bool b_less) const;
 
     protected:
         void SetUpAdapterDescription(int client_width, int client_height);
@@ -50,25 +52,27 @@ namespace CS460
         void SetUpDWDevice();
 
     protected:
-        IDXGISwapChain*          m_swap_chain                    = nullptr;
-        ID3D11Device*            m_device                        = nullptr;
-        ID3D11DeviceContext*     m_device_context                = nullptr;
-        ID3D11RenderTargetView*  m_render_target_view            = nullptr;
-        ID3D11Texture2D*         m_depth_stencil_buffer          = nullptr;
-        ID3D11DepthStencilState* m_depth_stencil_state           = nullptr;
-        ID3D11DepthStencilView*  m_depth_stencil_view            = nullptr;
-        ID3D11RasterizerState*   m_raster_state                  = nullptr;
-        ID3D11RasterizerState*   m_wire_frame_raster_state       = nullptr;
-        ID3D11DepthStencilState* m_depth_disabled_stencil_state  = nullptr;
-        ID3D11BlendState*        m_alpha_enabled_blending_state  = nullptr;
-        ID3D11BlendState*        m_alpha_disabled_blending_state = nullptr;
-        ID2D1Device1*            m_d2d_device                    = nullptr;
-        ID2D1DeviceContext1*     m_d2d_device_context            = nullptr;
-        ID2D1Factory2*           m_d2d_factory                   = nullptr;
-        IDWriteFactory2*         m_write_factory                 = nullptr;
-        ID2D1Bitmap1*            m_target_bitmap                 = nullptr;
-        HWND                     m_hwnd                          = nullptr;
-        MatrixManager*           m_matrix_generator              = nullptr;
+        IDXGISwapChain*          m_swap_chain                     = nullptr;
+        ID3D11Device*            m_device                         = nullptr;
+        ID3D11DeviceContext*     m_device_context                 = nullptr;
+        ID3D11RenderTargetView*  m_render_target_view             = nullptr;
+        ID3D11Texture2D*         m_depth_stencil_buffer           = nullptr;
+        ID3D11DepthStencilState* m_depth_stencil_state            = nullptr;
+        ID3D11DepthStencilView*  m_depth_stencil_view             = nullptr;
+        ID3D11RasterizerState*   m_raster_state_normal            = nullptr;
+        ID3D11RasterizerState*   m_raster_state_without_culling   = nullptr;
+        ID3D11RasterizerState*   m_raster_state_wire_frame        = nullptr;
+        ID3D11DepthStencilState* m_depth_disabled_stencil_state   = nullptr;
+        ID3D11DepthStencilState* m_depth_stencil_state_less_equal = nullptr;
+        ID3D11BlendState*        m_alpha_enabled_blending_state   = nullptr;
+        ID3D11BlendState*        m_alpha_disabled_blending_state  = nullptr;
+        ID2D1Device1*            m_d2d_device                     = nullptr;
+        ID2D1DeviceContext1*     m_d2d_device_context             = nullptr;
+        ID2D1Factory2*           m_d2d_factory                    = nullptr;
+        IDWriteFactory2*         m_write_factory                  = nullptr;
+        ID2D1Bitmap1*            m_target_bitmap                  = nullptr;
+        HWND                     m_hwnd                           = nullptr;
+        MatrixManager*           m_matrix_generator               = nullptr;
         D3D_FEATURE_LEVEL        m_d3d_feature_level;
         DXGI_FORMAT              m_dxgi_color_format;
         D3D11_VIEWPORT           m_viewport;

@@ -9,7 +9,7 @@ SamplerState sample_type
 //global
 cbuffer MatrixBuffer
 {
-    matrix world
+    matrix world;
     matrix view;
     matrix proj;
 };
@@ -34,7 +34,7 @@ VSOut VertexShaderEntry(VSIn input)
     input.position.w = 1.0f;
 
     VSOut output;
-    output.pos_hclip = mul(input.pos_local, input.world);
+    output.pos_hclip = mul(input.pos_local, world);
     output.pos_hclip = mul(output.pos_hclip, view);
     output.pos_hclip = mul(output.pos_hclip, proj).xyww;
     output.tex = input.tex;

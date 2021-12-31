@@ -81,11 +81,11 @@ namespace CS460
     {
         if (flag == true)
         {
-            m_device_context->RSSetState(m_wire_frame_raster_state);
+            m_device_context->RSSetState(m_raster_state_wire_frame);
         }
         else
         {
-            m_device_context->RSSetState(m_raster_state);
+            m_device_context->RSSetState(m_raster_state_normal);
         }
     }
 
@@ -220,7 +220,7 @@ namespace CS460
             swap_chain_desc.SampleDesc.Count   = 4;
             swap_chain_desc.SampleDesc.Quality = m_msaa_quality - 1;
         }
-            // No MSAA Turn multi sampling off.
+        // No MSAA Turn multi sampling off.
         else
         {
             swap_chain_desc.SampleDesc.Count   = 1;
@@ -305,7 +305,7 @@ namespace CS460
             depth_buffer_desc.SampleDesc.Count   = 4;
             depth_buffer_desc.SampleDesc.Quality = m_msaa_quality - 1;
         }
-            // No MSAA
+        // No MSAA
         else
         {
             depth_buffer_desc.SampleDesc.Count   = 1;
@@ -372,6 +372,31 @@ namespace CS460
         // Create the state using the device.
         result = m_device->CreateDepthStencilState(&depth_disabled_stencil_desc, &m_depth_disabled_stencil_state);
         if (FAILED(result))
+            return;
+
+        D3D11_DEPTH_STENCIL_DESC depth_stencil_desc_le;
+        // Initialize the description of the stencil state.
+        ZeroMemory(&depth_stencil_desc_le, sizeof(depth_stencil_desc_le));
+        // Set up the description of the stencil state.
+        depth_stencil_desc_le.DepthEnable      = true;
+        depth_stencil_desc_le.DepthWriteMask   = D3D11_DEPTH_WRITE_MASK_ALL;
+        depth_stencil_desc_le.DepthFunc        = D3D11_COMPARISON_LESS_EQUAL;
+        depth_stencil_desc_le.StencilEnable    = true;
+        depth_stencil_desc_le.StencilReadMask  = 0xFF;
+        depth_stencil_desc_le.StencilWriteMask = 0xFF;
+        // Stencil operations if pixel is front-facing.
+        depth_stencil_desc_le.FrontFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
+        depth_stencil_desc_le.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+        depth_stencil_desc_le.FrontFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
+        depth_stencil_desc_le.FrontFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
+        // Stencil operations if pixel is back-facing.
+        depth_stencil_desc_le.BackFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
+        depth_stencil_desc_le.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+        depth_stencil_desc_le.BackFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
+        depth_stencil_desc_le.BackFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
+        // Create the depth stencil state.
+        result = m_device->CreateDepthStencilState(&depth_stencil_desc_le, &m_depth_stencil_state_less_equal);
+        if (FAILED(result))
         {
         }
     }
@@ -408,7 +433,7 @@ namespace CS460
         raster_desc.ScissorEnable         = false;
         raster_desc.SlopeScaledDepthBias  = 0.0f;
         // Create the rasterizer state from the description we just filled out.
-        HRESULT result = m_device->CreateRasterizerState(&raster_desc, &m_raster_state);
+        HRESULT result = m_device->CreateRasterizerState(&raster_desc, &m_raster_state_normal);
         if (FAILED(result))
             return;
         D3D11_RASTERIZER_DESC wire_frame_desc;
@@ -424,11 +449,29 @@ namespace CS460
         wire_frame_desc.ScissorEnable         = false;
         wire_frame_desc.SlopeScaledDepthBias  = 0.0f;
         // Create the rasterizer state from the description we just filled out.
-        result = m_device->CreateRasterizerState(&wire_frame_desc, &m_wire_frame_raster_state);
+        result = m_device->CreateRasterizerState(&wire_frame_desc, &m_raster_state_wire_frame);
         if (FAILED(result))
             return;
+
+        D3D11_RASTERIZER_DESC no_cull_desc;
+        // Setup the raster description which will determine how and what polygons will be drawn.
+        no_cull_desc.AntialiasedLineEnable = false;
+        no_cull_desc.CullMode              = D3D11_CULL_NONE;
+        no_cull_desc.DepthBias             = 0;
+        no_cull_desc.DepthBiasClamp        = 0.0f;
+        no_cull_desc.DepthClipEnable       = true;
+        no_cull_desc.FillMode              = D3D11_FILL_SOLID;
+        no_cull_desc.FrontCounterClockwise = false;
+        no_cull_desc.MultisampleEnable     = false;
+        no_cull_desc.ScissorEnable         = false;
+        no_cull_desc.SlopeScaledDepthBias  = 0.0f;
+        // Create the rasterizer state from the description we just filled out.
+        result = m_device->CreateRasterizerState(&no_cull_desc, &m_raster_state_without_culling);
+        if (FAILED(result))
+            return;
+
         // Now set the rasterizer state.
-        m_device_context->RSSetState(m_raster_state);
+        m_device_context->RSSetState(m_raster_state_normal);
     }
 
     void RendererDX11::SetUpViewport(int client_width, int client_height)
@@ -541,6 +584,30 @@ namespace CS460
         }
     }
 
+    void RendererDX11::SetCullMode(bool b_back) const
+    {
+        if (b_back == true)
+        {
+            m_device_context->RSSetState(m_raster_state_normal);
+        }
+        else
+        {
+            m_device_context->RSSetState(m_raster_state_without_culling);
+        }
+    }
+
+    void RendererDX11::SetDSMode(bool b_less) const
+    {
+        if (b_less == true)
+        {
+            m_device_context->OMSetDepthStencilState(m_depth_stencil_state, 1);
+        }
+        else
+        {
+            m_device_context->OMSetDepthStencilState(m_depth_stencil_state_less_equal, 1);
+        }
+    }
+
     RendererCommon::RendererCommon()
         : RendererDX11()
     {
@@ -604,16 +671,23 @@ namespace CS460
             m_alpha_disabled_blending_state->Release();
             m_alpha_disabled_blending_state = nullptr;
         }
-        if (m_raster_state != nullptr)
+        if (m_raster_state_normal != nullptr)
         {
-            m_raster_state->Release();
-            m_raster_state = nullptr;
+            m_raster_state_normal->Release();
+            m_raster_state_normal = nullptr;
         }
-        if (m_wire_frame_raster_state != nullptr)
+        if (m_raster_state_wire_frame != nullptr)
         {
-            m_wire_frame_raster_state->Release();
-            m_wire_frame_raster_state = nullptr;
+            m_raster_state_wire_frame->Release();
+            m_raster_state_wire_frame = nullptr;
         }
+
+        if (m_raster_state_without_culling != nullptr)
+        {
+            m_raster_state_without_culling->Release();
+            m_raster_state_without_culling = nullptr;
+        }
+
         if (m_depth_stencil_view != nullptr)
         {
             m_depth_stencil_view->Release();
@@ -624,6 +698,13 @@ namespace CS460
             m_depth_disabled_stencil_state->Release();
             m_depth_disabled_stencil_state = nullptr;
         }
+
+        if (m_depth_stencil_state_less_equal != nullptr)
+        {
+            m_depth_stencil_state_less_equal->Release();
+            m_depth_stencil_state_less_equal = nullptr;
+        }
+
         if (m_depth_stencil_state != nullptr)
         {
             m_depth_stencil_state->Release();
@@ -701,7 +782,7 @@ namespace CS460
 
     void RendererCommon::BeginScene(Color color) const
     {
-        Real color_arr[ 4 ];
+        Real color_arr[4];
         // Setup the color to clear the buffer to.
         color_arr[0] = color.r;
         color_arr[1] = color.g;
@@ -743,7 +824,7 @@ namespace CS460
 
     void RendererCommon::SetAlphaBlending(bool flag) const
     {
-        Real blend_factor[ 4 ];
+        Real blend_factor[4];
         // Setup the blend factor.
         blend_factor[0] = 0.0f;
         blend_factor[1] = 0.0f;
