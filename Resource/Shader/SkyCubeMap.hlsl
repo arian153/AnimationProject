@@ -46,12 +46,3 @@ float4 PixelShaderEntry(VSOut input) : SV_TARGET
     return cube_map_texture.Sample(sample_type, input.pos_local);
 }
 
-RasterizerState NoCullRS
-{
-    CullMode = None;
-};
-
-DepthStencilState LessEqualDSS
-{
-    DepthFunc = LESS_EQUAL;
-};

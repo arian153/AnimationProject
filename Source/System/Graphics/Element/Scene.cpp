@@ -200,7 +200,7 @@ namespace CS460
 
                 sky_box->Bind();
                 m_matrix_buffer->Bind();
-                m_shader_manager->Bind("SkyBox");
+                m_shader_manager->Bind("SkyCubeMap");
                 sky_box->Draw();
             }
 

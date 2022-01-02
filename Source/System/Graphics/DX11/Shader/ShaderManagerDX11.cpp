@@ -183,7 +183,8 @@ namespace CS460
         AddShader(L"TextureInstancing.hlsl", m_instancing_texture_vertex_layout);
 
         AddShader(L"PhongInstancing.hlsl", m_instancing_vertex_layout);
-        AddShader(L"SkyBox.hlsl", m_point_vertex_layout);
+        AddShader(L"SkyCubeMap.hlsl", m_point_vertex_layout);
+        AddShader(L"SkyTexture.hlsl", m_texture_vertex_layout);
         AddShader(L"SkinnedPhong.hlsl", m_skinned_vertex_layout);
     }
 

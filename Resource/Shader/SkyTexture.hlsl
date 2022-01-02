@@ -31,7 +31,7 @@ struct VSOut
 //vertex shader
 VSOut VertexShaderEntry(VSIn input)
 {
-    input.position.w = 1.0f;
+    input.pos_local.w = 1.0f;
 
     VSOut output;
     output.pos_hclip = mul(input.pos_local, world);
@@ -47,12 +47,3 @@ float4 PixelShaderEntry(VSOut input) : SV_TARGET
     return sky_dome_texture.Sample(sample_type, input.tex);
 }
 
-RasterizerState NoCullRS
-{
-    CullMode = None;
-};
-
-DepthStencilState LessEqualDSS
-{
-    DepthFunc = LESS_EQUAL;
-};
