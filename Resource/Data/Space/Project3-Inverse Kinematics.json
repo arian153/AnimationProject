@@ -19,16 +19,16 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 0, -60],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 0, -60 ],
+            "Scale": [ 1, 1, 1 ]
           }
         },
         {
           "Type": "class CS460::CameraComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 0, -60],
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 0, -60 ],
             "Zoom": 1.0
           }
         },
@@ -43,9 +43,29 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [0.5, -0.5, -0.5, -0.5],
-            "Position": [0, 0, 0],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 0, -60 ],
+            "Scale": [ 1, 1, 1 ]
+          }
+        },
+        {
+          "Type": "class CS460::SkyComponent",
+          "Value": {
+            "Type": "CubeMap",
+            "Texture": "../../Resource/Texture/CubeMap/GalaxyHighCube.dds"
+          }
+        }
+      ],
+      "Name": "SkyBox"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [ 0.5, -0.5, -0.5, -0.5 ],
+            "Position": [ 0, 0, 0 ],
+            "Scale": [ 1, 1, 1 ]
           }
         },
         {

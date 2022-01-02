@@ -19,16 +19,16 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 0, -60],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 0, -60 ],
+            "Scale": [ 1, 1, 1 ]
           }
         },
         {
           "Type": "class CS460::CameraComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 0, -60],
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 0, -60 ],
             "Zoom": 1.0
           }
         },
@@ -37,6 +37,26 @@
         }
       ],
       "Name": "Camera"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 0, -60 ],
+            "Scale": [ 1, 1, 1 ]
+          }
+        },
+        {
+          "Type": "class CS460::SkyComponent",
+          "Value": {
+            "Type": "CubeMap",
+            "Texture": "../../Resource/Texture/CubeMap/GrassCube.dds"
+          }
+        }
+      ],
+      "Name": "SkyBox"
     },
     {
       "Components": [
@@ -57,9 +77,9 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 15, 0],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 15, 0 ],
+            "Scale": [ 1, 1, 1 ]
           }
         },
         {
@@ -74,9 +94,9 @@
               {
                 "Density": 1.0,
                 "Material": "Rubber",
-                "Orientation": [1, 0, 0, 0],
-                "Position": [0, 0, 0],
-                "Cube": [1, 1, 1],
+                "Orientation": [ 1, 0, 0, 0 ],
+                "Position": [ 0, 0, 0 ],
+                "Cube": [ 1, 1, 1 ],
                 "Scale": 1,
                 "Type": "Box"
               }
@@ -88,7 +108,7 @@
           "Type": "class CS460::PointConstraintComponent",
           "Value": {
             "Mode": "Hard",
-            "Anchor": [2, 2, 2],
+            "Anchor": [ 2, 2, 2 ],
             "Target Object": "Anchor"
           }
         }
@@ -100,9 +120,9 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 15, 0],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 15, 0 ],
+            "Scale": [ 1, 1, 1 ]
           }
         },
         {
@@ -117,9 +137,9 @@
               {
                 "Density": 1.0,
                 "Material": "Rubber",
-                "Orientation": [1, 0, 0, 0],
-                "Position": [0, 0, 0],
-                "Cube": [1, 1, 1],
+                "Orientation": [ 1, 0, 0, 0 ],
+                "Position": [ 0, 0, 0 ],
+                "Cube": [ 1, 1, 1 ],
                 "Scale": 1,
                 "Type": "Box"
               }
@@ -131,7 +151,7 @@
           "Type": "class CS460::PointConstraintComponent",
           "Value": {
             "Mode": "Hard",
-            "Anchor": [2, 2, 2],
+            "Anchor": [ 2, 2, 2 ],
             "Target Object": "Box1"
           }
         }
@@ -143,9 +163,9 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 15, 0],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 15, 0 ],
+            "Scale": [ 1, 1, 1 ]
           }
         },
         {
@@ -160,9 +180,9 @@
               {
                 "Density": 1.0,
                 "Material": "Rubber",
-                "Orientation": [1, 0, 0, 0],
-                "Position": [0, 0, 0],
-                "Cube": [1, 1, 1],
+                "Orientation": [ 1, 0, 0, 0 ],
+                "Position": [ 0, 0, 0 ],
+                "Cube": [ 1, 1, 1 ],
                 "Scale": 1,
                 "Type": "Box"
               }
@@ -174,7 +194,7 @@
           "Type": "class CS460::PointConstraintComponent",
           "Value": {
             "Mode": "Hard",
-            "Anchor": [2, 2, 2],
+            "Anchor": [ 2, 2, 2 ],
             "Target Object": "Box2"
           }
         }
@@ -186,9 +206,9 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 15, 0],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 15, 0 ],
+            "Scale": [ 1, 1, 1 ]
           }
         },
         {
@@ -203,9 +223,9 @@
               {
                 "Density": 1.0,
                 "Material": "Rubber",
-                "Orientation": [1, 0, 0, 0],
-                "Position": [0, 0, 0],
-                "Cube": [1, 1, 1],
+                "Orientation": [ 1, 0, 0, 0 ],
+                "Position": [ 0, 0, 0 ],
+                "Cube": [ 1, 1, 1 ],
                 "Scale": 1,
                 "Type": "Box"
               }
@@ -217,7 +237,7 @@
           "Type": "class CS460::PointConstraintComponent",
           "Value": {
             "Mode": "Hard",
-            "Anchor": [2, 2, 2],
+            "Anchor": [ 2, 2, 2 ],
             "Target Object": "Box3"
           }
         }
@@ -229,9 +249,9 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 15, 0],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 15, 0 ],
+            "Scale": [ 1, 1, 1 ]
           }
         },
         {
@@ -246,9 +266,9 @@
               {
                 "Density": 1.0,
                 "Material": "Rubber",
-                "Orientation": [1, 0, 0, 0],
-                "Position": [0, 0, 0],
-                "Cube": [1, 1, 1],
+                "Orientation": [ 1, 0, 0, 0 ],
+                "Position": [ 0, 0, 0 ],
+                "Cube": [ 1, 1, 1 ],
                 "Scale": 1,
                 "Type": "Box"
               }
@@ -260,7 +280,7 @@
           "Type": "class CS460::PointConstraintComponent",
           "Value": {
             "Mode": "Hard",
-            "Anchor": [2, 2, 2],
+            "Anchor": [ 2, 2, 2 ],
             "Target Object": "Box4"
           }
         }
@@ -272,9 +292,9 @@
         {
           "Type": "class CS460::TransformComponent",
           "Value": {
-            "Orientation": [1, 0, 0, 0],
-            "Position": [0, 15, 0],
-            "Scale": [1, 1, 1]
+            "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 15, 0 ],
+            "Scale": [ 1, 1, 1 ]
           }
         },
         {
@@ -289,9 +309,9 @@
               {
                 "Density": 1.0,
                 "Material": "Rubber",
-                "Orientation": [1, 0, 0, 0],
-                "Position": [0, 0, 0],
-                "Cube": [1, 1, 1],
+                "Orientation": [ 1, 0, 0, 0 ],
+                "Position": [ 0, 0, 0 ],
+                "Cube": [ 1, 1, 1 ],
                 "Scale": 1,
                 "Type": "Box"
               }
@@ -303,7 +323,7 @@
           "Type": "class CS460::PointConstraintComponent",
           "Value": {
             "Mode": "Hard",
-            "Anchor": [2, 2, 2],
+            "Anchor": [ 2, 2, 2 ],
             "Target Object": "Box5"
           }
         }

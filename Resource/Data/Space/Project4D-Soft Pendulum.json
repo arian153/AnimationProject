@@ -44,6 +44,26 @@
           "Type": "class CS460::TransformComponent",
           "Value": {
             "Orientation": [ 1, 0, 0, 0 ],
+            "Position": [ 0, 0, -60 ],
+            "Scale": [ 1, 1, 1 ]
+          }
+        },
+        {
+          "Type": "class CS460::SkyComponent",
+          "Value": {
+            "Type": "CubeMap",
+            "Texture": "../../Resource/Texture/CubeMap/GrassCube.dds"
+          }
+        }
+      ],
+      "Name": "SkyBox"
+    },
+    {
+      "Components": [
+        {
+          "Type": "class CS460::TransformComponent",
+          "Value": {
+            "Orientation": [ 1, 0, 0, 0 ],
             "Position": [ 0, 15, 0 ],
             "Scale": [ 1, 1, 1 ]
           }
